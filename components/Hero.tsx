@@ -1,154 +1,98 @@
 'use client';
 
+import React from 'react';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/LanguageContext';
-import { buildMainOrderWhatsAppLink } from '@/lib/whatsapp';
-import { RESTAURANT_NAME } from '@/lib/config';
+import { translations } from '@/lib/translations';
+import { buildWhatsAppBaseLink } from '@/lib/whatsapp';
 
 export default function Hero() {
   const { lang } = useLanguage();
-  const isArabic = lang === 'ar';
-
-  const whatsappHref = buildMainOrderWhatsAppLink(lang);
-
-  const title = isArabic
-    ? 'سوشي هايواي في قلب صور'
-    : `${RESTAURANT_NAME} in Sour (Tyre)`;
-  const subtitle = isArabic
-    ? 'لفائف سوشي طازجة، نكهات جريئة، وتوصيل سريع ضمن مدينة صور.'
-    : 'Fresh sushi rolls, bold flavours and fast service within Sour (Tyre).';
-  const secondaryText = isArabic
-    ? 'اطلب الآن عبر واتساب أو اكتشف منيو السوشي والبوكسات والأطباق الساخنة.'
-    : 'Order now via WhatsApp or explore our sushi, boxes and hot dishes menu.';
-
-  const primaryCtaLabel = isArabic ? 'شاهد المنيو' : 'View menu';
-  const secondaryCtaLabel = isArabic ? 'اطلب عبر واتساب' : 'Order on WhatsApp';
+  const t = translations[lang];
+  const dir = lang === 'ar' ? 'rtl' : 'ltr';
+  const align = dir === 'rtl' ? 'text-right' : 'text-left';
+  const baseWhatsApp = buildWhatsAppBaseLink();
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
-      {/* خلفية زخرفية بسيطة */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-32 top-0 h-64 w-64 rounded-full bg-rose-500/20 blur-3xl" />
-        <div className="absolute bottom-[-4rem] right-[-4rem] h-80 w-80 rounded-full bg-orange-400/10 blur-3xl" />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-slate-950/90 to-transparent" />
-      </div>
+    <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-rose-950">
+      <div className="absolute -left-24 -top-40 h-72 w-72 rounded-full bg-rose-500/20 blur-3xl" />
+      <div className="absolute -right-40 bottom-0 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl" />
 
-      <div className="relative mx-auto flex max-w-6xl flex-col items-start gap-8 px-4 pb-16 pt-28 md:flex-row md:items-center md:justify-between md:px-6 lg:px-8">
-        {/* النص */}
-        <div className={`max-w-xl space-y-4 ${isArabic ? 'text-right md:ml-auto' : ''}`}>
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-rose-400">
-            {isArabic ? 'مطعم سوشي في صور' : 'Sushi restaurant in Sour'}
+      <div className="mx-auto flex max-w-6xl flex-col-reverse items-center gap-10 px-4 pb-20 pt-28 md:flex-row md:pb-28 md:pt-32">
+        <motion.div
+          className={`relative z-10 w-full md:w-1/2 ${align}`}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          dir={dir}
+        >
+          <p className="mb-3 inline-flex items-center rounded-full border border-rose-500/40 bg-rose-500/10 px-3 py-1 text-xs font-medium text-rose-100 shadow-soft">
+            <span className="mr-2 inline-block h-2 w-2 rounded-full bg-emerald-400" />
+            {t.hero.eyebrow}
           </p>
-
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-50 sm:text-4xl md:text-5xl">
-            {title}
+          <h1 className="mb-4 text-3xl font-semibold tracking-tight text-slate-50 sm:text-4xl lg:text-5xl">
+            {t.hero.title}
           </h1>
-
-          <p className="text-sm text-slate-200 md:text-base">{subtitle}</p>
-
-          <p className="text-xs text-slate-400 md:text-sm">{secondaryText}</p>
-
+          <p className="mb-6 max-w-xl text-sm leading-relaxed text-slate-200 sm:text-base">
+            {t.hero.subtitle}
+          </p>
           <div
-            className={`
-              mt-4 flex flex-wrap items-center gap-3
-              ${isArabic ? 'justify-end' : 'justify-start'}
-            `}
+            className={`flex flex-wrap items-center gap-3 ${
+              dir === 'rtl' ? 'justify-end' : 'justify-start'
+            }`}
           >
-            {/* زر المنيو */}
             <Link
               href="/menu"
-              className="
-                inline-flex items-center justify-center rounded-full
-                bg-rose-500 px-5 py-2.5 text-sm font-semibold text-white
-                shadow-lg shadow-rose-500/30
-                hover:bg-rose-600 hover:shadow-xl
-                active:scale-95 transition-all
-              "
+              className="inline-flex items-center justify-center rounded-full bg-rose-500 px-6 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-rose-400"
             >
-              {primaryCtaLabel}
+              {t.hero.primaryCta}
             </Link>
-
-            {/* زر واتساب */}
             <a
-              href={whatsappHref}
+              href={baseWhatsApp}
               target="_blank"
-              rel="noopener noreferrer"
-              className="
-                inline-flex items-center justify-center gap-2 rounded-full
-                border border-emerald-400/60 bg-slate-950/60 px-4 py-2.5
-                text-sm font-semibold text-emerald-200
-                hover:bg-emerald-500/10 hover:border-emerald-400
-                active:scale-95 transition-all
-              "
+              rel="noreferrer"
+              className="inline-flex items-center justify-center rounded-full border border-rose-200/40 bg-transparent px-5 py-2.5 text-sm font-semibold text-rose-100 backdrop-blur transition hover:border-rose-200 hover:bg-rose-200/5"
             >
-              <span className="text-lg">🟢</span>
-              <span>{secondaryCtaLabel}</span>
+              {t.hero.secondaryCta}
             </a>
           </div>
+          <p className="mt-4 text-xs text-slate-300">{t.hero.subNote}</p>
+        </motion.div>
 
-          <div
-            className={`
-              mt-3 flex flex-wrap items-center gap-3 text-[11px] text-slate-400
-              ${isArabic ? 'justify-end' : 'justify-start'}
-            `}
-          >
-            <span>• {isArabic ? 'توصيل ضمن مدينة صور' : 'Delivery within Sour only'}</span>
-            <span>• {isArabic ? 'سوشي طازج محضّر عند الطلب' : 'Fresh sushi prepared to order'}</span>
-          </div>
-        </div>
-
-        {/* جانب شكلي (مكان لصورة أطباق لاحقاً إن حبيت) */}
-        <div className="mt-6 w-full max-w-sm md:mt-0 md:max-w-md">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-tr from-slate-900 via-slate-800 to-slate-900 shadow-[0_20px_60px_rgba(15,23,42,0.8)]">
-            <div className="absolute inset-0">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(248,250,252,0.04),transparent_55%),radial-gradient(circle_at_80%_60%,rgba(248,250,252,0.06),transparent_55%)]" />
-            </div>
-            <div className="relative flex h-full flex-col justify-between p-4 md:p-5">
-              <div className="space-y-1 text-xs text-slate-200">
-                <p className="text-[11px] uppercase tracking-[0.2em] text-rose-400">
-                  {isArabic ? 'تجربة سوشي' : 'Sushi experience'}
-                </p>
-                <p className="text-sm font-semibold">
-                  {isArabic
-                    ? 'لفائف مختارة، ساشيمي وسوشي كلاسيك'
-                    : 'Curated rolls, sashimi & classic sushi'}
-                </p>
-                <p className="text-[11px] text-slate-400">
-                  {isArabic
-                    ? 'جاهزون لاستقبالكم في صور - الحوش، أو لخدمتكم بالتوصيل.'
-                    : 'Ready to welcome you in Sour – Al Housh, or serve you via delivery.'}
+        <motion.div
+          className="relative z-10 w-full md:w-1/2"
+          initial={{ opacity: 0, scale: 0.9, x: 60 }}
+          animate={{ opacity: 1, scale: 1, x: 0 }}
+          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
+        >
+          <div className="relative h-64 w-full overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/70 shadow-soft md:h-80">
+            <Image
+              src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80"
+              alt={
+                lang === 'ar'
+                  ? 'سوشي طازج من سوشي هاي واي'
+                  : 'Fresh sushi platter from Sushi Highway'
+              }
+              fill
+              priority
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/10 to-transparent" />
+            <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs text-slate-50">
+              <div>
+                <p className="font-semibold">{t.hero.imageLabel}</p>
+                <p className="text-[11px] text-slate-200">
+                  {t.hero.imageSubLabel}
                 </p>
               </div>
-
-              <div className="space-y-2 text-[11px] text-slate-300">
-                <div className="flex items-center justify-between gap-2">
-                  <span>{isArabic ? 'بوكسات مكس سوشي' : 'Sushi mix platters'}</span>
-                  <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] text-emerald-300">
-                    {isArabic ? 'مناسبة للعائلة' : 'Family-friendly'}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between gap-2">
-                  <span>{isArabic ? 'أطباق ساخنة ومقبلات' : 'Hot plates & starters'}</span>
-                  <span className="rounded-full bg-rose-500/10 px-2 py-0.5 text-[10px] text-rose-200">
-                    {isArabic ? 'لجميع الأذواق' : 'For every taste'}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between gap-2">
-                  <span>{isArabic ? 'مشروبات وعصائر طازجة' : 'Drinks & fresh juices'}</span>
-                  <span className="rounded-full bg-sky-500/10 px-2 py-0.5 text-[10px] text-sky-200">
-                    {isArabic ? 'تكمّل التجربة' : 'Complete the experience'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="mt-2 text-[10px] text-slate-500">
-                {isArabic
-                  ? 'الصور هنا مكان مخصص لاحقاً لصور أطباق حقيقية من المطعم.'
-                  : 'This block can later be replaced with real photos from the restaurant.'}
+              <div className="rounded-full bg-slate-900/70 px-3 py-1">
+                <span className="text-[11px]">{t.hero.badge}</span>
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
