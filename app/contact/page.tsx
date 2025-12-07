@@ -4,7 +4,10 @@ import React, { FormEvent, useState } from 'react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { translations } from '@/lib/translations';
 import {
-  RESTAURANT_ADDRESS,
+  RESTAURANT_ADDRESS_EN,
+  RESTAURANT_ADDRESS_AR,
+  DELIVERY_AREA_EN,
+  DELIVERY_AREA_AR,
   WHATSAPP_NUMBER_RAW
 } from '@/lib/config';
 import { buildWhatsAppBaseLink } from '@/lib/whatsapp';
@@ -157,3 +160,4 @@ export default function ContactPage() {
     </div>
   );
 }
+
