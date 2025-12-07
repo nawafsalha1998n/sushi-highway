@@ -3,7 +3,7 @@
 import React from 'react';
 import MenuSection from '@/components/menu/MenuSection';
 import { menuCategories } from '@/lib/menuData';
-import { useLanguage } from '@/context/LanguageContext';
+import { useLanguage } from '@/lib/LanguageContext';
 
 const MenuPage: React.FC = () => {
   const { lang } = useLanguage();
