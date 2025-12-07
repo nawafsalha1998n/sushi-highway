@@ -7,7 +7,8 @@ import React, {
   useState,
   ReactNode
 } from 'react';
-import type { Lang } from './translations';
+// ✅ عدلنا هذا السطر:
+import type { Lang } from '@/lib/translations';
 
 type LanguageContextValue = {
   lang: Lang;
