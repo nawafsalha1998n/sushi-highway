@@ -2,7 +2,16 @@
 
 import { useLanguage } from '@/lib/LanguageContext';
 import { menuItems } from '@/lib/menuData';
-import { buildWhatsAppOrderLink } from '@/lib/whatsapp';
+
+// نبني رابط واتساب للطلب مباشرة من هنا بدون الاعتماد على أي دالة ثانية
+const WHATSAPP_BASE = 'https://wa.me/9613823005';
+
+function buildItemWhatsAppLink(itemName: string, isArabic: boolean) {
+  const message = isArabic
+    ? `مرحبا، أود طلب (${itemName}) من منيو سوشي هايواي في صور - الحوش.`
+    : `Hello, I would like to order (${itemName}) from Sushi Highway menu in Sour - Al Hosh.`;
+  return `${WHATSAPP_BASE}?text=${encodeURIComponent(message)}`;
+}
 
 export default function MenuPage() {
   const { lang } = useLanguage();
@@ -11,6 +20,7 @@ export default function MenuPage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-50">
       <section className="mx-auto max-w-6xl px-4 pb-16 pt-28 md:px-6 lg:px-8">
+        {/* العنوان والوصف */}
         <header className={isArabic ? 'text-right' : 'text-left'}>
           <p className="text-[11px] font-semibold uppercase tracking-wide text-rose-400">
             {isArabic ? 'منيو سوشي هايواي' : 'Sushi Highway menu'}
@@ -27,6 +37,7 @@ export default function MenuPage() {
           </p>
         </header>
 
+        {/* عرض عناصر المنيو بشكل كروت بسيطة */}
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           {menuItems.map((item: any) => (
             <article
@@ -49,8 +60,9 @@ export default function MenuPage() {
                   {item.price}
                 </span>
                 <a
-                  href={buildWhatsAppOrderLink?.(
-                    item.name?.[lang] ?? ''
+                  href={buildItemWhatsAppLink(
+                    item.name?.[lang] ?? '',
+                    isArabic
                   )}
                   target="_blank"
                   rel="noopener noreferrer"
