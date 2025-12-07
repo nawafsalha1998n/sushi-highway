@@ -35,7 +35,7 @@ export default function ContactPage() {
         </header>
 
         <div className="grid gap-8 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
-          {/* معلومات المكان + البوكس اللي يمثل خريطة */}
+          {/* معلومات المكان + بوكس الخريطة */}
           <div className="space-y-4">
             <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 md:p-5">
               <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-300">
