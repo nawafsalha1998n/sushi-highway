@@ -6,8 +6,10 @@ import menuItems, {
   type MenuCategory,
   type MenuItem
 } from '@/lib/menuData';
-import { useLanguage } from '@/context/LanguageContext'; // تأكد من المسار حسب مشروعك
-import { WHATSAPP_NUMBER } from '@/lib/constants'; // لو عندك ملف constants فيه الرقم
+import { useLanguage } from '@/lib/LanguageContext';
+
+// نخلي رقم الواتساب هنا مباشرة عشان ما نعتمد على ملف آخر
+const WHATSAPP_NUMBER = '009613823005';
 
 type MenuSectionProps = {
   categoryId: MenuCategory;
@@ -41,7 +43,7 @@ const categoryEmojis: Record<MenuCategory, string> = {
 };
 
 const MenuSection: React.FC<MenuSectionProps> = ({ categoryId }) => {
-  const { lang } = useLanguage(); // يفترض وجود كونتكست لغة global
+  const { lang } = useLanguage();
   const [isOpen, setIsOpen] = useState(true);
 
   const categoryMeta = menuCategories.find((c) => c.id === categoryId);
