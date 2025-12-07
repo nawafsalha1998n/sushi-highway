@@ -90,13 +90,13 @@ export const translations: Record<Lang, Translations> = {
       contact: 'Contact'
     },
     hero: {
-      eyebrow: 'Beirut · Sushi · Delivery & Dine-In',
+      eyebrow: 'Sour · Sushi · Delivery & Dine-In',
       title: 'Sushi Highway — fresh rolls at full speed.',
       subtitle:
         'From classic California rolls to bold signature creations, Sushi Highway serves ultra-fresh sushi, bowls and bites made for sharing — dine in or order via WhatsApp.',
       primaryCta: 'View full menu',
       secondaryCta: 'Order on WhatsApp',
-      subNote: 'Serving guests across Beirut, with delivery and takeaway options.',
+      subNote: 'Serving guests across Sour, with delivery and takeaway options.',
       imageLabel: 'Signature Highway Platter',
       imageSubLabel: 'A mix of our most-loved rolls, perfect for 2–3 people.',
       badge: 'Made fresh, roll by roll'
@@ -143,7 +143,7 @@ export const translations: Record<Lang, Translations> = {
     },
     aboutPage: {
       title: 'About Sushi Highway',
-      subtitle: 'Fresh, modern sushi made for Beirut.',
+      subtitle: 'Fresh, modern sushi made for Lebanese.',
       storyTitle: 'The story',
       storyBody1:
         'Sushi Highway was created with a simple idea: bring the energy of a late-night city drive to the world of sushi. Fast, vibrant and full of flavour — without ever cutting corners on quality.',
@@ -160,7 +160,7 @@ export const translations: Record<Lang, Translations> = {
       title: 'Contact & Location',
       subtitle: 'Find us, say hello or send your order.',
       addressLabel: 'Visit us',
-      addressValue: 'Sushi Highway — Beirut, Lebanon (example location)',
+      addressValue: 'Sushi Highway — Sour, Lebanon (example location)',
       hoursLabel: 'Open daily · 12:00 PM – 11:30 PM',
       mapTitle: 'Map preview',
       formTitle: 'Send us a message',
@@ -187,7 +187,7 @@ export const translations: Record<Lang, Translations> = {
   },
 
   ar: {
-    brandTagline: 'سوشي طازج · نكهات قوية · توصيل داخل بيروت',
+    brandTagline: 'سوشي طازج · نكهات قوية · توصيل داخل صور',
     nav: {
       home: 'الرئيسية',
       menu: 'المنيو',
@@ -195,7 +195,7 @@ export const translations: Record<Lang, Translations> = {
       contact: 'التواصل والموقع'
     },
     hero: {
-      eyebrow: 'بيروت · سوشي · صالة وتوصيل',
+      eyebrow: 'صور · سوشي · صالة وتوصيل',
       title: 'سوشي هاي واي — لفائف طازجة بسرعة الطريق.',
       subtitle:
         'من الكاليفورنيا رول الكلاسيكي لأجرأ اللفائف الخاصة، سوشي هاي واي بيقدّم سوشي وأطباق يابانية بطزاجة عالية، للأكل بالمطعم أو الطلب عن طريق واتساب.',
@@ -247,7 +247,7 @@ export const translations: Record<Lang, Translations> = {
     },
     aboutPage: {
       title: 'عن سوشي هاي واي',
-      subtitle: 'سوشي طازج وعصري على طريقة بيروت.',
+      subtitle: 'سوشي طازج وعصري على طريقة لبنانية .',
       storyTitle: 'القصة',
       storyBody1:
         'سوشي هاي واي انولد من فكرة بسيطة: نجيب إحساس مشوار السيارة الليلي لعالم السوشي. سريع، حيوي، ومليان نكهات — من دون ما نساوم على الجودة أبداً.',
@@ -264,7 +264,7 @@ export const translations: Record<Lang, Translations> = {
       title: 'التواصل والموقع',
       subtitle: 'زورنا، احكي معنا، أو ابعت طلبك.',
       addressLabel: 'زورونا',
-      addressValue: 'سوشي هاي واي — بيروت، لبنان (عنوان تجريبي)',
+      addressValue: 'سوشي هاي واي — صور، لبنان ',
       hoursLabel: 'نستقبلكم يومياً · من 12:00 الظهر حتى 11:30 بالليل',
       mapTitle: 'خريطة تقريبية',
       formTitle: 'ابعث لنا رسالة',
