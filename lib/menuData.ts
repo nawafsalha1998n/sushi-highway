@@ -1,1173 +1,932 @@
-export type MenuCategory =
+// lib/menuData.ts
+// بيانات المنيو مع دعم عربي/إنجليزي واستخدامها في صفحة المنيو والـ Preview
+
+export type CategoryKey =
   | 'starters'
   | 'salads'
   | 'temaki'
-  | 'hosoMaki'
-  | 'futoMaki'
-  | 'uraTuna'
-  | 'uraCrab'
-  | 'uraSalmon'
-  | 'uraShrimp'
+  | 'hoso'
+  | 'futo'
+  | 'ura_tuna'
+  | 'ura_crab'
+  | 'ura_salmon'
+  | 'ura_shrimp'
   | 'sashimi'
   | 'sushi'
-  | 'duoMaki'
-  | 'vegetarianMaki'
-  | 'reginaSpecialMaki'
-  | 'creamySmokedSalmonCrab'
+  | 'duo_maki'
+  | 'vegetarian'
+  | 'regina'
+  | 'creamy'
   | 'platters'
-  | 'specialRolls'
-  | 'miniBoat'
-  | 'bigBoat'
+  | 'special_rolls'
+  | 'boat_mini'
+  | 'boat_big'
   | 'pizza'
   | 'kumpir'
   | 'pasta'
-  | 'hotPlates'
+  | 'hot_plates'
   | 'drinks';
 
 export type MenuItem = {
   id: string;
-  category: MenuCategory;
-  name: { en: string; ar: string };
-  description: { en: string; ar: string };
-  price: string;
+  categoryKey: CategoryKey;
+  name: {
+    en: string;
+    ar: string;
+  };
+  description: {
+    en: string;
+    ar: string;
+  };
+  price: string; // مثال "5$"
   isSignature?: boolean;
 };
 
-export const menuCategories: {
-  id: MenuCategory;
-  label: { en: string; ar: string };
-}[] = [
-  { id: 'starters', label: { en: 'Starters', ar: 'المقبلات' } },
-  { id: 'salads', label: { en: 'Salads', ar: 'السلطات' } },
-  { id: 'temaki', label: { en: 'Temaki (1 pc)', ar: 'تِماكي (قطعة واحدة)' } },
-  {
-    id: 'hosoMaki',
-    label: { en: 'Hoso Maki (4 pcs)', ar: 'هوسو ماكي (٤ قطع)' }
-  },
-  {
-    id: 'futoMaki',
-    label: { en: 'Futo Maki (4 pcs)', ar: 'فوتو ماكي (٤ قطع)' }
-  },
-  {
-    id: 'uraTuna',
-    label: { en: 'Uramaki Tuna (4 pcs)', ar: 'أوراماكي تونة (٤ قطع)' }
-  },
-  {
-    id: 'uraCrab',
-    label: { en: 'Uramaki Crab (4 pcs)', ar: 'أوراماكي كابوريا (٤ قطع)' }
-  },
-  {
-    id: 'uraSalmon',
-    label: { en: 'Uramaki Salmon (4 pcs)', ar: 'أوراماكي سالمون (٤ قطع)' }
-  },
-  {
-    id: 'uraShrimp',
-    label: { en: 'Uramaki Shrimp (4 pcs)', ar: 'أوراماكي روبيان (٤ قطع)' }
-  },
-  { id: 'sashimi', label: { en: 'Sashimi (2 pcs)', ar: 'ساشيمي (٢ قطعة)' } },
-  { id: 'sushi', label: { en: 'Sushi (2 pcs)', ar: 'سوشي (٢ قطعة)' } },
-  { id: 'duoMaki', label: { en: 'Duo Maki (4 pcs)', ar: 'ديو ماكي (٤ قطع)' } },
-  {
-    id: 'vegetarianMaki',
-    label: { en: 'Vegetarian Maki (4 pcs)', ar: 'فيجيتيريان ماكي (٤ قطع)' }
-  },
-  {
-    id: 'reginaSpecialMaki',
-    label: { en: 'Regina Special Maki (4 pcs)', ar: 'ريجينا سبيشل ماكي (٤ قطع)' }
-  },
-  {
-    id: 'creamySmokedSalmonCrab',
-    label: {
-      en: 'Creamy / Smoked / Salmon Crab Maki',
-      ar: 'كريمي / سموكد / سالمون كاب ماكي'
-    }
-  },
-  { id: 'platters', label: { en: 'Platters', ar: 'بوكسات / بلايتر' } },
-  { id: 'specialRolls', label: { en: 'Special Rolls', ar: 'لفائف خاصة' } },
-  { id: 'miniBoat', label: { en: 'Mini Boat', ar: 'ميني بوت' } },
-  { id: 'bigBoat', label: { en: 'Big Boat', ar: 'بيغ بوت' } },
-  { id: 'pizza', label: { en: 'Italian Pizza', ar: 'بيتزا إيطالية' } },
-  { id: 'kumpir', label: { en: 'Kumpir Potato', ar: 'بطاطا كومبير' } },
-  { id: 'pasta', label: { en: 'Pasta', ar: 'باستا' } },
-  { id: 'hotPlates', label: { en: 'Hot Plates', ar: 'أطباق ساخنة' } },
-  { id: 'drinks', label: { en: 'Drinks', ar: 'المشروبات' } }
-];
+type MakeItemArgs = {
+  id: string;
+  categoryKey: CategoryKey;
+  nameEn: string;
+  nameAr: string;
+  price: string;
+  descEn?: string;
+  descAr?: string;
+  isSignature?: boolean;
+};
+
+function makeItem({
+  id,
+  categoryKey,
+  nameEn,
+  nameAr,
+  price,
+  descEn,
+  descAr,
+  isSignature
+}: MakeItemArgs): MenuItem {
+  return {
+    id,
+    categoryKey,
+    name: { en: nameEn, ar: nameAr },
+    description: {
+      en: descEn ?? '',
+      ar: descAr ?? ''
+    },
+    price,
+    isSignature
+  };
+}
+
+// ملاحظة: ليس بالضرورة 100% من منيو HTML الأصلي، لكن الأساس كله موجود
+// ويمكنك إضافة/تعديل الأصناف بسهولة باتّباع نفس النمط.
 
 const menuItems: MenuItem[] = [
   // STARTERS
-  {
+  makeItem({
     id: 'starters-edamame',
-    category: 'starters',
-    name: { en: 'Edamame', ar: 'إدامامي' },
-    description: {
-      en: 'Steamed soybeans with sea salt.',
-      ar: 'فول صويا مطهو على البخار مع ملح بحري.'
-    },
-    price: '5$',
-    isSignature: true
-  },
-  {
+    categoryKey: 'starters',
+    nameEn: 'Edamame',
+    nameAr: 'إدامامي',
+    price: '5$'
+  }),
+  makeItem({
     id: 'starters-cheese-rolls',
-    category: 'starters',
-    name: { en: 'Cheese Rolls', ar: 'تشيز رولز' },
-    description: {
-      en: 'Crispy cheese rolls.',
-      ar: 'لفائف جبنة مقلية مقرمشة.'
-    },
+    categoryKey: 'starters',
+    nameEn: 'Cheese Rolls',
+    nameAr: 'روول جبنة',
     price: '4.6$'
-  },
-  {
+  }),
+  makeItem({
     id: 'starters-spring-rolls',
-    category: 'starters',
-    name: { en: 'Spring Rolls', ar: 'سبرينغ رولز' },
-    description: {
-      en: 'Vegetable spring rolls.',
-      ar: 'سبرينغ رولز خضار مقرمشة.'
-    },
+    categoryKey: 'starters',
+    nameEn: 'Spring Rolls',
+    nameAr: 'سبرنغ رولز',
     price: '3.5$'
-  },
+  }),
 
   // SALADS
-  {
-    id: 'salads-crab-salad',
-    category: 'salads',
-    name: { en: 'Crab Salad', ar: 'سلطة كابوريا' },
-    description: {
-      en: 'Shrimp 180g, avocado, mango, crispy topping.',
-      ar: 'روبيان 180غ، أفوكادو، مانغو، وتوبينغ مقرمش.'
-    },
-    price: '12$'
-  },
-  {
-    id: 'salads-salmon-salad',
-    category: 'salads',
-    name: { en: 'Salmon Salad', ar: 'سلطة سالمون' },
-    description: {
-      en: 'Salmon 180g, avocado, mango, crispy topping.',
-      ar: 'سالمون 180غ، أفوكادو، مانغو، وتوبينغ مقرمش.'
-    },
+  makeItem({
+    id: 'salads-crab',
+    categoryKey: 'salads',
+    nameEn: 'Crab Salad',
+    nameAr: 'سلطة كابوريا',
+    price: '12$',
+    descEn: 'Crab, avocado, mango, crispy topping',
+    descAr: 'كابوريا، أفوكادو، مانغو، كريسبي'
+  }),
+  makeItem({
+    id: 'salads-salmon',
+    categoryKey: 'salads',
+    nameEn: 'Salmon Salad',
+    nameAr: 'سلطة سلمون',
     price: '16$',
-    isSignature: true
-  },
-  {
-    id: 'salads-shrimp-salad',
-    category: 'salads',
-    name: { en: 'Shrimp Salad', ar: 'سلطة روبيان' },
-    description: {
-      en: 'Shrimp 180g, avocado, mango, crispy topping.',
-      ar: 'روبيان 180غ، أفوكادو، مانغو، وتوبينغ مقرمش.'
-    },
-    price: '15$'
-  },
-  {
-    id: 'salads-tuna-salad',
-    category: 'salads',
-    name: { en: 'Tuna Salad', ar: 'سلطة تونة' },
-    description: {
-      en: 'Tuna 180g, avocado, mango, crispy topping.',
-      ar: 'تونة 180غ، أفوكادو، مانغو، وتوبينغ مقرمش.'
-    },
-    price: '16$'
-  },
-  {
+    descEn: 'Salmon 180g, avocado, mango, crispy topping',
+    descAr: 'سلمون 180غ، أفوكادو، مانغو، كريسبي'
+  }),
+  makeItem({
+    id: 'salads-shrimp',
+    categoryKey: 'salads',
+    nameEn: 'Shrimp Salad',
+    nameAr: 'سلطة روبيان',
+    price: '15$',
+    descEn: 'Shrimp 180g, avocado, mango, crispy topping',
+    descAr: 'روبيان 180غ، أفوكادو، مانغو، كريسبي'
+  }),
+  makeItem({
+    id: 'salads-tuna',
+    categoryKey: 'salads',
+    nameEn: 'Tuna Salad',
+    nameAr: 'سلطة تونا',
+    price: '16$',
+    descEn: 'Tuna 180g, avocado, mango, crispy topping',
+    descAr: 'تونا 180غ، أفوكادو، مانغو، كريسبي'
+  }),
+  makeItem({
     id: 'salads-mixed-seafood',
-    category: 'salads',
-    name: { en: 'Mixed Sea Food Salad', ar: 'سلطة مأكولات بحرية مشكّلة' },
-    description: {
-      en: 'Crab, salmon, tuna, shrimp mix.',
-      ar: 'خليط من كابوريا، سالمون، تونة، وروبيان.'
-    },
+    categoryKey: 'salads',
+    nameEn: 'Mixed Sea Food Salad',
+    nameAr: 'سلطة مأكولات بحرية مشكلة',
     price: '16$',
-    isSignature: true
-  },
-  {
+    descEn: 'Crab, salmon, tuna, shrimp mix',
+    descAr: 'خلطة كابوريا، سلمون، تونا، روبيان'
+  }),
+  makeItem({
     id: 'salads-greek',
-    category: 'salads',
-    name: { en: 'Greek Salad', ar: 'سلطة يونانية' },
-    description: {
-      en: 'Classic Greek salad.',
-      ar: 'سلطة يونانية كلاسيكية.'
-    },
+    categoryKey: 'salads',
+    nameEn: 'Greek Salad',
+    nameAr: 'سلطة يونانية',
     price: '6$'
-  },
-  {
+  }),
+  makeItem({
     id: 'salads-lebanese',
-    category: 'salads',
-    name: { en: 'Lebanese Salad', ar: 'سلطة لبنانية' },
-    description: {
-      en: 'Fresh Lebanese-style salad.',
-      ar: 'سلطة على الطريقة اللبنانية.'
-    },
+    categoryKey: 'salads',
+    nameEn: 'Lebanese Salad',
+    nameAr: 'سلطة لبنانية',
     price: '5.5$'
-  },
+  }),
 
-  // TEMAKI – 1 PC
-  {
+  // TEMAKI
+  makeItem({
     id: 'temaki-tuna',
-    category: 'temaki',
-    name: { en: 'Tuna Temaki', ar: 'تماكي تونة' },
-    description: { en: 'Tuna hand roll.', ar: 'تماكي تونة (رول يدوي).' },
+    categoryKey: 'temaki',
+    nameEn: 'Tuna Temaki',
+    nameAr: 'تونا تيمّاكي',
     price: '6$'
-  },
-  {
+  }),
+  makeItem({
     id: 'temaki-salmon',
-    category: 'temaki',
-    name: { en: 'Salmon Temaki', ar: 'تماكي سالمون' },
-    description: { en: 'Salmon hand roll.', ar: 'تماكي سالمون (رول يدوي).' },
+    categoryKey: 'temaki',
+    nameEn: 'Salmon Temaki',
+    nameAr: 'سلمون تيمّاكي',
     price: '6$'
-  },
-  {
+  }),
+  makeItem({
     id: 'temaki-crab',
-    category: 'temaki',
-    name: { en: 'Crab Temaki', ar: 'تماكي كابوريا' },
-    description: { en: 'Crab hand roll.', ar: 'تماكي كابوريا.' },
+    categoryKey: 'temaki',
+    nameEn: 'Crab Temaki',
+    nameAr: 'كراب تيمّاكي',
     price: '4$'
-  },
-  {
+  }),
+  makeItem({
     id: 'temaki-shrimp',
-    category: 'temaki',
-    name: { en: 'Shrimp Temaki', ar: 'تماكي روبيان' },
-    description: { en: 'Shrimp hand roll.', ar: 'تماكي روبيان.' },
+    categoryKey: 'temaki',
+    nameEn: 'Shrimp Temaki',
+    nameAr: 'روبيان تيمّاكي',
     price: '4$'
-  },
-  {
+  }),
+  makeItem({
     id: 'temaki-hawaiian',
-    category: 'temaki',
-    name: { en: 'Hawaiian Temaki', ar: 'تماكي هاواي' },
-    description: { en: 'Hawaiian style hand roll.', ar: 'تماكي هاواي.' },
+    categoryKey: 'temaki',
+    nameEn: 'Hawaiian Temaki',
+    nameAr: 'هاوايان تيمّاكي',
     price: '4$'
-  },
-  {
+  }),
+  makeItem({
     id: 'temaki-california',
-    category: 'temaki',
-    name: { en: 'California Temaki', ar: 'تماكي كاليفورنيا' },
-    description: { en: 'California style hand roll.', ar: 'تماكي كاليفورنيا.' },
+    categoryKey: 'temaki',
+    nameEn: 'California Temaki',
+    nameAr: 'كاليفورنيا تيمّاكي',
     price: '4$'
-  },
+  }),
 
-  // HOSO MAKI – 4 PCS
-  {
+  // HOSO MAKI
+  makeItem({
     id: 'hoso-salmon',
-    category: 'hosoMaki',
-    name: { en: 'Salmon Hoso Maki', ar: 'سالمون هوسو ماكي' },
-    description: { en: 'Salmon hoso maki (4 pcs).', ar: '٤ قطع هوسو ماكي سالمون.' },
+    categoryKey: 'hoso',
+    nameEn: 'Salmon Hoso Maki',
+    nameAr: 'هوسو ماكي سلمون',
     price: '5$'
-  },
-  {
+  }),
+  makeItem({
     id: 'hoso-crab',
-    category: 'hosoMaki',
-    name: { en: 'Crab Hoso Maki', ar: 'كابوريا هوسو ماكي' },
-    description: { en: 'Crab hoso maki (4 pcs).', ar: '٤ قطع هوسو ماكي كابوريا.' },
+    categoryKey: 'hoso',
+    nameEn: 'Crab Hoso Maki',
+    nameAr: 'هوسو ماكي كراب',
     price: '4$'
-  },
-  {
+  }),
+  makeItem({
     id: 'hoso-tuna',
-    category: 'hosoMaki',
-    name: { en: 'Tuna Hoso Maki', ar: 'تونة هوسو ماكي' },
-    description: { en: 'Tuna hoso maki (4 pcs).', ar: '٤ قطع هوسو ماكي تونة.' },
+    categoryKey: 'hoso',
+    nameEn: 'Tuna Hoso Maki',
+    nameAr: 'هوسو ماكي تونا',
     price: '4.5$'
-  },
-  {
+  }),
+  makeItem({
     id: 'hoso-avocado',
-    category: 'hosoMaki',
-    name: { en: 'Avocado Hoso Maki', ar: 'أفوكادو هوسو ماكي' },
-    description: { en: 'Avocado hoso maki (4 pcs).', ar: '٤ قطع هوسو ماكي أفوكادو.' },
+    categoryKey: 'hoso',
+    nameEn: 'Avocado Hoso Maki',
+    nameAr: 'هوسو ماكي أفوكادو',
     price: '4$'
-  },
-  {
+  }),
+  makeItem({
     id: 'hoso-mango',
-    category: 'hosoMaki',
-    name: { en: 'Mango Hoso Maki', ar: 'مانغو هوسو ماكي' },
-    description: { en: 'Mango hoso maki (4 pcs).', ar: '٤ قطع هوسو ماكي مانغو.' },
+    categoryKey: 'hoso',
+    nameEn: 'Mango Hoso Maki',
+    nameAr: 'هوسو ماكي مانغو',
     price: '4$'
-  },
-  {
+  }),
+  makeItem({
     id: 'hoso-cucumber',
-    category: 'hosoMaki',
-    name: { en: 'Cucumber Hoso Maki', ar: 'خيار هوسو ماكي' },
-    description: { en: 'Cucumber hoso maki (4 pcs).', ar: '٤ قطع هوسو ماكي خيار.' },
+    categoryKey: 'hoso',
+    nameEn: 'Cucumber Hoso Maki',
+    nameAr: 'هوسو ماكي خيار',
     price: '3.5$'
-  },
-  {
+  }),
+  makeItem({
     id: 'hoso-shrimp',
-    category: 'hosoMaki',
-    name: { en: 'Shrimp Hoso Maki', ar: 'روبيان هوسو ماكي' },
-    description: { en: 'Shrimp hoso maki (4 pcs).', ar: '٤ قطع هوسو ماكي روبيان.' },
+    categoryKey: 'hoso',
+    nameEn: 'Shrimp Hoso Maki',
+    nameAr: 'هوسو ماكي روبيان',
     price: '3.5$'
-  },
+  }),
 
-  // FUTO MAKI – 4 PCS
-  {
+  // FUTO MAKI
+  makeItem({
     id: 'futo-hawaiian',
-    category: 'futoMaki',
-    name: { en: 'Hawaiian Futo Maki', ar: 'هاواي فوتو ماكي' },
-    description: { en: 'Hawaiian style futo maki (4 pcs).', ar: '٤ قطع فوتو ماكي هاواي.' },
+    categoryKey: 'futo',
+    nameEn: 'Hawaiian Futo Maki',
+    nameAr: 'فوتو ماكي هاوايان',
     price: '6$'
-  },
-  {
+  }),
+  makeItem({
     id: 'futo-mixed',
-    category: 'futoMaki',
-    name: { en: 'Mixed Futo Maki', ar: 'فوتو ماكي مشكل' },
-    description: { en: 'Mixed futo maki (4 pcs).', ar: '٤ قطع فوتو ماكي مشكل.' },
+    categoryKey: 'futo',
+    nameEn: 'Mixed Futo Maki',
+    nameAr: 'فوتو ماكي مشكل',
     price: '7$'
-  },
+  }),
 
-  // URAMAKI TUNA – 4 PCS
-  {
+  // URAMAKI TUNA
+  makeItem({
     id: 'ura-tuna-volcano',
-    category: 'uraTuna',
-    name: { en: 'Volcano Tuna', ar: 'فولكانو تونة' },
-    description: { en: 'Volcano tuna uramaki (4 pcs).', ar: '٤ قطع فولكانو تونة.' },
+    categoryKey: 'ura_tuna',
+    nameEn: 'Volcano Tuna',
+    nameAr: 'فولكينو تونا',
     price: '7$'
-  },
-  {
+  }),
+  makeItem({
     id: 'ura-tuna-wrap',
-    category: 'uraTuna',
-    name: { en: 'Tuna Wrap', ar: 'تونة راب' },
-    description: { en: 'Tuna wrap uramaki (4 pcs).', ar: '٤ قطع تونة راب.' },
+    categoryKey: 'ura_tuna',
+    nameEn: 'Tuna Wrap',
+    nameAr: 'تونا رابس',
     price: '7$'
-  },
+  }),
 
-  // URAMAKI CRAB – 4 PCS
-  {
+  // URAMAKI CRAB
+  makeItem({
     id: 'ura-crab-california',
-    category: 'uraCrab',
-    name: { en: 'California', ar: 'كاليفورنيا' },
-    description: { en: 'California uramaki (4 pcs).', ar: '٤ قطع كاليفورنيا رول.' },
+    categoryKey: 'ura_crab',
+    nameEn: 'California',
+    nameAr: 'كاليفورنيا',
     price: '3$'
-  },
-  {
+  }),
+  makeItem({
     id: 'ura-crab-california-ebiko',
-    category: 'uraCrab',
-    name: { en: 'California Ebiko', ar: 'كاليفورنيا إبيكو' },
-    description: { en: 'California with ebiko (4 pcs).', ar: '٤ قطع كاليفورنيا مع إبيكو.' },
+    categoryKey: 'ura_crab',
+    nameEn: 'California Ebiko',
+    nameAr: 'كاليفورنيا إبيكو',
     price: '5$'
-  },
-  {
+  }),
+  makeItem({
     id: 'ura-crab-crispy-california',
-    category: 'uraCrab',
-    name: { en: 'Crispy California', ar: 'كريسبي كاليفورنيا' },
-    description: { en: 'Crispy California roll (4 pcs).', ar: '٤ قطع كريسبي كاليفورنيا.' },
+    categoryKey: 'ura_crab',
+    nameEn: 'Crispy California',
+    nameAr: 'كريسبي كاليفورنيا',
     price: '3$'
-  },
-  {
+  }),
+  makeItem({
     id: 'ura-crab-crispy-crazy',
-    category: 'uraCrab',
-    name: { en: 'Crispy Crazy', ar: 'كريسبي كرايزي' },
-    description: { en: 'Crispy crazy crab roll (4 pcs).', ar: '٤ قطع كريسبي كرايزي.' },
-    price: '4$'
-  },
-  {
+    categoryKey: 'ura_crab',
+    nameEn: 'Crispy Crazy',
+    nameAr: 'كريسبي كريزي',
+    price: '4$',
+    isSignature: true
+  }),
+  makeItem({
     id: 'ura-crab-crunchy-crab',
-    category: 'uraCrab',
-    name: { en: 'Crunchy Crab', ar: 'كرنشي كابوريا' },
-    description: { en: 'Crunchy crab roll (4 pcs).', ar: '٤ قطع كرنشي كابوريا.' },
+    categoryKey: 'ura_crab',
+    nameEn: 'Crunchy Crab',
+    nameAr: 'كرانشي كراب',
     price: '3.5$'
-  },
-  {
+  }),
+  makeItem({
     id: 'ura-crab-spicy-crab',
-    category: 'uraCrab',
-    name: { en: 'Spicy Crab', ar: 'سبايسي كابوريا' },
-    description: { en: 'Spicy crab roll (4 pcs).', ar: '٤ قطع سبايسي كابوريا.' },
+    categoryKey: 'ura_crab',
+    nameEn: 'Spicy Crab',
+    nameAr: 'سبايسي كراب',
     price: '4$'
-  },
-  {
+  }),
+  makeItem({
     id: 'ura-crab-fruity-crab',
-    category: 'uraCrab',
-    name: { en: 'Fruity Crab', ar: 'فروتي كابوريا' },
-    description: { en: 'Fruity crab roll (4 pcs).', ar: '٤ قطع فروتي كابوريا.' },
+    categoryKey: 'ura_crab',
+    nameEn: 'Fruity Crab',
+    nameAr: 'فروتي كراب',
     price: '5$'
-  },
-  {
+  }),
+  makeItem({
     id: 'ura-crab-rainbow-kani',
-    category: 'uraCrab',
-    name: { en: 'Rainbow Kani', ar: 'رينبو كاني' },
-    description: { en: 'Rainbow kani roll (4 pcs).', ar: '٤ قطع رينبو كاني.' },
+    categoryKey: 'ura_crab',
+    nameEn: 'Rainbow Kani',
+    nameAr: 'رينبو كاني',
     price: '5$'
-  },
-  {
+  }),
+  makeItem({
     id: 'ura-crab-avocado-wrap',
-    category: 'uraCrab',
-    name: { en: 'Crab Avocado Wrap', ar: 'كابوريا أفوكادو راب' },
-    description: { en: 'Crab avocado wrap (4 pcs).', ar: '٤ قطع كابوريا أفوكادو راب.' },
+    categoryKey: 'ura_crab',
+    nameEn: 'Crab Avocado Wrap',
+    nameAr: 'كراب أفوكادو رابس',
     price: '4$'
-  },
+  }),
 
-  // URAMAKI SALMON – 4 PCS
-  {
+  // URAMAKI SALMON
+  makeItem({
     id: 'ura-salmon-volcano',
-    category: 'uraSalmon',
-    name: { en: 'Volcano Salmon', ar: 'فولكانو سالمون' },
-    description: { en: 'Volcano salmon roll (4 pcs).', ar: '٤ قطع فولكانو سالمون.' },
+    categoryKey: 'ura_salmon',
+    nameEn: 'Volcano Salmon',
+    nameAr: 'فولكينو سلمون',
     price: '8$',
     isSignature: true
-  },
-  {
+  }),
+  makeItem({
     id: 'ura-salmon-ebiko',
-    category: 'uraSalmon',
-    name: { en: 'Salmon Ebiko', ar: 'سالمون إبيكو' },
-    description: { en: 'Salmon ebiko roll (4 pcs).', ar: '٤ قطع سالمون إبيكو.' },
+    categoryKey: 'ura_salmon',
+    nameEn: 'Salmon Ebiko',
+    nameAr: 'سلمون إبيكو',
     price: '7$'
-  },
-  {
+  }),
+  makeItem({
     id: 'ura-salmon-fruity',
-    category: 'uraSalmon',
-    name: { en: 'Fruity Salmon', ar: 'فروتي سالمون' },
-    description: { en: 'Fruity salmon roll (4 pcs).', ar: '٤ قطع فروتي سالمون.' },
+    categoryKey: 'ura_salmon',
+    nameEn: 'Fruity Salmon',
+    nameAr: 'فروتي سلمون',
     price: '6$'
-  },
-  {
+  }),
+  makeItem({
     id: 'ura-salmon-wrap',
-    category: 'uraSalmon',
-    name: { en: 'Salmon Wrap', ar: 'سالمون راب' },
-    description: { en: 'Salmon wrap roll (4 pcs).', ar: '٤ قطع سالمون راب.' },
+    categoryKey: 'ura_salmon',
+    nameEn: 'Salmon Wrap',
+    nameAr: 'سلمون رابس',
     price: '6$'
-  },
-  {
+  }),
+  makeItem({
     id: 'ura-salmon-avocado',
-    category: 'uraSalmon',
-    name: { en: 'Salmon Avocado', ar: 'سالمون أفوكادو' },
-    description: { en: 'Salmon avocado roll (4 pcs).', ar: '٤ قطع سالمون أفوكادو.' },
+    categoryKey: 'ura_salmon',
+    nameEn: 'Salmon Avocado',
+    nameAr: 'سلمون أفوكادو',
     price: '4$'
-  },
-  {
+  }),
+  makeItem({
     id: 'ura-salmon-mango',
-    category: 'uraSalmon',
-    name: { en: 'Salmon Mango', ar: 'سالمون مانغو' },
-    description: { en: 'Salmon mango roll (4 pcs).', ar: '٤ قطع سالمون مانغو.' },
+    categoryKey: 'ura_salmon',
+    nameEn: 'Salmon Mango',
+    nameAr: 'سلمون مانغو',
     price: '6$'
-  },
-  {
+  }),
+  makeItem({
     id: 'ura-salmon-philadelphia',
-    category: 'uraSalmon',
-    name: { en: 'Salmon Philadelphia', ar: 'سالمون فيلادلفيا' },
-    description: {
-      en: 'Creamy salmon Philadelphia roll (4 pcs).',
-      ar: '٤ قطع سالمون فيلادلفيا.'
-    },
+    categoryKey: 'ura_salmon',
+    nameEn: 'Salmon Philadelphia',
+    nameAr: 'سلمون فيلادلفيا',
     price: '6$'
-  },
+  }),
 
-  // URAMAKI SHRIMP – 4 PCS
-  {
+  // URAMAKI SHRIMP
+  makeItem({
     id: 'ura-shrimp-volcano',
-    category: 'uraShrimp',
-    name: { en: 'Volcano Shrimp', ar: 'فولكانو روبيان' },
-    description: { en: 'Volcano shrimp roll (4 pcs).', ar: '٤ قطع فولكانو روبيان.' },
+    categoryKey: 'ura_shrimp',
+    nameEn: 'Volcano Shrimp',
+    nameAr: 'فولكينو روبيان',
     price: '5$'
-  },
-  {
+  }),
+  makeItem({
     id: 'ura-shrimp-crispy',
-    category: 'uraShrimp',
-    name: { en: 'Shrimp Crispy', ar: 'كريسبي روبيان' },
-    description: { en: 'Crispy shrimp roll (4 pcs).', ar: '٤ قطع رول روبيان كريسبي.' },
+    categoryKey: 'ura_shrimp',
+    nameEn: 'Shrimp Crispy',
+    nameAr: 'روبيان كريسبي',
     price: '5$'
-  },
-  {
+  }),
+  makeItem({
     id: 'ura-shrimp-mango',
-    category: 'uraShrimp',
-    name: { en: 'Shrimp Mango', ar: 'روبيان مانغو' },
-    description: { en: 'Shrimp mango roll (4 pcs).', ar: '٤ قطع رول روبيان مع مانغو.' },
+    categoryKey: 'ura_shrimp',
+    nameEn: 'Shrimp Mango',
+    nameAr: 'روبيان مانغو',
     price: '5$'
-  },
-  {
+  }),
+  makeItem({
     id: 'ura-shrimp-fruity',
-    category: 'uraShrimp',
-    name: { en: 'Fruity Shrimp', ar: 'فروتي روبيان' },
-    description: { en: 'Fruity shrimp roll (4 pcs).', ar: '٤ قطع فروتي روبيان.' },
+    categoryKey: 'ura_shrimp',
+    nameEn: 'Fruity Shrimp',
+    nameAr: 'فروتي روبيان',
     price: '5$'
-  },
-  {
+  }),
+  makeItem({
     id: 'ura-shrimp-ebiko',
-    category: 'uraShrimp',
-    name: { en: 'Shrimp Ebiko', ar: 'روبيان إبيكو' },
-    description: { en: 'Shrimp ebiko roll (4 pcs).', ar: '٤ قطع روبيان إبيكو.' },
+    categoryKey: 'ura_shrimp',
+    nameEn: 'Shrimp Ebiko',
+    nameAr: 'روبيان إبيكو',
     price: '5$'
-  },
+  }),
 
-  // SASHIMI – 2 PCS
-  {
+  // SASHIMI
+  makeItem({
     id: 'sashimi-salmon',
-    category: 'sashimi',
-    name: { en: 'Salmon Sashimi', ar: 'سالمون ساشيمي' },
-    description: { en: '2 pcs salmon sashimi.', ar: '٢ قطعة سالمون ساشيمي.' },
+    categoryKey: 'sashimi',
+    nameEn: 'Salmon Sashimi (2 pcs)',
+    nameAr: 'سلمون ساشيمي (قطعتان)',
     price: '4$'
-  },
-  {
+  }),
+  makeItem({
     id: 'sashimi-tuna',
-    category: 'sashimi',
-    name: { en: 'Tuna Sashimi', ar: 'تونة ساشيمي' },
-    description: { en: '2 pcs tuna sashimi.', ar: '٢ قطعة تونة ساشيمي.' },
+    categoryKey: 'sashimi',
+    nameEn: 'Tuna Sashimi (2 pcs)',
+    nameAr: 'تونا ساشيمي (قطعتان)',
     price: '4$'
-  },
-  {
+  }),
+  makeItem({
     id: 'sashimi-crab',
-    category: 'sashimi',
-    name: { en: 'Crab Sashimi', ar: 'كابوريا ساشيمي' },
-    description: { en: '2 pcs crab sashimi.', ar: '٢ قطعة كابوريا ساشيمي.' },
+    categoryKey: 'sashimi',
+    nameEn: 'Crab Sashimi (2 pcs)',
+    nameAr: 'كابوريا ساشيمي (قطعتان)',
     price: '2.5$'
-  },
-  {
+  }),
+  makeItem({
     id: 'sashimi-shrimp',
-    category: 'sashimi',
-    name: { en: 'Shrimp Sashimi', ar: 'روبيان ساشيمي' },
-    description: { en: '2 pcs shrimp sashimi.', ar: '٢ قطعة روبيان ساشيمي.' },
+    categoryKey: 'sashimi',
+    nameEn: 'Shrimp Sashimi (2 pcs)',
+    nameAr: 'روبيان ساشيمي (قطعتان)',
     price: '4$'
-  },
+  }),
 
-  // SUSHI – 2 PCS
-  {
+  // SUSHI
+  makeItem({
     id: 'sushi-salmon',
-    category: 'sushi',
-    name: { en: 'Salmon Sushi', ar: 'سالمون سوشي' },
-    description: { en: '2 pcs salmon sushi.', ar: '٢ قطعة سالمون سوشي.' },
+    categoryKey: 'sushi',
+    nameEn: 'Salmon Sushi (2 pcs)',
+    nameAr: 'سلمون سوشي (قطعتان)',
     price: '4$'
-  },
-  {
+  }),
+  makeItem({
     id: 'sushi-tuna',
-    category: 'sushi',
-    name: { en: 'Tuna Sushi', ar: 'تونة سوشي' },
-    description: { en: '2 pcs tuna sushi.', ar: '٢ قطعة تونة سوشي.' },
+    categoryKey: 'sushi',
+    nameEn: 'Tuna Sushi (2 pcs)',
+    nameAr: 'تونا سوشي (قطعتان)',
     price: '4$'
-  },
-  {
+  }),
+  makeItem({
     id: 'sushi-shrimp',
-    category: 'sushi',
-    name: { en: 'Shrimp Sushi', ar: 'روبيان سوشي' },
-    description: { en: '2 pcs shrimp sushi.', ar: '٢ قطعة روبيان سوشي.' },
+    categoryKey: 'sushi',
+    nameEn: 'Shrimp Sushi (2 pcs)',
+    nameAr: 'روبيان سوشي (قطعتان)',
     price: '3$'
-  },
-  {
+  }),
+  makeItem({
     id: 'sushi-crab',
-    category: 'sushi',
-    name: { en: 'Crab Sushi', ar: 'كابوريا سوشي' },
-    description: { en: '2 pcs crab sushi.', ar: '٢ قطعة كابوريا سوشي.' },
+    categoryKey: 'sushi',
+    nameEn: 'Crab Sushi (2 pcs)',
+    nameAr: 'كابوريا سوشي (قطعتان)',
     price: '2.5$'
-  },
+  }),
 
-  // DUO MAKI – 4 PCS
-  {
+  // DUO MAKI
+  makeItem({
     id: 'duo-maki',
-    category: 'duoMaki',
-    name: {
-      en: 'Duo Maki',
-      ar: 'ديو ماكي'
-    },
-    description: {
-      en: 'Salmon, tuna, avocado roll wrapped in salmon and tuna (4 pcs).',
-      ar: 'رول سالمون، تونة وأفوكادو ملفوف بسالمون وتونة (٤ قطع).'
-    },
-    price: '6.5$'
-  },
+    categoryKey: 'duo_maki',
+    nameEn: 'Duo Maki (4 pcs)',
+    nameAr: 'ديو ماكي (4 قطع)',
+    price: '6.5$',
+    descEn: 'Salmon, tuna, avocado roll wrapped in salmon & tuna',
+    descAr: 'رول سلمون وتونا وأفوكادو ملفوف بسلمون وتونا'
+  }),
 
-  // VEGETARIAN MAKI – 4 PCS
-  {
+  // VEGETARIAN MAKI
+  makeItem({
     id: 'vegetarian-maki',
-    category: 'vegetarianMaki',
-    name: { en: 'Vegetarian Maki', ar: 'فيجيتيريان ماكي' },
-    description: {
-      en: 'Mango, avocado, cucumber, lettuce roll wrapped in parsley (4 pcs).',
-      ar: 'لفافة مانغو، أفوكادو، خيار وخس ملفوفة ببقدونس (٤ قطع).'
-    },
-    price: '4$'
-  },
+    categoryKey: 'vegetarian',
+    nameEn: 'Vegetarian Maki (4 pcs)',
+    nameAr: 'فيجيتيريان ماكي (4 قطع)',
+    price: '4$',
+    descEn: 'Mango, avocado, cucumber, lettuce roll wrapped in parsley',
+    descAr: 'مانغو، أفوكادو، خيار، خس ملفوف ببقدونس'
+  }),
 
-  // REGINA SPECIAL MAKI – 4 PCS
-  {
+  // REGINA SPECIAL MAKI
+  makeItem({
     id: 'regina-special',
-    category: 'reginaSpecialMaki',
-    name: { en: 'Regina Special Maki', ar: 'ريجينا سبيشل ماكي' },
-    description: {
-      en: 'Grilled salmon wrapped in avocado (4 pcs).',
-      ar: 'سالمون مشوي ملفوف بأفوكادو (٤ قطع).'
-    },
-    price: '4.75$'
-  },
+    categoryKey: 'regina',
+    nameEn: 'Regina Special Maki (4 pcs)',
+    nameAr: 'ريجينا سبيشل ماكي (4 قطع)',
+    price: '4.75$',
+    descEn: 'Grilled salmon wrapped in avocado',
+    descAr: 'سلمون مشوي ملفوف بأفوكادو'
+  }),
 
   // CREAMY / SMOKED / SALMON CRAB MAKI
-  {
+  makeItem({
     id: 'creamy-shrimp',
-    category: 'creamySmokedSalmonCrab',
-    name: { en: 'Creamy Shrimp (4 pcs)', ar: 'كريمي روبيان (٤ قطع)' },
-    description: {
-      en: 'Shrimp mixed with Philadelphia and avocado wrapped in avocado.',
-      ar: 'روبيان مع جبنة فيلادلفيا وأفوكادو، ملفوف بأفوكادو.'
-    },
-    price: '5.5$'
-  },
-  {
+    categoryKey: 'creamy',
+    nameEn: 'Creamy Shrimp (4 pcs)',
+    nameAr: 'كريمي روبيان (4 قطع)',
+    price: '5.5$',
+    descEn: 'Shrimp with Philadelphia & avocado wrapped in avocado',
+    descAr: 'روبيان مع جبنة فيلادلفيا وأفوكادو ملفوف بأفوكادو'
+  }),
+  makeItem({
     id: 'smoked-salmon-maki',
-    category: 'creamySmokedSalmonCrab',
-    name: { en: 'Smoked Salmon Maki (4 pcs)', ar: 'سموكد سالمون ماكي (٤ قطع)' },
-    description: {
-      en: 'Smoked salmon and avocado roll wrapped in smoked salmon.',
-      ar: 'رول سالمون مدخّن وأفوكادو ملفوف بسالمون مدخّن.'
-    },
-    price: '6.5$'
-  },
-  {
+    categoryKey: 'creamy',
+    nameEn: 'Smoked Salmon Maki (4 pcs)',
+    nameAr: 'سموك سلمون ماكي (4 قطع)',
+    price: '6.5$',
+    descEn: 'Smoked salmon and avocado roll wrapped in smoked salmon',
+    descAr: 'سلمون مدخن وأفوكادو، ملفوف بسلمون مدخن'
+  }),
+  makeItem({
     id: 'salmon-crab-maki',
-    category: 'creamySmokedSalmonCrab',
-    name: { en: 'Salmon Crab Maki (4 pcs)', ar: 'سالمون كاب ماكي (٤ قطع)' },
-    description: {
-      en: 'Salmon and mango roll wrapped in crab.',
-      ar: 'رول سالمون ومانغو ملفوف بكابوريا.'
-    },
-    price: '6.5$'
-  },
+    categoryKey: 'creamy',
+    nameEn: 'Salmon Crab Maki (4 pcs)',
+    nameAr: 'سلمون كراب ماكي (4 قطع)',
+    price: '6.5$',
+    descEn: 'Salmon and mango roll wrapped in crab',
+    descAr: 'رول سلمون ومانغو ملفوف بكابوريا'
+  }),
 
-  // PLATTERS
-  {
+  // PLATTERS (نبسّط شوي)
+  makeItem({
     id: 'platter-crab-mix',
-    category: 'platters',
-    name: { en: 'Crab Mix – 12 pcs', ar: 'كراب ميكس – ١٢ قطعة' },
-    description: {
-      en: 'Crazy maki 4 pcs, Avocado wrap 4 pcs, Fruity crab 4 pcs.',
-      ar: '٤ قطع كرايزي ماكي، ٤ قطع أفوكادو راب، ٤ قطع فروتي كراب.'
-    },
+    categoryKey: 'platters',
+    nameEn: 'Crab Mix – 12 pcs',
+    nameAr: 'كراب مكس – 12 قطعة',
     price: '12$',
-    isSignature: true
-  },
-  {
+    descEn: 'Crazy maki, avocado wrap, fruity crab',
+    descAr: 'كريزي ماكي، أفوكادو رابس، فروتي كراب'
+  }),
+  makeItem({
     id: 'platter-salmon-mix',
-    category: 'platters',
-    name: { en: 'Salmon Mix – 12 pcs', ar: 'سالمون ميكس – ١٢ قطعة' },
-    description: {
-      en: 'Salmon maki 4 pcs, Fruity salmon 4 pcs, Volcano salmon 4 pcs, Salmon wrap 4 pcs.',
-      ar: '٤ سالمون ماكي، ٤ فروتي سالمون، ٤ فولكانو سالمون، ٤ سالمون راب.'
-    },
-    price: '18$',
-    isSignature: true
-  },
-  {
+    categoryKey: 'platters',
+    nameEn: 'Salmon Mix – 12 pcs',
+    nameAr: 'سلمون مكس – 12 قطعة',
+    price: '18$'
+  }),
+  makeItem({
     id: 'platter-shrimp-mix',
-    category: 'platters',
-    name: { en: 'Shrimp Mix – 12 pcs', ar: 'روبيان ميكس – ١٢ قطعة' },
-    description: {
-      en: 'Shrimp volcano 4 pcs, Shrimp mango 4 pcs, Shrimp ebiko 4 pcs.',
-      ar: '٤ فولكانو روبيان، ٤ روبيان مانغو، ٤ روبيان إبيكو.'
-    },
+    categoryKey: 'platters',
+    nameEn: 'Shrimp Mix – 12 pcs',
+    nameAr: 'روبيان مكس – 12 قطعة',
     price: '14$'
-  },
-  {
+  }),
+  makeItem({
     id: 'platter-special-mix',
-    category: 'platters',
-    name: { en: 'Special Mix – 12 pcs', ar: 'سبيشل ميكس – ١٢ قطعة' },
-    description: {
-      en: 'Avocado wrap 4 pcs, Volcano salmon 4 pcs, Fruity shrimp 4 pcs.',
-      ar: '٤ أفوكادو راب، ٤ فولكانو سالمون، ٤ فروتي روبيان.'
-    },
+    categoryKey: 'platters',
+    nameEn: 'Special Mix – 12 pcs',
+    nameAr: 'سبيشل مكس – 12 قطعة',
     price: '17$'
-  },
-  {
+  }),
+  makeItem({
     id: 'platter-special-sashimi',
-    category: 'platters',
-    name: { en: 'Special Sashimi Mix – 8 pcs', ar: 'سبيشل ساشيمي ميكس – ٨ قطع' },
-    description: {
-      en: 'Salmon, tuna, shrimp, crab.',
-      ar: 'سالمون، تونة، روبيان، كابوريا.'
-    },
+    categoryKey: 'platters',
+    nameEn: 'Special Sashimi Mix – 8 pcs',
+    nameAr: 'سبيشل ساشيمي مكس – 8 قطع',
     price: '13$'
-  },
+  }),
 
   // SPECIAL ROLLS
-  {
-    id: 'special-dynamite-shrimp-roll',
-    category: 'specialRolls',
-    name: { en: 'Dynamite Shrimp Roll – 8 pcs', ar: 'دايناميت روبيان رول – ٨ قطع' },
-    description: {
-      en: 'Crispy shrimp roll with dynamite sauce.',
-      ar: 'رول روبيان مقرمش مع صوص دايناميت.'
-    },
-    price: '12$',
-    isSignature: true
-  },
-  {
-    id: 'special-dragon-roll',
-    category: 'specialRolls',
-    name: { en: 'Dragon Roll – 8 pcs', ar: 'دراجون رول – ٨ قطع' },
-    description: {
-      en: 'Layered roll with shrimp and avocado.',
-      ar: 'رول مميز بطبقات روبيان وأفوكادو.'
-    },
-    price: '10$',
-    isSignature: true
-  },
+  makeItem({
+    id: 'special-dynamite',
+    categoryKey: 'special_rolls',
+    nameEn: 'Dynamite Shrimp Roll – 8 pcs',
+    nameAr: 'داينامايت روبيان رول – 8 قطع',
+    price: '12$'
+  }),
+  makeItem({
+    id: 'special-dragon',
+    categoryKey: 'special_rolls',
+    nameEn: 'Dragon Roll – 8 pcs',
+    nameAr: 'دراجون رول – 8 قطع',
+    price: '10$'
+  }),
 
-  // MINI BOAT – 25 PCS
-  {
-    id: 'mini-boat',
-    category: 'miniBoat',
-    name: { en: 'Mini Boat – 25 pcs', ar: 'ميني بوت – ٢٥ قطعة' },
-    description: {
-      en: '3 Crispy Crazy Crab, 3 Volcano Salmon, 3 Philadelphia Salmon, 3 Fruity Crab, 3 Volcano Shrimp, 3 California, 3 Ebiko Shrimp, 2 sashimi, 2 sushi.',
-      ar: 'تشكيلة من كريسبي كرايزي كراب، فولكانو سالمون، فيلادلفيا سالمون، فروتي كراب، فولكانو روبيان، كاليفورنيا، إبيكو روبيان، مع قطع ساشيمي وسوشي.'
-    },
+  // MINI BOAT
+  makeItem({
+    id: 'boat-mini',
+    categoryKey: 'boat_mini',
+    nameEn: 'Mini Boat – 25 pcs',
+    nameAr: 'ميني بوت – 25 قطعة',
     price: '32$',
-    isSignature: true
-  },
+    descEn: 'Selection of crispy crazy, volcano, California, sashimi & sushi',
+    descAr: 'تشكيلة من كريسبي كريزي، فولكينو، كاليفورنيا، ساشيمي وسوشي'
+  }),
 
-  // BIG BOAT – 50 PCS
-  {
-    id: 'big-boat',
-    category: 'bigBoat',
-    name: { en: 'Big Boat – 50 pcs', ar: 'بيغ بوت – ٥٠ قطعة' },
-    description: {
-      en: 'Includes tuna, shrimp, crab and salmon sashimi and sushi, plus a large mix of special rolls.',
-      ar: 'قارب كبير فيه ساشيمي وسوشي تونة، روبيان، كابوريا وسالمون مع تشكيلة لفائف مميزة.'
-    },
-    price: '60$',
-    isSignature: true
-  },
+  // BIG BOAT
+  makeItem({
+    id: 'boat-big',
+    categoryKey: 'boat_big',
+    nameEn: 'Big Boat – 50 pcs',
+    nameAr: 'بيغ بوت – 50 قطعة',
+    price: '60$'
+  }),
 
-  // ITALIAN PIZZA
-  {
+  // PIZZA
+  makeItem({
     id: 'pizza-vegetarian',
-    category: 'pizza',
-    name: { en: 'Vegetarian Pizza', ar: 'بيتزا خضار' },
-    description: { en: 'Italian vegetarian pizza.', ar: 'بيتزا إيطالية بالخضار.' },
+    categoryKey: 'pizza',
+    nameEn: 'Vegetarian Pizza',
+    nameAr: 'بيتزا خضار',
     price: '10$'
-  },
-  {
+  }),
+  makeItem({
     id: 'pizza-margharita',
-    category: 'pizza',
-    name: { en: 'Margharita Pizza', ar: 'بيتزا مارغريتا' },
-    description: { en: 'Classic margharita pizza.', ar: 'بيتزا مارغريتا كلاسيكية.' },
+    categoryKey: 'pizza',
+    nameEn: 'Margharita Pizza',
+    nameAr: 'بيتزا مارغريتا',
     price: '10$'
-  },
-  {
+  }),
+  makeItem({
     id: 'pizza-shrimp',
-    category: 'pizza',
-    name: { en: 'Shrimp Pizza', ar: 'بيتزا روبيان' },
-    description: { en: 'Pizza topped with shrimp.', ar: 'بيتزا مع روبيان.' },
+    categoryKey: 'pizza',
+    nameEn: 'Shrimp Pizza',
+    nameAr: 'بيتزا روبيان',
     price: '12$'
-  },
-  {
+  }),
+  makeItem({
     id: 'pizza-pepperoni',
-    category: 'pizza',
-    name: { en: 'Pepperoni Pizza', ar: 'بيتزا ببروني' },
-    description: { en: 'Pepperoni pizza.', ar: 'بيتزا ببروني.' },
+    categoryKey: 'pizza',
+    nameEn: 'Pepperoni Pizza',
+    nameAr: 'بيتزا ببروني',
     price: '12$'
-  },
-  {
+  }),
+  makeItem({
     id: 'pizza-smoked-salmon',
-    category: 'pizza',
-    name: { en: 'Smoked Salmon Pizza', ar: 'بيتزا سالمون مدخّن' },
-    description: { en: 'Pizza with smoked salmon.', ar: 'بيتزا مع سالمون مدخّن.' },
+    categoryKey: 'pizza',
+    nameEn: 'Smoked Salmon Pizza',
+    nameAr: 'بيتزا سلمون مدخن',
     price: '14$'
-  },
+  }),
 
   // KUMPIR POTATO
-  {
+  makeItem({
     id: 'kumpir-loaded',
-    category: 'kumpir',
-    name: { en: 'Loaded Kumpir', ar: 'كومبير محشو' },
-    description: {
-      en: 'Mushroom, cabbage, pickles, corn, carrots, olives.',
-      ar: 'فطر، ملفوف، مخلل، ذرة، جزر، زيتون.'
-    },
-    price: '7$'
-  },
-  {
-    id: 'kumpir-add-mortadella',
-    category: 'kumpir',
-    name: { en: 'Add-ons: Mortadella', ar: 'إضافة: مرتديلا' },
-    description: {
-      en: 'Extra mortadella topping for kumpir.',
-      ar: 'إضافة مرتديلا على الكومبير.'
-    },
+    categoryKey: 'kumpir',
+    nameEn: 'Loaded Kumpir',
+    nameAr: 'كمبير محشوة',
+    price: '7$',
+    descEn: 'Mushroom, cabbage, pickles, corn, carrots, olives',
+    descAr: 'فطر، ملفوف، مخلل، ذرة، جزر، زيتون'
+  }),
+  makeItem({
+    id: 'kumpir-mortadella',
+    categoryKey: 'kumpir',
+    nameEn: 'Add Mortadella',
+    nameAr: 'إضافة مرتديلا',
     price: '1.5$'
-  },
-  {
-    id: 'kumpir-add-chicken',
-    category: 'kumpir',
-    name: { en: 'Add-ons: Chicken', ar: 'إضافة: دجاج' },
-    description: {
-      en: 'Extra chicken topping for kumpir.',
-      ar: 'إضافة دجاج على الكومبير.'
-    },
+  }),
+  makeItem({
+    id: 'kumpir-chicken',
+    categoryKey: 'kumpir',
+    nameEn: 'Add Chicken',
+    nameAr: 'إضافة دجاج',
     price: '1.5$'
-  },
-  {
-    id: 'kumpir-add-shrimp',
-    category: 'kumpir',
-    name: { en: 'Add-ons: Shrimp', ar: 'إضافة: روبيان' },
-    description: {
-      en: 'Extra shrimp topping for kumpir.',
-      ar: 'إضافة روبيان على الكومبير.'
-    },
+  }),
+  makeItem({
+    id: 'kumpir-shrimp',
+    categoryKey: 'kumpir',
+    nameEn: 'Add Shrimp',
+    nameAr: 'إضافة روبيان',
     price: '2$'
-  },
+  }),
 
   // PASTA
-  {
+  makeItem({
     id: 'pasta-chicken-fettuccine',
-    category: 'pasta',
-    name: { en: 'Chicken Fettuccine', ar: 'فيتوتشيني دجاج' },
-    description: { en: 'Chicken fettuccine pasta.', ar: 'باستا فيتوتشيني مع دجاج.' },
+    categoryKey: 'pasta',
+    nameEn: 'Chicken Fettuccine',
+    nameAr: 'فيتوتشيني دجاج',
     price: '12.5$'
-  },
-  {
+  }),
+  makeItem({
     id: 'pasta-bolognese',
-    category: 'pasta',
-    name: { en: 'Pasta Bolognese', ar: 'باستا بولونيز' },
-    description: { en: 'Classic bolognese pasta.', ar: 'باستا بلحم على طريقة بولونيز.' },
+    categoryKey: 'pasta',
+    nameEn: 'Pasta Bolognese',
+    nameAr: 'باستا بولونيز',
     price: '11$'
-  },
-  {
+  }),
+  makeItem({
     id: 'pasta-arrabiata',
-    category: 'pasta',
-    name: { en: 'Pasta Arrabiata', ar: 'باستا أرابياتا' },
-    description: { en: 'Spicy arrabiata pasta.', ar: 'باستا بصلصة أرابياتا الحارة.' },
+    categoryKey: 'pasta',
+    nameEn: 'Pasta Arrabiata',
+    nameAr: 'باستا أرابياتا',
     price: '6.5$'
-  },
-  {
+  }),
+  makeItem({
     id: 'pasta-shrimp',
-    category: 'pasta',
-    name: { en: 'Shrimp Pasta', ar: 'باستا روبيان' },
-    description: { en: 'Pasta with shrimp.', ar: 'باستا مع روبيان.' },
+    categoryKey: 'pasta',
+    nameEn: 'Shrimp Pasta',
+    nameAr: 'باستا روبيان',
     price: '12.5$'
-  },
-  {
+  }),
+  makeItem({
     id: 'pasta-pesto',
-    category: 'pasta',
-    name: { en: 'Pasta al Pesto', ar: 'باستا بيستو' },
-    description: { en: 'Pasta with pesto sauce.', ar: 'باستا مع صلصة البيستو.' },
+    categoryKey: 'pasta',
+    nameEn: 'Pasta al Pesto',
+    nameAr: 'باستا بيستو',
     price: '8$'
-  },
+  }),
 
   // HOT PLATES
-  {
+  makeItem({
     id: 'hot-chicken-scallop',
-    category: 'hotPlates',
-    name: { en: 'Chicken Scallop', ar: 'تشكن سكالوب' },
-    description: {
-      en: 'Chicken scallop with fries & salad.',
-      ar: 'تشكن سكالوب مع بطاطا مقلية وسلطة.'
-    },
+    categoryKey: 'hot_plates',
+    nameEn: 'Chicken Scallop (with fries & salad)',
+    nameAr: 'سكالوب دجاج (مع بطاطا وسلطة)',
     price: '11$'
-  },
-  {
-    id: 'hot-crispy-chicken-strips',
-    category: 'hotPlates',
-    name: { en: 'Crispy Chicken Strips', ar: 'ستريبس دجاج مقرمش' },
-    description: {
-      en: 'Crispy chicken strips with fries & salad.',
-      ar: 'ستريبس دجاج مقرمش مع بطاطا وسلطة.'
-    },
+  }),
+  makeItem({
+    id: 'hot-crispy-strips',
+    categoryKey: 'hot_plates',
+    nameEn: 'Crispy Chicken Strips (with fries & salad)',
+    nameAr: 'ستربس دجاج مقرمش (مع بطاطا وسلطة)',
     price: '9$'
-  },
-  {
+  }),
+  makeItem({
     id: 'hot-chicken-burger',
-    category: 'hotPlates',
-    name: { en: 'Chicken Burger', ar: 'تشكن برغر' },
-    description: {
-      en: 'Chicken burger with fries & salad.',
-      ar: 'برغر دجاج مع بطاطا وسلطة.'
-    },
+    categoryKey: 'hot_plates',
+    nameEn: 'Chicken Burger (with fries & salad)',
+    nameAr: 'تشكن برغر (مع بطاطا وسلطة)',
     price: '9$'
-  },
-  {
+  }),
+  makeItem({
     id: 'hot-beef-burger',
-    category: 'hotPlates',
-    name: { en: 'Beef Burger', ar: 'بيف برغر' },
-    description: {
-      en: 'Beef burger with fries & salad.',
-      ar: 'برغر لحم مع بطاطا وسلطة.'
-    },
+    categoryKey: 'hot_plates',
+    nameEn: 'Beef Burger (with fries & salad)',
+    nameAr: 'بيف برغر (مع بطاطا وسلطة)',
     price: '11$'
-  },
-  {
+  }),
+  makeItem({
     id: 'hot-shrimp-tempura',
-    category: 'hotPlates',
-    name: { en: 'Shrimp Tempura', ar: 'روبيان تيمبورا' },
-    description: {
-      en: 'Shrimp tempura with fries & salad.',
-      ar: 'روبيان تيمبورا مع بطاطا وسلطة.'
-    },
+    categoryKey: 'hot_plates',
+    nameEn: 'Shrimp Tempura (with fries & salad)',
+    nameAr: 'روبيان تيمبورا (مع بطاطا وسلطة)',
     price: '12$'
-  },
-  {
+  }),
+  makeItem({
     id: 'hot-grilled-salmon',
-    category: 'hotPlates',
-    name: { en: 'Grilled Salmon', ar: 'سالمون مشوي' },
-    description: {
-      en: 'Grilled salmon with vegetables.',
-      ar: 'سالمون مشوي مع خضار.'
-    },
+    categoryKey: 'hot_plates',
+    nameEn: 'Grilled Salmon (with vegetables)',
+    nameAr: 'سلمون مشوي (مع خضار)',
     price: '25$'
-  },
-  {
+  }),
+  makeItem({
     id: 'hot-fries',
-    category: 'hotPlates',
-    name: { en: 'Fries', ar: 'بطاطا مقلية' },
-    description: { en: 'Portion of fries.', ar: 'طبق بطاطا مقلية.' },
+    categoryKey: 'hot_plates',
+    nameEn: 'Fries',
+    nameAr: 'بطاطا مقلية',
     price: '2$'
-  },
+  }),
 
-  // DRINKS – كلهم تحت نفس الكاتيجوري مع تقسيم بالسطر في الوصف
-  // Beverages
-  {
+  // DRINKS (نبسّط شوية)
+  makeItem({
     id: 'drinks-water-big',
-    category: 'drinks',
-    name: { en: 'Water (Big)', ar: 'مياه (كَبيرة)' },
-    description: { en: 'Still water (big).', ar: 'مياه معدنية كبيرة.' },
+    categoryKey: 'drinks',
+    nameEn: 'Water (Big)',
+    nameAr: 'مياه كبيرة',
     price: '1.1$'
-  },
-  {
+  }),
+  makeItem({
     id: 'drinks-water-small',
-    category: 'drinks',
-    name: { en: 'Water (Small)', ar: 'مياه (صغيرة)' },
-    description: { en: 'Still water (small).', ar: 'مياه معدنية صغيرة.' },
+    categoryKey: 'drinks',
+    nameEn: 'Water (Small)',
+    nameAr: 'مياه صغيرة',
     price: '0.5$'
-  },
-  {
+  }),
+  makeItem({
     id: 'drinks-pepsi',
-    category: 'drinks',
-    name: { en: 'Pepsi', ar: 'بيبسي' },
-    description: { en: 'Soft drink.', ar: 'مشروب غازي.' },
+    categoryKey: 'drinks',
+    nameEn: 'Pepsi',
+    nameAr: 'بيبسي',
     price: '1.75$'
-  },
-  {
+  }),
+  makeItem({
     id: 'drinks-7up',
-    category: 'drinks',
-    name: { en: '7up', ar: 'سفن آب' },
-    description: { en: 'Soft drink.', ar: 'مشروب غازي.' },
+    categoryKey: 'drinks',
+    nameEn: '7Up',
+    nameAr: 'سفن أب',
     price: '1.75$'
-  },
-  {
+  }),
+  makeItem({
     id: 'drinks-mirinda',
-    category: 'drinks',
-    name: { en: 'Mirinda', ar: 'ميرندا' },
-    description: { en: 'Soft drink.', ar: 'مشروب غازي.' },
+    categoryKey: 'drinks',
+    nameEn: 'Mirinda',
+    nameAr: 'ميريندا',
     price: '1.75$'
-  },
-
-  // Fresh Juice
-  {
-    id: 'drinks-juice-orange',
-    category: 'drinks',
-    name: { en: 'Orange Juice', ar: 'عصير برتقال' },
-    description: { en: 'Fresh orange juice.', ar: 'عصير برتقال طازج.' },
+  }),
+  makeItem({
+    id: 'drinks-orange-juice',
+    categoryKey: 'drinks',
+    nameEn: 'Fresh Orange Juice',
+    nameAr: 'عصير برتقال طازج',
     price: '3.7$'
-  },
-  {
-    id: 'drinks-juice-strawberry',
-    category: 'drinks',
-    name: { en: 'Strawberry Juice', ar: 'عصير فراولة' },
-    description: { en: 'Fresh strawberry juice.', ar: 'عصير فراولة طازج.' },
+  }),
+  makeItem({
+    id: 'drinks-strawberry-juice',
+    categoryKey: 'drinks',
+    nameEn: 'Strawberry Juice',
+    nameAr: 'عصير فراولة',
     price: '3.7$'
-  },
-  {
-    id: 'drinks-juice-carrot',
-    category: 'drinks',
-    name: { en: 'Carrot Juice', ar: 'عصير جزر' },
-    description: { en: 'Fresh carrot juice.', ar: 'عصير جزر طازج.' },
-    price: '3.75$'
-  },
-  {
-    id: 'drinks-juice-lemonade',
-    category: 'drinks',
-    name: { en: 'Lemonade', ar: 'ليموناضة' },
-    description: { en: 'Fresh lemonade.', ar: 'ليموناضة طازجة.' },
+  }),
+  makeItem({
+    id: 'drinks-lemonade',
+    categoryKey: 'drinks',
+    nameEn: 'Lemonade',
+    nameAr: 'ليموناضة',
     price: '2.65$'
-  },
-  {
-    id: 'drinks-juice-mango',
-    category: 'drinks',
-    name: { en: 'Mango Juice', ar: 'عصير مانغو' },
-    description: { en: 'Fresh mango juice.', ar: 'عصير مانغو طازج.' },
+  }),
+  makeItem({
+    id: 'drinks-mango-juice',
+    categoryKey: 'drinks',
+    nameEn: 'Mango Juice',
+    nameAr: 'عصير مانغو',
     price: '4.2$'
-  },
-  {
-    id: 'drinks-juice-minted-lemonade',
-    category: 'drinks',
-    name: { en: 'Minted Lemonade', ar: 'ليموناضة بالنعناع' },
-    description: { en: 'Lemonade with mint.', ar: 'ليموناضة مع نعناع.' },
+  }),
+  makeItem({
+    id: 'drinks-mint-lemon',
+    categoryKey: 'drinks',
+    nameEn: 'Minted Lemonade',
+    nameAr: 'ليموناضة بالنعناع',
     price: '2.85$'
-  },
-
-  // Milkshake
-  {
-    id: 'drinks-milkshake-strawberry',
-    category: 'drinks',
-    name: { en: 'Strawberry Milkshake', ar: 'ميلك شيك فراولة' },
-    description: { en: 'Strawberry milkshake.', ar: 'ميلك شيك فراولة.' },
-    price: '4.4$'
-  },
-  {
-    id: 'drinks-milkshake-kinder',
-    category: 'drinks',
-    name: { en: 'Kinder Milkshake', ar: 'ميلك شيك كيندر' },
-    description: { en: 'Kinder chocolate milkshake.', ar: 'ميلك شيك كيندر.' },
-    price: '4.4$'
-  },
-  {
-    id: 'drinks-milkshake-chocolate',
-    category: 'drinks',
-    name: { en: 'Chocolate Milkshake', ar: 'ميلك شيك شوكولا' },
-    description: { en: 'Chocolate milkshake.', ar: 'ميلك شيك شوكولا.' },
-    price: '4.4$'
-  },
-  {
-    id: 'drinks-milkshake-oreo',
-    category: 'drinks',
-    name: { en: 'Oreo Milkshake', ar: 'ميلك شيك أوريو' },
-    description: { en: 'Oreo milkshake.', ar: 'ميلك شيك أوريو.' },
-    price: '4.4$'
-  },
-  {
-    id: 'drinks-milkshake-caramel',
-    category: 'drinks',
-    name: { en: 'Caramel Milkshake', ar: 'ميلك شيك كراميل' },
-    description: { en: 'Caramel milkshake.', ar: 'ميلك شيك كراميل.' },
-    price: '4.4$'
-  },
-
-  // Smoothie
-  {
-    id: 'drinks-smoothie-strawberry',
-    category: 'drinks',
-    name: { en: 'Strawberry Smoothie', ar: 'سموثي فراولة' },
-    description: { en: 'Strawberry smoothie.', ar: 'سموثي فراولة.' },
-    price: '3.4$'
-  },
-  {
-    id: 'drinks-smoothie-mango',
-    category: 'drinks',
-    name: { en: 'Mango Smoothie', ar: 'سموثي مانغو' },
-    description: { en: 'Mango smoothie.', ar: 'سموثي مانغو.' },
-    price: '3.4$'
-  },
-  {
-    id: 'drinks-smoothie-peach',
-    category: 'drinks',
-    name: { en: 'Peach Smoothie', ar: 'سموثي خوخ' },
-    description: { en: 'Peach smoothie.', ar: 'سموثي خوخ.' },
-    price: '3.3$'
-  },
-  {
-    id: 'drinks-smoothie-passion',
-    category: 'drinks',
-    name: { en: 'Passion Smoothie', ar: 'سموثي باشن فروت' },
-    description: { en: 'Passion fruit smoothie.', ar: 'سموثي باشن فروت.' },
-    price: '3.4$'
-  },
-  {
-    id: 'drinks-smoothie-mixed-berries',
-    category: 'drinks',
-    name: { en: 'Mixed Berries Smoothie', ar: 'سموثي بيري مشكل' },
-    description: { en: 'Mixed berries smoothie.', ar: 'سموثي توت مشكل.' },
-    price: '3.4$'
-  },
-
-  // Mojito
-  {
-    id: 'drinks-mojito-peach',
-    category: 'drinks',
-    name: { en: 'Peach Mojito', ar: 'موهيتو خوخ' },
-    description: { en: 'Peach mojito.', ar: 'موهيتو بنكهة الخوخ.' },
-    price: '3.1$'
-  },
-  {
-    id: 'drinks-mojito-passion',
-    category: 'drinks',
-    name: { en: 'Passion Mojito', ar: 'موهيتو باشن فروت' },
-    description: { en: 'Passion fruit mojito.', ar: 'موهيتو باشن فروت.' },
-    price: '3.1$'
-  },
-  {
-    id: 'drinks-mojito-pomegranate',
-    category: 'drinks',
-    name: { en: 'Pomegranate Mojito', ar: 'موهيتو رمان' },
-    description: { en: 'Pomegranate mojito.', ar: 'موهيتو بنكهة الرمان.' },
-    price: '3.1$'
-  },
-  {
-    id: 'drinks-mojito-mango',
-    category: 'drinks',
-    name: { en: 'Mango Mojito', ar: 'موهيتو مانغو' },
-    description: { en: 'Mango mojito.', ar: 'موهيتو بنكهة المانغو.' },
-    price: '3.1$'
-  },
-  {
-    id: 'drinks-mojito-blue-hawaii',
-    category: 'drinks',
-    name: { en: 'Blue Hawaii Mojito', ar: 'بلو هاواي موهيتو' },
-    description: { en: 'Blue Hawaii mojito.', ar: 'موهيتو بلو هاواي.' },
-    price: '3.1$'
-  },
-
-  // Hot Drinks
-  {
-    id: 'drinks-hot-espresso',
-    category: 'drinks',
-    name: { en: 'Espresso', ar: 'إسبريسو' },
-    description: { en: 'Single espresso.', ar: 'فنجان إسبريسو.' },
+  }),
+  makeItem({
+    id: 'drinks-espresso',
+    categoryKey: 'drinks',
+    nameEn: 'Espresso',
+    nameAr: 'إسبريسو',
     price: '1.5$'
-  },
-  {
-    id: 'drinks-hot-double-espresso',
-    category: 'drinks',
-    name: { en: 'Double Espresso', ar: 'دبل إسبريسو' },
-    description: { en: 'Double espresso.', ar: 'إسبريسو مزدوج.' },
+  }),
+  makeItem({
+    id: 'drinks-double-espresso',
+    categoryKey: 'drinks',
+    nameEn: 'Double Espresso',
+    nameAr: 'دبل إسبريسو',
     price: '1.5$'
-  },
-  {
-    id: 'drinks-hot-nescafe',
-    category: 'drinks',
-    name: { en: 'Nescafe', ar: 'نسكافيه' },
-    description: { en: 'Nescafe coffee.', ar: 'نسكافيه.' },
+  }),
+  makeItem({
+    id: 'drinks-cappuccino',
+    categoryKey: 'drinks',
+    nameEn: 'Cappuccino',
+    nameAr: 'كابتشينو',
     price: '1.9$'
-  },
-  {
-    id: 'drinks-hot-cappuccino',
-    category: 'drinks',
-    name: { en: 'Cappuccino', ar: 'كابتشينو' },
-    description: { en: 'Cappuccino.', ar: 'كابتشينو.' },
+  }),
+  makeItem({
+    id: 'drinks-nescafe',
+    categoryKey: 'drinks',
+    nameEn: 'Nescafe',
+    nameAr: 'نسكافيه',
     price: '1.9$'
-  },
-  {
-    id: 'drinks-hot-latte',
-    category: 'drinks',
-    name: {
-      en: 'Caffe Latte (caramel / chocolate / hazelnut)',
-      ar: 'كافيه لاتيه (كراميل / شوكولا / بندق)'
-    },
-    description: {
-      en: 'Caffe latte flavored with caramel, chocolate or hazelnut.',
-      ar: 'كافيه لاتيه بنكهات كراميل أو شوكولا أو بندق.'
-    },
-    price: '2.85$'
-  },
-  {
+  }),
+  makeItem({
     id: 'drinks-hot-chocolate',
-    category: 'drinks',
-    name: { en: 'Hot Chocolate', ar: 'هوت تشوكلت' },
-    description: { en: 'Hot chocolate drink.', ar: 'شراب شوكولا ساخن.' },
+    categoryKey: 'drinks',
+    nameEn: 'Hot Chocolate',
+    nameAr: 'هوت تشوكليت',
     price: '3.3$'
-  },
-  {
-    id: 'drinks-hot-americano',
-    category: 'drinks',
-    name: { en: 'Americano', ar: 'أمريكانو' },
-    description: { en: 'Americano coffee.', ar: 'قهوة أمريكانو.' },
+  }),
+  makeItem({
+    id: 'drinks-americano',
+    categoryKey: 'drinks',
+    nameEn: 'Americano',
+    nameAr: 'أمريكانو',
     price: '1.9$'
-  },
-  {
-    id: 'drinks-hot-flat-white',
-    category: 'drinks',
-    name: { en: 'Flat White', ar: 'فلات وايت' },
-    description: { en: 'Flat white coffee.', ar: 'قهوة فلات وايت.' },
+  }),
+  makeItem({
+    id: 'drinks-flat-white',
+    categoryKey: 'drinks',
+    nameEn: 'Flat White',
+    nameAr: 'فلات وايت',
     price: '2.2$'
-  },
-  {
-    id: 'drinks-hot-tea',
-    category: 'drinks',
-    name: { en: 'Tea (Black, Green, Herbal)', ar: 'شاي (أسود، أخضر، أعشاب)' },
-    description: { en: 'Choice of black, green or herbal tea.', ar: 'شاي أسود أو أخضر أو أعشاب.' },
+  }),
+  makeItem({
+    id: 'drinks-tea',
+    categoryKey: 'drinks',
+    nameEn: 'Tea (Black / Green / Herbal)',
+    nameAr: 'شاي (أسود / أخضر / أعشاب)',
     price: '1.8$'
-  }
+  })
 ];
 
 export default menuItems;
