@@ -1,24 +1,35 @@
 'use client';
 
-import React from 'react';
-import { FaWhatsapp } from 'react-icons/fa';
 import { useLanguage } from '@/lib/LanguageContext';
-import { translations } from '@/lib/translations';
-import { buildWhatsAppBaseLink } from '@/lib/whatsapp';
+import { buildMainOrderWhatsAppLink } from '@/lib/whatsapp';
 
 export default function FloatingWhatsAppButton() {
   const { lang } = useLanguage();
-  const t = translations[lang];
+  const isArabic = lang === 'ar';
+
+  const href = buildMainOrderWhatsAppLink(lang);
+  const label = isArabic ? 'اطلب الآن عبر واتساب' : 'Order now on WhatsApp';
 
   return (
     <a
-      href={buildWhatsAppBaseLink()}
+      href={href}
       target="_blank"
-      rel="noreferrer"
-      className="fixed bottom-4 right-4 z-40 inline-flex items-center gap-2 rounded-full bg-emerald-500 px-4 py-2 text-xs font-semibold text-white shadow-xl shadow-emerald-900/50 md:hidden"
+      rel="noopener noreferrer"
+      className="
+        fixed bottom-4 right-4 z-40
+        flex items-center gap-2 rounded-full
+        bg-emerald-500 px-3 py-2 text-xs md:text-sm font-semibold text-white
+        shadow-lg shadow-emerald-500/30
+        hover:bg-emerald-600 hover:shadow-xl
+        active:scale-95 transition-all
+      "
+      aria-label={label}
     >
-      <FaWhatsapp />
-      <span>{t.common.whatsappCtaShort}</span>
+      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-lg">
+        🟢
+      </span>
+      {/* النص يظهر من حجم شاشة sm وما فوق، على الموبايل تبقى الأيقونة فقط لو حاب تخف الزحمة */}
+      <span className="hidden sm:inline">{label}</span>
     </a>
   );
 }
