@@ -3,6 +3,8 @@
 import {
   DELIVERY_AREA_AR,
   DELIVERY_AREA_EN,
+  OPENING_HOURS_AR,
+  OPENING_HOURS_EN,
   RESTAURANT_ADDRESS_AR,
   RESTAURANT_ADDRESS_EN
 } from '@/lib/config';
@@ -17,6 +19,7 @@ export default function ContactPage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-50">
       <section className="mx-auto flex max-w-6xl flex-col gap-8 px-4 pb-16 pt-28 md:px-6 lg:px-8">
+        {/* العنوان الرئيسي */}
         <header className="max-w-2xl space-y-2">
           <p className="text-xs uppercase tracking-[0.2em] text-rose-400">
             {isArabic ? 'تواصل معنا' : 'Contact us'}
@@ -32,7 +35,7 @@ export default function ContactPage() {
         </header>
 
         <div className="grid gap-8 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
-          {/* Info + "Map" placeholder */}
+          {/* معلومات المكان + البوكس اللي يمثل خريطة */}
           <div className="space-y-4">
             <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 md:p-5">
               <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-300">
@@ -44,17 +47,19 @@ export default function ContactPage() {
               <p className="mt-1 text-xs text-slate-400">
                 {isArabic ? DELIVERY_AREA_AR : DELIVERY_AREA_EN}
               </p>
+              <p className="mt-1 text-xs text-slate-400">
+                {isArabic ? OPENING_HOURS_AR : OPENING_HOURS_EN}
+              </p>
 
               <div className="mt-4 rounded-xl border border-slate-800 bg-slate-950/60 p-4 text-xs text-slate-400">
-                {/* مجرد بوكس كـ Placeholder لخريطة */}
                 {isArabic
-                  ? 'سيتم إضافة خريطة تفاعلية هنا لاحقاً (Google Maps).'
-                  : 'An interactive map (Google Maps) can be embedded here later.'}
+                  ? 'سيتم إضافة خريطة تفاعلية (Google Maps) هنا لاحقاً.'
+                  : 'An interactive Google Map can be embedded here later.'}
               </div>
             </div>
           </div>
 
-          {/* Contact form */}
+          {/* نموذج التواصل */}
           <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 md:p-5">
             <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-300">
               {isArabic ? 'ارسِل لنا رسالة' : 'Send us a message'}
