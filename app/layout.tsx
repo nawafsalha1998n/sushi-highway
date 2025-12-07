@@ -9,13 +9,13 @@ import FloatingWhatsAppButton from '@/components/FloatingWhatsAppButton';
 import { RESTAURANT_NAME, SITE_URL } from '@/lib/config';
 
 export const metadata: Metadata = {
-  title: `${RESTAURANT_NAME} · Fresh Sushi in Sour (Tyre)`,
+  title: `${RESTAURANT_NAME} · Fresh Sushi in Beirut`,
   description:
-    'Sushi Highway serves fresh sushi, rolls and Japanese-inspired dishes in Sour (Tyre), Lebanon. Dine in, takeaway or order via WhatsApp within Sour.',
+    'Sushi Highway serves fresh sushi, rolls and Japanese-inspired dishes in Beirut, Lebanon. Dine in, takeaway or order via WhatsApp.',
   openGraph: {
-    title: `${RESTAURANT_NAME} · Fresh Sushi in Sour (Tyre)`,
+    title: `${RESTAURANT_NAME} · Fresh Sushi in Beirut`,
     description:
-      'Fresh rolls, bold flavours and fast service. Welcome to Sushi Highway in Sour (Tyre), Lebanon.',
+      'Fresh rolls, bold flavours and fast service. Welcome to Sushi Highway, Beirut.',
     url: SITE_URL,
     siteName: RESTAURANT_NAME,
     locale: 'en_LB',
