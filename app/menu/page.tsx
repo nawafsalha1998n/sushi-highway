@@ -1,84 +1,40 @@
 'use client';
 
 import React from 'react';
-import { useLanguage } from '@/lib/LanguageContext';
-import { translations } from '@/lib/translations';
-import menuItems, { menuCategories } from '@/lib/menuData';
-import { buildWhatsAppOrderLink } from '@/lib/whatsapp';
+import MenuSection from '@/components/menu/MenuSection';
+import { menuCategories } from '@/lib/menuData';
+import { useLanguage } from '@/context/LanguageContext';
 
-export default function MenuPage() {
+const MenuPage: React.FC = () => {
   const { lang } = useLanguage();
-  const t = translations[lang];
-  const dir = lang === 'ar' ? 'rtl' : 'ltr';
 
   return (
-    <div className={lang === 'ar' ? 'font-arabic bg-slate-950' : 'bg-slate-950'} dir={dir}>
-      <div className="mx-auto max-w-6xl px-4 pb-16 pt-24 sm:pt-28">
-        <div className={dir === 'rtl' ? 'text-right' : 'text-left'}>
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-rose-300">
-            {t.menuPage.title}
+    <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-50">
+      <section className="mx-auto flex max-w-6xl flex-col gap-6 px-4 pb-16 pt-28 md:px-6 lg:px-8">
+        {/* عنوان المنيو */}
+        <header className="mb-2 md:mb-4">
+          <p className="text-xs uppercase tracking-[0.2em] text-rose-400">
+            SUSHI HIGHWAY
           </p>
-          <h1 className="mt-2 text-2xl font-semibold text-slate-50 sm:text-3xl">
-            {t.menuPage.subtitle}
+          <h1 className="mt-1 text-2xl md:text-3xl font-extrabold tracking-tight">
+            {lang === 'ar' ? 'قائمة الطعام' : 'Our Menu'}
           </h1>
-          <p className="mt-2 text-xs text-slate-300">{t.menuPage.orderHint}</p>
-        </div>
+          <p className="mt-2 max-w-2xl text-sm md:text-base text-slate-300">
+            {lang === 'ar'
+              ? 'اكتشف تشكيلتنا الكاملة من السوشي، البوكسات، الأطباق الساخنة والمشروبات.'
+              : 'Discover our full selection of sushi, platters, hot dishes and drinks.'}
+          </p>
+        </header>
 
-        <div className="mt-8 space-y-8">
-          {menuCategories.map((cat) => {
-            const items = menuItems.filter((i) => i.category === cat.id);
-            if (!items.length) return null;
-
-            return (
-              <section key={cat.id}>
-                <h2
-                  className={`mb-3 text-lg font-semibold text-slate-50 ${
-                    dir === 'rtl' ? 'text-right' : 'text-left'
-                  }`}
-                >
-                  {lang === 'ar' ? cat.label.ar : cat.label.en}
-                </h2>
-                <div className="grid gap-4 md:grid-cols-2">
-                  {items.map((item) => {
-                    const name = lang === 'ar' ? item.name.ar : item.name.en;
-                    const description =
-                      lang === 'ar'
-                        ? item.description.ar
-                        : item.description.en;
-                    const orderUrl = buildWhatsAppOrderLink(name, lang);
-                    return (
-                      <article
-                        key={item.id}
-                        className="flex flex-col justify-between rounded-2xl border border-slate-800 bg-slate-900/70 p-4 text-sm text-slate-100 shadow-soft"
-                      >
-                        <div>
-                          <h3 className="text-sm font-semibold text-slate-50">
-                            {name}
-                          </h3>
-                          <p className="mt-1 text-[12px] text-slate-300">
-                            {description}
-                          </p>
-                        </div>
-                        <div className="mt-3 flex items-center justify-between text-xs text-slate-200">
-                          <span className="font-semibold">{item.price}</span>
-                          <a
-                            href={orderUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="rounded-full bg-rose-500 px-3 py-1 text-[11px] font-semibold text-white hover:bg-rose-400"
-                          >
-                            {t.common.orderItemOnWhatsApp}
-                          </a>
-                        </div>
-                      </article>
-                    );
-                  })}
-                </div>
-              </section>
-            );
-          })}
+        {/* الأكورديون لكل قسم */}
+        <div className="flex flex-col gap-4">
+          {menuCategories.map((cat) => (
+            <MenuSection key={cat.id} categoryId={cat.id} />
+          ))}
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
-}
+};
+
+export default MenuPage;
