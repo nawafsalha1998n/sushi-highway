@@ -3,7 +3,7 @@
 import React from 'react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { translations } from '@/lib/translations';
-import menuItems, { menuCategories } from '@/lib/menuData';
+import { menuItems, menuCategories } from '@/lib/menuData';
 import { buildWhatsAppOrderLink } from '@/lib/whatsapp';
 
 export default function MenuPage() {
@@ -82,3 +82,4 @@ export default function MenuPage() {
     </div>
   );
 }
+
