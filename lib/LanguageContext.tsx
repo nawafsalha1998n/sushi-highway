@@ -7,7 +7,6 @@ import React, {
   useState,
   ReactNode
 } from 'react';
-// ✅ عدلنا هذا السطر:
 import type { Lang } from './translations';
 
 type LanguageContextValue = {
@@ -53,4 +52,3 @@ export function useLanguage(): LanguageContextValue {
   }
   return ctx;
 }
-
