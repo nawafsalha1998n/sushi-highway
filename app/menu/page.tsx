@@ -2,174 +2,20 @@
 'use client';
 
 import SectionTitle from '@/components/SectionTitle';
-import MenuSection from '@/components/menu/MenuSection';
-import menuItems, { type CategoryKey, type MenuItem } from '@/lib/menuData';
 import { useLanguage } from '@/lib/LanguageContext';
+import { menuCategories, menuItems, type MenuItem } from '@/lib/menuData';
 
-type CategoryMeta = {
-  key: CategoryKey;
-  emoji: string;
-  titleEn: string;
-  titleAr: string;
-};
+function groupByCategory(items: MenuItem) {
+  return;
+}
 
-const CATEGORIES: CategoryMeta[] = [
-  {
-    key: 'starters',
-    emoji: '🥟',
-    titleEn: 'Starters',
-    titleAr: 'المقبلات'
-  },
-  {
-    key: 'salads',
-    emoji: '🥗',
-    titleEn: 'Salads',
-    titleAr: 'السلطات'
-  },
-  {
-    key: 'temaki',
-    emoji: '🍣',
-    titleEn: 'Temaki – 1 pc',
-    titleAr: 'تيمّاكي – قطعة'
-  },
-  {
-    key: 'hoso',
-    emoji: '🍣',
-    titleEn: 'Hoso Maki – 4 pcs',
-    titleAr: 'هوسو ماكي – 4 قطع'
-  },
-  {
-    key: 'futo',
-    emoji: '🍱',
-    titleEn: 'Futo Maki – 4 pcs',
-    titleAr: 'فوتو ماكي – 4 قطع'
-  },
-  {
-    key: 'ura_tuna',
-    emoji: '🐟',
-    titleEn: 'Uramaki Tuna – 4 pcs',
-    titleAr: 'أوراماكي تونا – 4 قطع'
-  },
-  {
-    key: 'ura_crab',
-    emoji: '🦀',
-    titleEn: 'Uramaki Crab – 4 pcs',
-    titleAr: 'أوراماكي كراب – 4 قطع'
-  },
-  {
-    key: 'ura_salmon',
-    emoji: '🐠',
-    titleEn: 'Uramaki Salmon – 4 pcs',
-    titleAr: 'أوراماكي سلمون – 4 قطع'
-  },
-  {
-    key: 'ura_shrimp',
-    emoji: '🦐',
-    titleEn: 'Uramaki Shrimp – 4 pcs',
-    titleAr: 'أوراماكي روبيان – 4 قطع'
-  },
-  {
-    key: 'sashimi',
-    emoji: '🍥',
-    titleEn: 'Sashimi – 2 pcs',
-    titleAr: 'ساشيمي – قطعتان'
-  },
-  {
-    key: 'sushi',
-    emoji: '🍣',
-    titleEn: 'Sushi – 2 pcs',
-    titleAr: 'سوشي – قطعتان'
-  },
-  {
-    key: 'duo_maki',
-    emoji: '🧡',
-    titleEn: 'Duo Maki – 4 pcs',
-    titleAr: 'ديو ماكي – 4 قطع'
-  },
-  {
-    key: 'vegetarian',
-    emoji: '🥒',
-    titleEn: 'Vegetarian Maki – 4 pcs',
-    titleAr: 'فوتو ماكي نباتي – 4 قطع'
-  },
-  {
-    key: 'regina',
-    emoji: '👑',
-    titleEn: 'Regina Special Maki – 4 pcs',
-    titleAr: 'ريجينا سبيشل ماكي – 4 قطع'
-  },
-  {
-    key: 'creamy',
-    emoji: '💮',
-    titleEn: 'Creamy / Smoked / Salmon Crab',
-    titleAr: 'كريمي / سموكد / سلمون كراب'
-  },
-  {
-    key: 'platters',
-    emoji: '🍱',
-    titleEn: 'Platters',
-    titleAr: 'بوكسات وبلاترز'
-  },
-  {
-    key: 'special_rolls',
-    emoji: '🔥',
-    titleEn: 'Special Rolls',
-    titleAr: 'رولز خاصة'
-  },
-  {
-    key: 'boat_mini',
-    emoji: '⛵',
-    titleEn: 'Mini Boat',
-    titleAr: 'ميني بوت'
-  },
-  {
-    key: 'boat_big',
-    emoji: '🚤',
-    titleEn: 'Big Boat',
-    titleAr: 'بيغ بوت'
-  },
-  {
-    key: 'pizza',
-    emoji: '🍕',
-    titleEn: 'Italian Pizza',
-    titleAr: 'بيتزا إيطالية'
-  },
-  {
-    key: 'kumpir',
-    emoji: '🥔',
-    titleEn: 'Kumpir Potato',
-    titleAr: 'كمبير بطاطا'
-  },
-  {
-    key: 'pasta',
-    emoji: '🍝',
-    titleEn: 'Pasta',
-    titleAr: 'باستا'
-  },
-  {
-    key: 'hot_plates',
-    emoji: '🍗',
-    titleEn: 'Hot Plates',
-    titleAr: 'أطباق ساخنة'
-  },
-  {
-    key: 'drinks',
-    emoji: '🥤',
-    titleEn: 'Drinks',
-    titleAr: 'المشروبات'
-  }
-];
-
-function groupItemsByCategory(items: MenuItem[]): Record<CategoryKey, MenuItem[]> {
-  const grouped: Record<CategoryKey, MenuItem[]> = {} as Record<
-    CategoryKey,
-    MenuItem[]
-  >;
+function groupItemsByCategory(items: MenuItem[]) {
+  const grouped: Record<string, MenuItem[]> = {};
   for (const item of items) {
-    if (!grouped[item.categoryKey]) {
-      grouped[item.categoryKey] = [];
+    if (!grouped[item.categoryId]) {
+      grouped[item.categoryId] = [];
     }
-    grouped[item.categoryKey].push(item);
+    grouped[item.categoryId].push(item);
   }
   return grouped;
 }
@@ -187,31 +33,75 @@ export default function MenuPage() {
           eyebrow={isArabic ? 'منيو سوشي هايواي' : 'Sushi Highway menu'}
           title={
             isArabic
-              ? 'اكتشف تشكيلتنا من السوشي والأطباق الساخنة'
-              : 'Explore our sushi, platters and hot dishes'
+              ? 'تشكيلة مختارة من السوشي والأطباق الساخنة'
+              : 'A curated selection of sushi & hot dishes'
           }
           align={isArabic ? 'right' : 'left'}
         />
 
         <p className="mt-2 text-sm text-slate-300">
           {isArabic
-            ? 'الأسعار بالدولار الأميركي (أو ما يعادلها). يمكنكم الطلب للتناول داخل المطعم أو للتوصيل ضمن مدينة صور.'
-            : 'Prices are in USD (or local equivalent). You can dine in or order delivery within Sour (Tyre).'}
+            ? 'الأسعار بالدولار الأميركي (أو ما يعادلها). التوصيل متوفر ضمن مدينة صور والحوش بجانب المستشفى اللبناني الإيطالي.'
+            : 'Prices are in USD (or local equivalent). Delivery is available within Sour (Tyre) – Al Hosh, near the Lebanese Italian Hospital.'}
         </p>
 
-        <div className="mt-6 space-y-3">
-          {CATEGORIES.map((cat) => {
-            const items = grouped[cat.key] ?? [];
+        <div className="mt-8 space-y-8">
+          {menuCategories.map((cat) => {
+            const items = grouped[cat.id] ?? [];
             if (!items.length) return null;
 
+            const title = cat.name[lang];
+            const desc = cat.description[lang];
+
             return (
-              <MenuSection
-                key={cat.key}
-                emoji={cat.emoji}
-                titleEn={cat.titleEn}
-                titleAr={cat.titleAr}
-                items={items}
-              />
+              <section
+                key={cat.id}
+                className="rounded-3xl border border-slate-800 bg-slate-900/80 p-4 md:p-6"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h2 className="flex items-center gap-2 text-lg font-semibold text-slate-50 md:text-xl">
+                      <span className="text-2xl">{cat.emoji}</span>
+                      <span>{title}</span>
+                    </h2>
+                    {desc && (
+                      <p className="mt-1 text-xs text-slate-400 md:text-sm">
+                        {desc}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="mt-4 grid gap-3 md:grid-cols-2">
+                  {items.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex flex-col gap-2 rounded-2xl bg-slate-950/70 p-3 shadow-sm shadow-slate-900/40"
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="flex-1">
+                          <p className="text-[13px] font-semibold md:text-sm">
+                            {item.name[lang]}
+                          </p>
+                          {item.description && item.description[lang] && (
+                            <p className="mt-0.5 text-[11px] text-slate-400 md:text-xs">
+                              {item.description[lang]}
+                            </p>
+                          )}
+                        </div>
+                        <span className="whitespace-nowrap rounded-full bg-rose-500/10 px-2 py-1 text-[11px] font-semibold text-rose-200 md:text-xs">
+                          {item.price}
+                        </span>
+                      </div>
+                      {item.isSignature && (
+                        <span className="inline-flex w-fit items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium text-amber-300 md:text-xs">
+                          ⭐ {isArabic ? 'صنف مميز' : 'Signature item'}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </section>
             );
           })}
         </div>
