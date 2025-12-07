@@ -117,7 +117,7 @@ export const translations: Record<Lang, Translations> = {
       testimonials: [
         {
           quote:
-            'The rolls are super fresh and the flavours are on point. Our new go-to sushi spot in Beirut.',
+            'The rolls are super fresh and the flavours are on point. Our new go-to sushi spot in Sour.',
           name: 'Maya',
           role: 'Regular guest'
         },
@@ -201,7 +201,7 @@ export const translations: Record<Lang, Translations> = {
         'من الكاليفورنيا رول الكلاسيكي لأجرأ اللفائف الخاصة، سوشي هاي واي بيقدّم سوشي وأطباق يابانية بطزاجة عالية، للأكل بالمطعم أو الطلب عن طريق واتساب.',
       primaryCta: 'عرض المنيو بالكامل',
       secondaryCta: 'اطلب عبر واتساب',
-      subNote: 'نخدم زبائننا في بيروت مع توصيل وسفري وتجربة مميزة داخل المطعم.',
+      subNote: 'نخدم زبائننا في صور مع توصيل وسفري وتجربة مميزة داخل المطعم.',
       imageLabel: 'صحن سوشي هاي واي المميز',
       imageSubLabel: 'تشكيلة من أشهر لفائفنا، مناسبة لشخصين أو ثلاثة.',
       badge: 'تُحضَّر طازجة، لفة وراء لفة'
@@ -290,3 +290,4 @@ export const translations: Record<Lang, Translations> = {
     }
   }
 };
+
