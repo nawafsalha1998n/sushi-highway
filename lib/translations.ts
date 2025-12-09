@@ -222,7 +222,7 @@ export const translations: Record<Lang, Translations> = {
       testimonials: [
         {
           quote:
-            'اللفائف طعمها فريش جداً والنكهات متوازنة. صار مطعمنا المفضل للسوشي ببيروت.',
+            'اللفائف طعمها فريش جداً والنكهات متوازنة. صار مطعمنا المفضل للسوشي بصور.',
           name: 'مايا',
           role: 'زبونة دائمة'
         },
@@ -290,4 +290,5 @@ export const translations: Record<Lang, Translations> = {
     }
   }
 };
+
 
