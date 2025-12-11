@@ -33,8 +33,8 @@ export default function SplashScreen() {
               <Image
                 src="/logo.png"
                 alt="Sushi Highway logo"
-                width={100}
-                height={100}
+                width={120}
+                height={120}
                 className="object-contain p-1.5"
                 priority
               />
@@ -51,5 +51,6 @@ export default function SplashScreen() {
     </AnimatePresence>
   );
 }
+
 
 
