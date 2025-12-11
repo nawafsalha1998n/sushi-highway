@@ -17,6 +17,7 @@ function buildItemWhatsAppLink(itemName: string, isArabic: boolean) {
 // خريطة تربط كل صنف برقم الصورة بحسب ترتيبه في القائمة
 const itemImageMap: Record<string, string> = {};
 (menuItems as any[]).forEach((item, index) => {
+  // مثال:
   // أول صنف => /menu/1.png
   // ثاني صنف => /menu/2.png
   itemImageMap[item.id] = `/menu/${index + 1}.png`;
@@ -45,7 +46,6 @@ export default function MenuPage() {
     );
   });
 
-  // سكرول ناعم لقسم معيّن
   const handleScrollToCategory = (categoryId: string | 'all') => {
     if (categoryId === 'all') {
       const root = document.getElementById('menu-root');
@@ -63,18 +63,16 @@ export default function MenuPage() {
 
   return (
     <main dir={dir} className="min-h-screen bg-slate-950 text-slate-50">
-      {/* شريط عنوان المنيو + البحث + الفلاتر — ثابت (sticky) تحت الهيدر */}
-      <section className="sticky top-16 z-30 border-b border-slate-900 bg-slate-950/95 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-4 sm:px-6 sm:py-5">
+      {/* الهيدر الخاص بالمنيو */}
+      <section className="border-b border-slate-900 bg-slate-950/80">
+        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-6 sm:px-6 sm:py-8">
           <div className={isArabic ? 'text-right' : 'text-left'}>
-            <h1 className="text-xl font-semibold sm:text-2xl">{pageTitle}</h1>
-            <p className="mt-1 text-xs text-slate-400 sm:text-sm">
-              {pageSubtitle}
-            </p>
+            <h1 className="text-2xl font-semibold sm:text-3xl">{pageTitle}</h1>
+            <p className="mt-1 text-sm text-slate-400">{pageSubtitle}</p>
           </div>
 
           {/* شريط البحث + قائمة الأقسام (تعمل سكورل للأقسام) */}
-          <div className="mt-1 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex-1">
               <input
                 type="text"
@@ -85,7 +83,7 @@ export default function MenuPage() {
                 }
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full rounded-full border border-slate-700 bg-slate-900/90 px-4 py-2 text-xs text-slate-100 placeholder:text-slate-500 focus:border-rose-400 focus:outline-none"
+                className="w-full rounded-full border border-slate-700 bg-slate-900/80 px-4 py-2 text-xs text-slate-100 placeholder:text-slate-500 focus:border-rose-400 focus:outline-none"
               />
             </div>
 
@@ -94,7 +92,7 @@ export default function MenuPage() {
               <button
                 type="button"
                 onClick={() => handleScrollToCategory('all')}
-                className="rounded-full border border-slate-700 bg-slate-900/80 px-3 py-1 text-[11px] font-medium text-slate-200 hover:border-rose-400 hover:text-rose-200"
+                className="rounded-full bg-slate-900/70 px-3 py-1 text-[11px] font-medium text-slate-200 border border-slate-700 hover:border-rose-400 hover:text-rose-200"
               >
                 {isArabic ? 'الكل' : 'All'}
               </button>
@@ -104,7 +102,7 @@ export default function MenuPage() {
                   key={cat.id}
                   type="button"
                   onClick={() => handleScrollToCategory(cat.id)}
-                  className="rounded-full border border-slate-700 bg-slate-900/80 px-3 py-1 text-[11px] font-medium text-slate-200 hover:border-rose-400 hover:text-rose-200"
+                  className="rounded-full bg-slate-900/70 px-3 py-1 text-[11px] font-medium text-slate-200 border border-slate-700 hover:border-rose-400 hover:text-rose-200"
                 >
                   <span className="mr-1">{cat.emoji}</span>
                   <span>{cat.name[lang]}</span>
