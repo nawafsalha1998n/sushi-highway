@@ -31,7 +31,7 @@ export default function SplashScreen() {
           >
             <div className="mb-4 flex h-20 w-20 items-center justify-center overflow-hidden rounded-3xl border border-rose-400/60 bg-slate-900/80 shadow-2xl shadow-rose-900/60">
               <Image
-                src="/logo.PNG"
+                src="/logo.png"
                 alt="Sushi Highway logo"
                 width={80}
                 height={80}
@@ -51,3 +51,4 @@ export default function SplashScreen() {
     </AnimatePresence>
   );
 }
+
