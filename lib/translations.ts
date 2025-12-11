@@ -160,7 +160,7 @@ export const translations: Record<Lang, Translations> = {
       title: 'Contact & Location',
       subtitle: 'Find us, say hello or send your order.',
       addressLabel: 'Visit us',
-      addressValue: 'Sushi Highway — Sour, Lebanon (example location)',
+      addressValue: 'Sushi Highway — Sour, Lebanon (Next to Lebanese Italian Hospital )',
       hoursLabel: 'Open daily · 12:00 PM – 11:30 PM',
       mapTitle: 'Map preview',
       formTitle: 'Send us a message',
@@ -264,7 +264,7 @@ export const translations: Record<Lang, Translations> = {
       title: 'التواصل والموقع',
       subtitle: 'زورنا، احكي معنا، أو ابعت طلبك.',
       addressLabel: 'زورونا',
-      addressValue: 'سوشي هاي واي — صور، لبنان ',
+      addressValue: 'سوشي هاي واي — صور، لبنان (بجانب المستشفى اللبناني الايطالي)',
       hoursLabel: 'نستقبلكم يومياً · من 12:00 الظهر حتى 11:30 بالليل',
       mapTitle: 'خريطة تقريبية',
       formTitle: 'ابعث لنا رسالة',
@@ -290,6 +290,7 @@ export const translations: Record<Lang, Translations> = {
     }
   }
 };
+
 
 
 
