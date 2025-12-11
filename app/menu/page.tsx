@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
+import Image from 'next/image';
 import { useLanguage } from '@/lib/LanguageContext';
 import { menuCategories, menuItems } from '@/lib/menuData';
 
@@ -13,116 +14,179 @@ function buildItemWhatsAppLink(itemName: string, isArabic: boolean) {
   return `${WHATSAPP_BASE}?text=${encodeURIComponent(message)}`;
 }
 
+// خريطة تربط كل صنف برقم الصورة بحسب ترتيبه في القائمة
+const itemImageMap: Record<string, string> = {};
+menuItems.forEach((item, index) => {
+  itemImageMap[item.id] = `/menu/${index + 1}.png`;
+});
+
 export default function MenuPage() {
   const { lang } = useLanguage();
   const isArabic = lang === 'ar';
+  const dir = isArabic ? 'rtl' : 'ltr';
 
-  // نسمح بفتح قسم واحد في نفس الوقت (Accordion)
-  const [openCategoryId, setOpenCategoryId] = useState<string | null>(
-    menuCategories[0]?.id ?? null
+  const [activeCategoryId, setActiveCategoryId] = useState<string | 'all'>(
+    'starters'
   );
+  const [searchTerm, setSearchTerm] = useState('');
 
-  // تجميع الأصناف حسب الكاتيجوري
-  const itemsByCategory: Record<string, any[]> = {};
-  for (const item of menuItems as any[]) {
-    if (!itemsByCategory[item.categoryId]) {
-      itemsByCategory[item.categoryId] = [];
-    }
-    itemsByCategory[item.categoryId].push(item);
-  }
+  const pageTitle = isArabic ? 'منيو سوشي هاي واي' : 'Sushi Highway Menu';
+  const pageSubtitle = isArabic
+    ? 'تشكيلة كاملة من السوشي، الرولز، البوتس والمشروبات.'
+    : 'Full selection of sushi, rolls, boats and drinks.';
+
+  // فلترة عامة حسب البحث
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const filteredItems = menuItems.filter((item) => {
+    if (!normalizedSearch) return true;
+    const nameEn = item.name.en.toLowerCase();
+    const nameAr = item.name.ar.toLowerCase();
+    return (
+      nameEn.includes(normalizedSearch) || nameAr.includes(normalizedSearch)
+    );
+  });
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-50">
-      <section className="mx-auto max-w-6xl px-4 pb-16 pt-28 md:px-6 lg:px-8">
-        <header className={isArabic ? 'text-right' : 'text-left'}>
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-rose-400">
-            {isArabic ? 'منيو سوشي هايواي' : 'Sushi Highway menu'}
-          </p>
-          <h1 className="mt-1 text-2xl font-semibold md:text-3xl">
-            {isArabic
-              ? 'تشكيلة واسعة من السوشي والأطباق'
-              : 'A wide selection of sushi, platters & hot dishes'}
-          </h1>
-          <p className="mt-2 text-sm text-slate-300">
-            {isArabic
-              ? 'الأسعار بالدولار الأميركي (أو ما يعادلها). التوصيل متوفر ضمن مدينة صور - الحوش، جانب المستشفى اللبناني الإيطالي.'
-              : 'Prices are in USD (or local equivalent). Delivery is available within Sour – Al Hosh, next to the Lebanese Italian Hospital.'}
-          </p>
-        </header>
+    <main dir={dir} className="min-h-screen bg-slate-950 text-slate-50">
+      <section className="border-b border-slate-900 bg-slate-950/80">
+        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-6 sm:px-6 sm:py-8">
+          <div className={isArabic ? 'text-right' : 'text-left'}>
+            <h1 className="text-2xl font-semibold sm:text-3xl">{pageTitle}</h1>
+            <p className="mt-1 text-sm text-slate-400">{pageSubtitle}</p>
+          </div>
 
-        <div className="mt-8 space-y-4">
-          {menuCategories.map((cat) => {
-            const catItems = itemsByCategory[cat.id] ?? [];
-            if (!catItems.length) return null;
+          {/* شريط البحث + الفلاتر */}
+          <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex-1">
+              <input
+                type="text"
+                placeholder={
+                  isArabic
+                    ? 'ابحث عن طبق معيّن...'
+                    : 'Search for a specific item...'
+                }
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full rounded-full border border-slate-700 bg-slate-900/80 px-4 py-2 text-xs text-slate-100 placeholder:text-slate-500 focus:border-rose-400 focus:outline-none"
+              />
+            </div>
 
-            const isOpen = openCategoryId === cat.id;
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => setActiveCategoryId('all')}
+                className={`rounded-full px-3 py-1 text-[11px] font-medium ${
+                  activeCategoryId === 'all'
+                    ? 'bg-rose-500 text-white'
+                    : 'bg-slate-900/70 text-slate-200 border border-slate-700'
+                }`}
+              >
+                {isArabic ? 'الكل' : 'All'}
+              </button>
+              {menuCategories.map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setActiveCategoryId(cat.id)}
+                  className={`rounded-full px-3 py-1 text-[11px] font-medium ${
+                    activeCategoryId === cat.id
+                      ? 'bg-rose-500 text-white'
+                      : 'bg-slate-900/70 text-slate-200 border border-slate-700'
+                  }`}
+                >
+                  <span className="mr-1">{cat.emoji}</span>
+                  <span>{cat.name[lang]}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
-            // نجمع الأصناف في هذا الكاتيجوري حسب subSection لو موجودة
-            const groups: Record<string, any[]> = {};
-            for (const item of catItems) {
-              const key = item.subSection || '_default';
+      <section className="bg-slate-950">
+        <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+          {menuCategories.map((category) => {
+            // لو الفلتر على كاتيجوري معيّن، نخفي الباقي
+            if (activeCategoryId !== 'all' && activeCategoryId !== category.id) {
+              const hasAny =
+                filteredItems.filter((item) => item.categoryId === category.id)
+                  .length > 0;
+              if (!hasAny) return null;
+            }
+
+            const itemsForCategory = filteredItems.filter(
+              (item) => item.categoryId === category.id
+            );
+            if (!itemsForCategory.length) return null;
+
+            // تجميع حسب subSection إن وجدت
+            const groups: Record<string, typeof itemsForCategory> = {};
+            itemsForCategory.forEach((item) => {
+              const key = item.subSection ?? '_default';
               if (!groups[key]) groups[key] = [];
               groups[key].push(item);
-            }
+            });
+
+            const groupNames = Object.keys(groups);
 
             return (
               <section
-                key={cat.id}
-                className="overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/80 shadow-sm shadow-slate-950/40"
+                key={category.id}
+                className="mb-8 rounded-3xl border border-slate-900/80 bg-slate-950/80 p-4 shadow-sm shadow-slate-900 sm:p-5"
               >
-                {/* رأس الكاتيجوري (العنوان + الأيقونة + السهم) */}
-                <button
-                  type="button"
-                  onClick={() =>
-                    setOpenCategoryId(isOpen ? null : (cat.id as string))
-                  }
-                  className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left hover:bg-slate-900"
+                <header
+                  className={`mb-4 flex flex-col gap-1 ${
+                    isArabic ? 'text-right' : 'text-left'
+                  }`}
                 >
-                  <div
-                    className={`flex items-center gap-3 ${
-                      isArabic ? 'flex-row-reverse text-right' : ''
-                    }`}
-                  >
-                    <span className="text-2xl">{cat.emoji}</span>
-                    <div>
-                      <p className="text-sm font-semibold md:text-base">
-                        {cat.name[lang]}
-                      </p>
-                      <p className="text-[11px] text-slate-400 md:text-xs">
-                        {cat.description[lang]}
-                      </p>
-                    </div>
-                  </div>
-                  <span
-                    className={`text-slate-300 transition-transform ${
-                      isOpen ? 'rotate-180' : ''
-                    }`}
-                  >
-                    ▼
-                  </span>
-                </button>
+                  <h2 className="flex items-center gap-2 text-lg font-semibold text-slate-50">
+                    <span className="text-xl">{category.emoji}</span>
+                    <span>{category.name[lang]}</span>
+                  </h2>
+                  <p className="text-xs text-slate-400">
+                    {category.description[lang]}
+                  </p>
+                </header>
 
-                {/* محتوى الكاتيجوري (الأصناف) */}
-                {isOpen && (
-                  <div className="border-t border-slate-800 px-4 py-3 md:px-5 md:py-4">
-                    <div className="space-y-3">
-                      {Object.entries(groups).map(([groupName, groupItems]) => (
-                        <div key={groupName}>
-                          {groupName !== '_default' && (
-                            <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
-                              {groupName}
-                            </p>
-                          )}
+                {groupNames.map((groupName) => {
+                  const groupItems = groups[groupName];
 
-                          <div className="space-y-2">
-                            {groupItems.map((item: any) => (
-                              <article
-                                key={item.id}
-                                className="flex flex-col justify-between rounded-2xl bg-slate-950/70 p-3 text-xs text-slate-200 md:flex-row md:items-center md:text-sm"
-                              >
+                  return (
+                    <div key={groupName} className="mt-2 space-y-2">
+                      {groupName !== '_default' && (
+                        <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+                          {groupName}
+                        </p>
+                      )}
+
+                      <div className="space-y-2">
+                        {groupItems.map((item: any) => {
+                          const imgSrc = itemImageMap[item.id];
+
+                          return (
+                            <article
+                              key={item.id}
+                              className="flex gap-3 rounded-2xl border border-slate-800 bg-slate-900/70 p-3 text-xs text-slate-200 md:text-sm"
+                            >
+                              {/* صورة الطبق */}
+                              <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl border border-slate-700 bg-slate-900/80">
+                                {imgSrc && (
+                                  <Image
+                                    src={imgSrc}
+                                    alt={item.name?.[lang] ?? 'Menu item'}
+                                    fill
+                                    className="object-cover"
+                                  />
+                                )}
+                              </div>
+
+                              {/* نص الطبق + السعر + زر الطلب */}
+                              <div className="flex flex-1 flex-col gap-2 md:flex-row md:items-center md:justify-between">
                                 <div
                                   className={
-                                    isArabic ? 'text-right md:ml-3' : 'text-left md:mr-3'
+                                    isArabic
+                                      ? 'text-right md:ml-3'
+                                      : 'text-left md:mr-3'
                                   }
                                 >
                                   <p className="font-semibold text-slate-50">
@@ -135,8 +199,8 @@ export default function MenuPage() {
                                   )}
                                 </div>
 
-                                <div className="mt-2 flex items-center justify-between gap-3 md:mt-0 md:justify-end">
-                                  <span className="whitespace-nowrap rounded-full bg-rose-500/10 px-3 py-1 text-[11px] font-semibold text-rose-200 md:text-xs">
+                                <div className="flex items-center justify-between gap-3 md:justify-end">
+                                  <span className="whitespace-nowrap rounded-full bg-slate-950/80 px-3 py-1 text-[11px] font-semibold text-rose-200 md:text-xs">
                                     {item.price}
                                   </span>
                                   <a
@@ -151,14 +215,14 @@ export default function MenuPage() {
                                     {isArabic ? 'اطلب هذا الصنف' : 'Order this item'}
                                   </a>
                                 </div>
-                              </article>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
+                              </div>
+                            </article>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  );
+                })}
               </section>
             );
           })}
