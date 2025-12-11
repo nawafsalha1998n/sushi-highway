@@ -33,7 +33,7 @@ export default function Header() {
         {/* Logo + Brand */}
         <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
           <Link href="/" className="flex items-center gap-2">
-            <div className="relative h-10 w-10 overflow-hidden rounded-full border border-slate-700 bg-slate-900/80">
+            <div className="relative h-16 w-16 overflow-hidden rounded-full border border-slate-700 bg-slate-900/80">
               <Image
                 src="/logo.png"
                 alt={lang === 'ar' ? 'شعار مطعم سوشي هاي واي' : 'Sushi Highway logo'}
@@ -121,4 +121,5 @@ export default function Header() {
     </header>
   );
 }
+
 
