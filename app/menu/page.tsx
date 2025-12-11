@@ -16,7 +16,10 @@ function buildItemWhatsAppLink(itemName: string, isArabic: boolean) {
 
 // خريطة تربط كل صنف برقم الصورة بحسب ترتيبه في القائمة
 const itemImageMap: Record<string, string> = {};
-menuItems.forEach((item, index) => {
+(menuItems as any[]).forEach((item, index) => {
+  // مثال:
+  // أول صنف => /menu/1.png
+  // ثاني صنف => /menu/2.png
   itemImageMap[item.id] = `/menu/${index + 1}.png`;
 });
 
@@ -25,9 +28,6 @@ export default function MenuPage() {
   const isArabic = lang === 'ar';
   const dir = isArabic ? 'rtl' : 'ltr';
 
-  const [activeCategoryId, setActiveCategoryId] = useState<string | 'all'>(
-    'starters'
-  );
   const [searchTerm, setSearchTerm] = useState('');
 
   const pageTitle = isArabic ? 'منيو سوشي هاي واي' : 'Sushi Highway Menu';
@@ -37,7 +37,7 @@ export default function MenuPage() {
 
   // فلترة عامة حسب البحث
   const normalizedSearch = searchTerm.trim().toLowerCase();
-  const filteredItems = menuItems.filter((item) => {
+  const filteredItems = (menuItems as any[]).filter((item) => {
     if (!normalizedSearch) return true;
     const nameEn = item.name.en.toLowerCase();
     const nameAr = item.name.ar.toLowerCase();
@@ -46,8 +46,24 @@ export default function MenuPage() {
     );
   });
 
+  const handleScrollToCategory = (categoryId: string | 'all') => {
+    if (categoryId === 'all') {
+      const root = document.getElementById('menu-root');
+      if (root) {
+        root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      return;
+    }
+
+    const el = document.getElementById(`menu-section-${categoryId}`);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <main dir={dir} className="min-h-screen bg-slate-950 text-slate-50">
+      {/* الهيدر الخاص بالمنيو */}
       <section className="border-b border-slate-900 bg-slate-950/80">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-6 sm:px-6 sm:py-8">
           <div className={isArabic ? 'text-right' : 'text-left'}>
@@ -55,7 +71,7 @@ export default function MenuPage() {
             <p className="mt-1 text-sm text-slate-400">{pageSubtitle}</p>
           </div>
 
-          {/* شريط البحث + الفلاتر */}
+          {/* شريط البحث + قائمة الأقسام (تعمل سكورل للأقسام) */}
           <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex-1">
               <input
@@ -72,27 +88,21 @@ export default function MenuPage() {
             </div>
 
             <div className="flex flex-wrap gap-2">
+              {/* زر الكل – يرجع لبداية المنيو */}
               <button
                 type="button"
-                onClick={() => setActiveCategoryId('all')}
-                className={`rounded-full px-3 py-1 text-[11px] font-medium ${
-                  activeCategoryId === 'all'
-                    ? 'bg-rose-500 text-white'
-                    : 'bg-slate-900/70 text-slate-200 border border-slate-700'
-                }`}
+                onClick={() => handleScrollToCategory('all')}
+                className="rounded-full bg-slate-900/70 px-3 py-1 text-[11px] font-medium text-slate-200 border border-slate-700 hover:border-rose-400 hover:text-rose-200"
               >
                 {isArabic ? 'الكل' : 'All'}
               </button>
+
               {menuCategories.map((cat) => (
                 <button
                   key={cat.id}
                   type="button"
-                  onClick={() => setActiveCategoryId(cat.id)}
-                  className={`rounded-full px-3 py-1 text-[11px] font-medium ${
-                    activeCategoryId === cat.id
-                      ? 'bg-rose-500 text-white'
-                      : 'bg-slate-900/70 text-slate-200 border border-slate-700'
-                  }`}
+                  onClick={() => handleScrollToCategory(cat.id)}
+                  className="rounded-full bg-slate-900/70 px-3 py-1 text-[11px] font-medium text-slate-200 border border-slate-700 hover:border-rose-400 hover:text-rose-200"
                 >
                   <span className="mr-1">{cat.emoji}</span>
                   <span>{cat.name[lang]}</span>
@@ -103,25 +113,18 @@ export default function MenuPage() {
         </div>
       </section>
 
-      <section className="bg-slate-950">
+      {/* جذع المنيو – نستخدمه لزر "الكل" */}
+      <section id="menu-root" className="bg-slate-950">
         <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
           {menuCategories.map((category) => {
-            // لو الفلتر على كاتيجوري معيّن، نخفي الباقي
-            if (activeCategoryId !== 'all' && activeCategoryId !== category.id) {
-              const hasAny =
-                filteredItems.filter((item) => item.categoryId === category.id)
-                  .length > 0;
-              if (!hasAny) return null;
-            }
-
             const itemsForCategory = filteredItems.filter(
-              (item) => item.categoryId === category.id
+              (item: any) => item.categoryId === category.id
             );
             if (!itemsForCategory.length) return null;
 
             // تجميع حسب subSection إن وجدت
             const groups: Record<string, typeof itemsForCategory> = {};
-            itemsForCategory.forEach((item) => {
+            itemsForCategory.forEach((item: any) => {
               const key = item.subSection ?? '_default';
               if (!groups[key]) groups[key] = [];
               groups[key].push(item);
@@ -132,6 +135,7 @@ export default function MenuPage() {
             return (
               <section
                 key={category.id}
+                id={`menu-section-${category.id}`}
                 className="mb-8 rounded-3xl border border-slate-900/80 bg-slate-950/80 p-4 shadow-sm shadow-slate-900 sm:p-5"
               >
                 <header
