@@ -82,7 +82,7 @@ type Translations = {
 
 export const translations: Record<Lang, Translations> = {
   en: {
-    brandTagline: 'Fresh sushi, bold flavours, Beirut delivery.',
+    brandTagline: 'Fresh sushi, bold flavours, Sour delivery.',
     nav: {
       home: 'Home',
       menu: 'Menu',
@@ -290,5 +290,6 @@ export const translations: Record<Lang, Translations> = {
     }
   }
 };
+
 
 
