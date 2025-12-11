@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa';
 import { useLanguage } from '@/lib/LanguageContext';
@@ -21,109 +22,101 @@ const navLinks = [
 ];
 
 export default function Header() {
+  const pathname = usePathname();
   const { lang } = useLanguage();
   const t = translations[lang];
-  const pathname = usePathname();
+  const isRTL = lang === 'ar';
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40 border-b border-slate-800 bg-slate-950/80 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-rose-500 to-amber-400 shadow-lg shadow-rose-900/40">
-            <span className="text-xs font-bold tracking-tight text-white">
-              SH
-            </span>
-          </div>
-          <div className="flex flex-col leading-tight">
-            <span className="text-sm font-semibold sm:text-base">
-              {RESTAURANT_NAME}
-            </span>
-            <span className="hidden text-[11px] text-slate-400 sm:block">
-              {t.brandTagline}
-            </span>
-          </div>
-        </Link>
+    <header className="sticky top-0 z-40 border-b border-slate-800/70 bg-slate-950/80 backdrop-blur-md">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+        {/* Logo + Brand */}
+        <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+          <Link href="/" className="flex items-center gap-2">
+            <div className="relative h-10 w-10 overflow-hidden rounded-full border border-slate-700 bg-slate-900/80">
+              <Image
+                src="/logo.PNG"
+                alt={lang === 'ar' ? 'شعار مطعم سوشي هاي واي' : 'Sushi Highway logo'}
+                fill
+                className="object-contain p-1.5"
+                priority
+              />
+            </div>
+            <div
+              className={`flex flex-col leading-tight ${
+                isRTL ? 'items-end' : 'items-start'
+              }`}
+            >
+              <span className="text-sm font-semibold sm:text-base">
+                {RESTAURANT_NAME}
+              </span>
+              <span className="hidden text-[11px] text-slate-400 sm:block">
+                {t.brandTagline}
+              </span>
+            </div>
+          </Link>
+        </div>
 
-        <nav className="hidden items-center gap-6 md:flex">
+        {/* Desktop Nav */}
+        <nav
+          className={`hidden items-center gap-6 text-xs font-medium text-slate-200 sm:flex ${
+            isRTL ? 'flex-row-reverse' : ''
+          }`}
+        >
           {navLinks.map((link) => {
-            const active = pathname === link.href;
+            const isActive =
+              link.href === '/'
+                ? pathname === '/'
+                : pathname.startsWith(link.href);
+
             return (
               <Link
-                key={link.href}
+                key={link.key}
                 href={link.href}
-                className={`text-sm font-medium transition-colors ${
-                  active
-                    ? 'text-rose-300'
-                    : 'text-slate-200 hover:text-white'
+                className={`relative transition hover:text-rose-300 ${
+                  isActive ? 'text-rose-400' : ''
                 }`}
               >
-                {t.nav[link.key]}
+                <span>{t.nav[link.key]}</span>
+                {isActive && (
+                  <span className="absolute -bottom-1 left-0 right-0 h-px bg-gradient-to-r from-rose-400/70 via-rose-300 to-amber-300" />
+                )}
               </Link>
             );
           })}
         </nav>
 
-        <div className="flex items-center gap-3">
-          <a
-            href={WHATSAPP_LINK}
-            target="_blank"
-            rel="noreferrer"
-            className="hidden items-center justify-center rounded-full bg-emerald-500/90 px-3 py-1 text-xs font-semibold text-white shadow-md shadow-emerald-800/40 transition hover:bg-emerald-400 sm:inline-flex"
-          >
-            <FaWhatsapp className="mr-1.5" />
-            <span>WhatsApp</span>
-          </a>
-          <a
-            href={INSTAGRAM_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="hidden items-center justify-center rounded-full bg-gradient-to-br from-pink-500 to-amber-400 px-3 py-1 text-xs font-semibold text-white shadow-md shadow-pink-800/40 transition hover:from-pink-400 hover:to-amber-300 sm:inline-flex"
-          >
-            <FaInstagram className="mr-1.5" />
-            <span>Instagram</span>
-          </a>
+        {/* Actions: language + social */}
+        <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
           <LanguageToggle />
-        </div>
-      </div>
 
-      {/* Mobile nav */}
-      <div className="border-t border-slate-800 md:hidden">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2">
-          <nav className="flex items-center gap-4 text-xs">
-            {navLinks.map((link) => {
-              const active = pathname === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`font-medium ${
-                    active ? 'text-rose-300' : 'text-slate-200'
-                  }`}
-                >
-                  {t.nav[link.key]}
-                </Link>
-              );
-            })}
-          </nav>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <a
               href={WHATSAPP_LINK}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center justify-center rounded-full bg-emerald-500/90 px-2.5 py-1 text-[11px] text-white"
+              className="inline-flex items-center justify-center rounded-full bg-emerald-500 px-3 py-1 text-[11px] font-semibold text-white shadow-soft transition hover:bg-emerald-400"
             >
-              <FaWhatsapp />
+              <FaWhatsapp className="mr-1 h-3 w-3" />
+              <span className="hidden sm:inline">
+                {lang === 'ar' ? 'اطلب واتساب' : 'Order on WhatsApp'}
+              </span>
             </a>
             <a
               href={INSTAGRAM_URL}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center justify-center rounded-full bg-pink-500 px-2.5 py-1 text-[11px] text-white"
+              className="inline-flex items-center justify-center rounded-full bg-pink-500 px-2.5 py-1 text-[11px] text-white shadow-soft transition hover:bg-pink-400"
             >
-              <FaInstagram />
+              <FaInstagram className="h-3 w-3" />
             </a>
           </div>
         </div>
+      </div>
+
+      {/* Mobile tagline bar */}
+      <div className="flex w-full items-center justify-center border-t border-slate-900 bg-slate-950/90 py-2 text-[11px] text-slate-400 sm:hidden">
+        <span>{t.brandTagline}</span>
       </div>
     </header>
   );
