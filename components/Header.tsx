@@ -35,7 +35,7 @@ export default function Header() {
           <Link href="/" className="flex items-center gap-2">
             <div className="relative h-10 w-10 overflow-hidden rounded-full border border-slate-700 bg-slate-900/80">
               <Image
-                src="/logo.PNG"
+                src="/logo.png"
                 alt={lang === 'ar' ? 'شعار مطعم سوشي هاي واي' : 'Sushi Highway logo'}
                 fill
                 className="object-contain p-1.5"
@@ -121,3 +121,4 @@ export default function Header() {
     </header>
   );
 }
+
