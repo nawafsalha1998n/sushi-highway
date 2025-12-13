@@ -30,6 +30,15 @@ export default function MenuPage() {
 
   const [searchTerm, setSearchTerm] = useState('');
 
+  // التحكم بفتح/إغلاق الأقسام (dropdown)
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>(() => {
+    const initial: Record<string, boolean> = {};
+    menuCategories.forEach((c) => {
+      initial[c.id] = true; // مفتوح افتراضياً — إذا بدك افتراضياً مغلق: خليها false
+    });
+    return initial;
+  });
+
   const pageTitle = isArabic ? 'منيو سوشي هاي واي' : 'Sushi Highway Menu';
   const pageSubtitle = isArabic
     ? 'تشكيلة كاملة من السوشي، الرولز، البوتس والمشروبات.'
@@ -41,9 +50,7 @@ export default function MenuPage() {
     if (!normalizedSearch) return true;
     const nameEn = item.name.en.toLowerCase();
     const nameAr = item.name.ar.toLowerCase();
-    return (
-      nameEn.includes(normalizedSearch) || nameAr.includes(normalizedSearch)
-    );
+    return nameEn.includes(normalizedSearch) || nameAr.includes(normalizedSearch);
   });
 
   const handleScrollToCategory = (categoryId: string | 'all') => {
@@ -55,10 +62,18 @@ export default function MenuPage() {
       return;
     }
 
-    const el = document.getElementById(`menu-section-${categoryId}`);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    // افتح القسم أولاً (إذا كان مغلق)
+    setOpenSections((prev) => ({ ...prev, [categoryId]: true }));
+
+    // بعد الفتح اعمل scroll (نؤخره فريمين حتى يتأكد DOM اتحدث)
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const el = document.getElementById(`menu-section-${categoryId}`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
   };
 
   return (
@@ -76,11 +91,7 @@ export default function MenuPage() {
             <div className="flex-1">
               <input
                 type="text"
-                placeholder={
-                  isArabic
-                    ? 'ابحث عن طبق معيّن...'
-                    : 'Search for a specific item...'
-                }
+                placeholder={isArabic ? 'ابحث عن طبق معيّن...' : 'Search for a specific item...'}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full rounded-full border border-slate-700 bg-slate-900/80 px-4 py-2 text-xs text-slate-100 placeholder:text-slate-500 focus:border-rose-400 focus:outline-none"
@@ -138,95 +149,114 @@ export default function MenuPage() {
                 id={`menu-section-${category.id}`}
                 className="mb-8 rounded-3xl border border-slate-900/80 bg-slate-950/80 p-4 shadow-sm shadow-slate-900 sm:p-5"
               >
-                <header
-                  className={`mb-4 flex flex-col gap-1 ${
-                    isArabic ? 'text-right' : 'text-left'
-                  }`}
+                <details
+                  className="group"
+                  open={!!openSections[category.id]}
+                  onToggle={(e) => {
+                    const isOpenNow = (e.currentTarget as HTMLDetailsElement).open;
+                    setOpenSections((prev) => ({ ...prev, [category.id]: isOpenNow }));
+                  }}
                 >
-                  <h2 className="flex items-center gap-2 text-lg font-semibold text-slate-50">
-                    <span className="text-xl">{category.emoji}</span>
-                    <span>{category.name[lang]}</span>
-                  </h2>
-                  <p className="text-xs text-slate-400">
-                    {category.description[lang]}
-                  </p>
-                </header>
+                  {/* عنوان القسم = منسدلة */}
+                  <summary className="list-none cursor-pointer select-none">
+                    <header
+                      className={`flex flex-col gap-1 ${
+                        isArabic ? 'text-right' : 'text-left'
+                      }`}
+                    >
+                      <div className="mb-1 flex items-center justify-between gap-3">
+                        <h2 className="flex items-center gap-2 text-lg font-semibold text-slate-50">
+                          <span className="text-xl">{category.emoji}</span>
+                          <span>{category.name[lang]}</span>
+                        </h2>
 
-                {groupNames.map((groupName) => {
-                  const groupItems = groups[groupName];
-
-                  return (
-                    <div key={groupName} className="mt-2 space-y-2">
-                      {groupName !== '_default' && (
-                        <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
-                          {groupName}
-                        </p>
-                      )}
-
-                      <div className="space-y-2">
-                        {groupItems.map((item: any) => {
-                          const imgSrc = itemImageMap[item.id];
-
-                          return (
-                            <article
-                              key={item.id}
-                              className="flex gap-3 rounded-2xl border border-slate-800 bg-slate-900/70 p-3 text-xs text-slate-200 md:text-sm"
-                            >
-                              {/* صورة الطبق */}
-                              <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl border border-slate-700 bg-slate-900/80">
-                                {imgSrc && (
-                                  <Image
-                                    src={imgSrc}
-                                    alt={item.name?.[lang] ?? 'Menu item'}
-                                    fill
-                                    className="object-cover"
-                                  />
-                                )}
-                              </div>
-
-                              {/* نص الطبق + السعر + زر الطلب */}
-                              <div className="flex flex-1 flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                                <div
-                                  className={
-                                    isArabic
-                                      ? 'text-right md:ml-3'
-                                      : 'text-left md:mr-3'
-                                  }
-                                >
-                                  <p className="font-semibold text-slate-50">
-                                    {item.name?.[lang] ?? ''}
-                                  </p>
-                                  {item.description?.[lang] && (
-                                    <p className="mt-0.5 text-[11px] text-slate-400 md:text-xs">
-                                      {item.description[lang]}
-                                    </p>
-                                  )}
-                                </div>
-
-                                <div className="flex items-center justify-between gap-3 md:justify-end">
-                                  <span className="whitespace-nowrap rounded-full bg-slate-950/80 px-3 py-1 text-[11px] font-semibold text-rose-200 md:text-xs">
-                                    {item.price}
-                                  </span>
-                                  <a
-                                    href={buildItemWhatsAppLink(
-                                      item.name?.[lang] ?? '',
-                                      isArabic
-                                    )}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="whitespace-nowrap rounded-full bg-emerald-500 px-3 py-1 text-[11px] font-semibold text-white hover:bg-emerald-400 md:text-xs"
-                                  >
-                                    {isArabic ? 'اطلب هذا الصنف' : 'Order this item'}
-                                  </a>
-                                </div>
-                              </div>
-                            </article>
-                          );
-                        })}
+                        {/* سهم فتح/إغلاق */}
+                        <span className="text-slate-400 transition-transform duration-200 group-open:rotate-180">
+                          ▼
+                        </span>
                       </div>
-                    </div>
-                  );
-                })}
+
+                      <p className="text-xs text-slate-400">{category.description[lang]}</p>
+                    </header>
+                  </summary>
+
+                  {/* محتوى القسم كما هو */}
+                  <div className="mt-4">
+                    {groupNames.map((groupName) => {
+                      const groupItems = groups[groupName];
+
+                      return (
+                        <div key={groupName} className="mt-2 space-y-2">
+                          {groupName !== '_default' && (
+                            <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+                              {groupName}
+                            </p>
+                          )}
+
+                          <div className="space-y-2">
+                            {groupItems.map((item: any) => {
+                              const imgSrc = itemImageMap[item.id];
+
+                              return (
+                                <article
+                                  key={item.id}
+                                  className="flex gap-3 rounded-2xl border border-slate-800 bg-slate-900/70 p-3 text-xs text-slate-200 md:text-sm"
+                                >
+                                  {/* صورة الطبق */}
+                                  <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl border border-slate-700 bg-slate-900/80">
+                                    {imgSrc && (
+                                      <Image
+                                        src={imgSrc}
+                                        alt={item.name?.[lang] ?? 'Menu item'}
+                                        fill
+                                        className="object-cover"
+                                      />
+                                    )}
+                                  </div>
+
+                                  {/* نص الطبق + السعر + زر الطلب */}
+                                  <div className="flex flex-1 flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                                    <div
+                                      className={
+                                        isArabic ? 'text-right md:ml-3' : 'text-left md:mr-3'
+                                      }
+                                    >
+                                      <p className="font-semibold text-slate-50">
+                                        {item.name?.[lang] ?? ''}
+                                      </p>
+                                      {item.description?.[lang] && (
+                                        <p className="mt-0.5 text-[11px] text-slate-400 md:text-xs">
+                                          {item.description[lang]}
+                                        </p>
+                                      )}
+                                    </div>
+
+                                    <div className="flex items-center justify-between gap-3 md:justify-end">
+                                      <span className="whitespace-nowrap rounded-full bg-slate-950/80 px-3 py-1 text-[11px] font-semibold text-rose-200 md:text-xs">
+                                        {item.price}
+                                      </span>
+                                      <a
+                                        href={buildItemWhatsAppLink(
+                                          item.name?.[lang] ?? '',
+                                          isArabic
+                                        )}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="whitespace-nowrap rounded-full bg-emerald-500 px-3 py-1 text-[11px] font-semibold text-white hover:bg-emerald-400 md:text-xs"
+                                      >
+                                        {isArabic ? 'اطلب هذا الصنف' : 'Order this item'}
+                                      </a>
+                                    </div>
+                                  </div>
+                                </article>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </details>
               </section>
             );
           })}
