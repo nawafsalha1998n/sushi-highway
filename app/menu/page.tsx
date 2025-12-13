@@ -20,6 +20,41 @@ const itemImageMap: Record<string, string> = {};
   itemImageMap[item.id] = `/menu/${index + 1}.png`;
 });
 
+// ✅ Tab جديد للأكثر طلبًا
+const BEST_TAB_ID = 'best';
+
+// كلمات مفتاحية للأكثر طلبًا (EN + AR) — مرنة على اختلاف التسمية
+const BEST_SELLER_MATCHERS = [
+  'mini boat',
+  'mini-boat',
+  'mini  boat',
+  'ميني بوت',
+  'مينى بوت',
+  'mini',
+  // Big Boat
+  'big boat',
+  'big-boat',
+  'big  boat',
+  'بيج بوت',
+  'big',
+  // Italian Pizza
+  'italian pizza',
+  'italian-pizza',
+  'pizza italian',
+  'بيتزا ايطالية',
+  'بيتزا إيطالية',
+  'بيتزا ايطاليه',
+  'بيتزا إيطاليه',
+];
+
+function isBestSellerItem(item: any) {
+  const en = (item?.name?.en ?? '').toString().toLowerCase();
+  const ar = (item?.name?.ar ?? '').toString().toLowerCase();
+  const hay = `${en} ${ar}`;
+
+  return BEST_SELLER_MATCHERS.some((k) => hay.includes(k.toLowerCase()));
+}
+
 export default function MenuPage() {
   const { lang } = useLanguage();
   const isArabic = lang === 'ar';
@@ -27,8 +62,8 @@ export default function MenuPage() {
 
   const [searchTerm, setSearchTerm] = useState('');
 
-  // ✅ افتراضيًا: أول قسم فقط (حتى ما يضيع الزبون بالجوال)
-  const defaultCategoryId = menuCategories?.[0]?.id ?? 'all';
+  // ✅ افتراضيًا: نفتح “الأكثر طلبًا” أول شي (مريح للزبون على الجوال)
+  const defaultCategoryId = BEST_TAB_ID;
   const [activeCategoryId, setActiveCategoryId] = useState<string>(defaultCategoryId);
 
   // ✅ ref لتبويب الأقسام (سكرول جانبي واضح)
@@ -66,7 +101,12 @@ export default function MenuPage() {
   // ✅ إذا في بحث: اعرض نتائج من كل الأقسام (حتى ما يضيع الزبون)
   const showAllBecauseSearching = !!normalizedSearch;
 
+  const bestSellerItems = useMemo(() => {
+    return (menuItems as any[]).filter((item) => isBestSellerItem(item));
+  }, []);
+
   const activeCategoryName = useMemo(() => {
+    if (activeCategoryId === BEST_TAB_ID) return isArabic ? 'الأكثر طلبًا' : 'Best Sellers';
     if (activeCategoryId === 'all') return isArabic ? 'الكل' : 'All';
     const cat = menuCategories.find((c) => c.id === activeCategoryId);
     return cat ? cat.name[lang] : isArabic ? 'الكل' : 'All';
@@ -92,8 +132,14 @@ export default function MenuPage() {
 
   // بناء أقسام مرئية حسب الحالة
   const visibleCategories = useMemo(() => {
+    // عند البحث: نعرض نتائج البحث من كل الأقسام (مثل قبل)
+    if (showAllBecauseSearching) return menuCategories;
+
+    // إذا اختار "الأكثر طلبًا": ما منعرض أقسام أخرى
+    if (activeCategoryId === BEST_TAB_ID) return [];
+
+    // باقي المنطق
     return menuCategories.filter((category) => {
-      if (showAllBecauseSearching) return true;
       if (activeCategoryId === 'all') return true;
       return category.id === activeCategoryId;
     });
@@ -134,10 +180,9 @@ export default function MenuPage() {
         </div>
       </section>
 
-      {/* ✅ Tabs ثابتة مثل KFC + سكرول جانبي واضح */}
+      {/* ✅ Tabs ثابتة + سكرول واضح */}
       <section className="sticky top-0 z-20 border-b border-slate-900 bg-slate-950/90 backdrop-blur">
         <div className="mx-auto w-full max-w-none px-4 py-3 sm:px-6">
-          {/* مربع تلميح + أزرار سكرول */}
           <div className="mb-2 flex items-center justify-between gap-2">
             <span className="rounded-full border border-slate-800 bg-slate-900/60 px-3 py-1 text-[11px] text-slate-300">
               {isArabic ? 'اسحب الأقسام ← →' : 'Swipe categories ← →'}
@@ -163,7 +208,6 @@ export default function MenuPage() {
             </div>
           </div>
 
-          {/* Tabs مع تدرج يمين/يسار كـ hint */}
           <div className="relative">
             <div className="pointer-events-none absolute inset-y-0 left-0 w-6 bg-gradient-to-r from-slate-950/90 to-transparent" />
             <div className="pointer-events-none absolute inset-y-0 right-0 w-6 bg-gradient-to-l from-slate-950/90 to-transparent" />
@@ -172,6 +216,20 @@ export default function MenuPage() {
               ref={tabsRef}
               className="flex gap-2 overflow-x-auto pb-1 pr-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
+              {/* ⭐ الأكثر طلبًا */}
+              <button
+                type="button"
+                onClick={() => handleSelectCategory(BEST_TAB_ID)}
+                className={`whitespace-nowrap rounded-full border px-3 py-1 text-[11px] font-medium transition
+                  ${
+                    activeCategoryId === BEST_TAB_ID
+                      ? 'border-rose-400 bg-rose-500/10 text-rose-200'
+                      : 'border-slate-700 bg-slate-900/70 text-slate-200 hover:border-rose-400 hover:text-rose-200'
+                  }`}
+              >
+                ⭐ {isArabic ? 'الأكثر طلبًا' : 'Best Sellers'}
+              </button>
+
               <button
                 type="button"
                 onClick={() => handleSelectCategory('all')}
@@ -204,7 +262,6 @@ export default function MenuPage() {
             </div>
           </div>
 
-          {/* شريط توضيح صغير يقلل الضياع */}
           <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400">
             <span>
               {showAllBecauseSearching
@@ -216,7 +273,7 @@ export default function MenuPage() {
                 : `Current category: ${activeCategoryName}`}
             </span>
 
-            {!showAllBecauseSearching && activeCategoryId !== 'all' && (
+            {!showAllBecauseSearching && activeCategoryId !== 'all' && activeCategoryId !== BEST_TAB_ID && (
               <button
                 type="button"
                 onClick={() => handleSelectCategory('all')}
@@ -261,11 +318,75 @@ export default function MenuPage() {
             </div>
           )}
 
+          {/* ⭐ عرض الأكثر طلبًا */}
+          {!showAllBecauseSearching && activeCategoryId === BEST_TAB_ID && (
+            <section className="mb-8 rounded-3xl border border-slate-900/80 bg-slate-950/80 p-4 shadow-sm shadow-slate-900 sm:p-5">
+              <header className={`mb-4 flex flex-col gap-1 ${isArabic ? 'text-right' : 'text-left'}`}>
+                <h2 className="flex items-center gap-2 text-lg font-semibold text-slate-50">
+                  <span className="text-xl">⭐</span>
+                  <span>{isArabic ? 'الأكثر طلبًا' : 'Best Sellers'}</span>
+                </h2>
+                <p className="text-xs text-slate-400">
+                  {isArabic ? 'Mini Boat • Big Boat • Italian Pizza' : 'Mini Boat • Big Boat • Italian Pizza'}
+                </p>
+              </header>
+
+              <div className="space-y-2">
+                {bestSellerItems.map((item: any) => {
+                  const imgSrc = itemImageMap[item.id];
+
+                  return (
+                    <article
+                      key={item.id}
+                      className="flex gap-3 rounded-2xl border border-slate-800 bg-slate-900/70 p-3 text-xs text-slate-200 md:text-sm"
+                    >
+                      <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl border border-slate-700 bg-slate-900/80">
+                        {imgSrc && (
+                          <Image
+                            src={imgSrc}
+                            alt={item.name?.[lang] ?? 'Menu item'}
+                            fill
+                            className="object-cover"
+                          />
+                        )}
+                      </div>
+
+                      <div className="flex flex-1 flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                        <div className={isArabic ? 'text-right md:ml-3' : 'text-left md:mr-3'}>
+                          <p className="font-semibold text-slate-50">{item.name?.[lang] ?? ''}</p>
+                          {item.description?.[lang] && (
+                            <p className="mt-0.5 text-[11px] text-slate-400 md:text-xs">
+                              {item.description[lang]}
+                            </p>
+                          )}
+                        </div>
+
+                        <div className="flex items-center justify-between gap-3 md:justify-end">
+                          <span className="whitespace-nowrap rounded-full bg-slate-950/80 px-3 py-1 text-[11px] font-semibold text-rose-200 md:text-xs">
+                            {item.price}
+                          </span>
+                          <a
+                            href={buildItemWhatsAppLink(item.name?.[lang] ?? '', isArabic)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="whitespace-nowrap rounded-full bg-emerald-500 px-3 py-1 text-[11px] font-semibold text-white hover:bg-emerald-400 md:text-xs"
+                          >
+                            {isArabic ? 'اطلب هذا الصنف' : 'Order this item'}
+                          </a>
+                        </div>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
+          {/* عرض الأقسام العادية */}
           {visibleCategories.map((category) => {
             const itemsForCategory = filteredItems.filter((item: any) => item.categoryId === category.id);
             if (!itemsForCategory.length) return null;
 
-            // تجميع حسب subSection إن وجدت
             const groups: Record<string, typeof itemsForCategory> = {};
             itemsForCategory.forEach((item: any) => {
               const key = item.subSection ?? '_default';
@@ -281,7 +402,6 @@ export default function MenuPage() {
                 id={`menu-section-${category.id}`}
                 className="mb-8 rounded-3xl border border-slate-900/80 bg-slate-950/80 p-4 shadow-sm shadow-slate-900 sm:p-5"
               >
-                {/* عنوان القسم */}
                 <header className={`mb-4 flex flex-col gap-1 ${isArabic ? 'text-right' : 'text-left'}`}>
                   <h2 className="flex items-center gap-2 text-lg font-semibold text-slate-50">
                     <span className="text-xl">{category.emoji}</span>
@@ -310,7 +430,6 @@ export default function MenuPage() {
                               key={item.id}
                               className="flex gap-3 rounded-2xl border border-slate-800 bg-slate-900/70 p-3 text-xs text-slate-200 md:text-sm"
                             >
-                              {/* صورة الطبق */}
                               <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl border border-slate-700 bg-slate-900/80">
                                 {imgSrc && (
                                   <Image
@@ -322,7 +441,6 @@ export default function MenuPage() {
                                 )}
                               </div>
 
-                              {/* نص الطبق + السعر + زر الطلب */}
                               <div className="flex flex-1 flex-col gap-2 md:flex-row md:items-center md:justify-between">
                                 <div className={isArabic ? 'text-right md:ml-3' : 'text-left md:mr-3'}>
                                   <p className="font-semibold text-slate-50">{item.name?.[lang] ?? ''}</p>
@@ -360,7 +478,6 @@ export default function MenuPage() {
         </div>
       </section>
 
-      {/* زر للأعلى (مفيد جدًا للجوال) */}
       {showToTop && (
         <button
           type="button"
