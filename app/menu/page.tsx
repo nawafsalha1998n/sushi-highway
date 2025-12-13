@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useLanguage } from '@/lib/LanguageContext';
 import { menuCategories, menuItems } from '@/lib/menuData';
@@ -30,6 +30,13 @@ export default function MenuPage() {
   // ✅ افتراضيًا: أول قسم فقط (حتى ما يضيع الزبون بالجوال)
   const defaultCategoryId = menuCategories?.[0]?.id ?? 'all';
   const [activeCategoryId, setActiveCategoryId] = useState<string>(defaultCategoryId);
+
+  // ✅ ref لتبويب الأقسام (سكرول جانبي واضح)
+  const tabsRef = useRef<HTMLDivElement | null>(null);
+  const scrollTabsBy = (dx: number) => {
+    if (!tabsRef.current) return;
+    tabsRef.current.scrollBy({ left: dx, behavior: 'smooth' });
+  };
 
   // زر للأعلى على الجوال
   const [showToTop, setShowToTop] = useState(false);
@@ -62,7 +69,7 @@ export default function MenuPage() {
   const activeCategoryName = useMemo(() => {
     if (activeCategoryId === 'all') return isArabic ? 'الكل' : 'All';
     const cat = menuCategories.find((c) => c.id === activeCategoryId);
-    return cat ? cat.name[lang] : (isArabic ? 'الكل' : 'All');
+    return cat ? cat.name[lang] : isArabic ? 'الكل' : 'All';
   }, [activeCategoryId, isArabic, lang]);
 
   const totalResultsCount = filteredItems.length;
@@ -97,15 +104,18 @@ export default function MenuPage() {
     if (showAllBecauseSearching && activeCategoryId !== 'all') {
       setActiveCategoryId('all');
     }
-    // لا نعمل العكس عند مسح البحث، حتى ما نزعج الزبون
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showAllBecauseSearching]);
 
   return (
-    <main id="menu-top" dir={dir} className="min-h-screen bg-slate-950 text-slate-50">
+    <main
+      id="menu-top"
+      dir={dir}
+      className="min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden"
+    >
       {/* Header بسيط وواضح */}
       <section className="border-b border-slate-900 bg-slate-950/80">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-6 sm:px-6 sm:py-8">
+        <div className="mx-auto w-full max-w-none flex flex-col gap-3 px-4 py-6 sm:px-6 sm:py-8">
           <div className={isArabic ? 'text-right' : 'text-left'}>
             <h1 className="text-2xl font-semibold sm:text-3xl">{pageTitle}</h1>
             <p className="mt-1 text-sm text-slate-400">{pageSubtitle}</p>
@@ -124,39 +134,74 @@ export default function MenuPage() {
         </div>
       </section>
 
-      {/* ✅ Tabs ثابتة مثل KFC */}
+      {/* ✅ Tabs ثابتة مثل KFC + سكرول جانبي واضح */}
       <section className="sticky top-0 z-20 border-b border-slate-900 bg-slate-950/90 backdrop-blur">
-        <div className="mx-auto max-w-6xl px-4 py-3 sm:px-6">
-          <div className="flex gap-2 overflow-x-auto pb-1">
-            <button
-              type="button"
-              onClick={() => handleSelectCategory('all')}
-              className={`whitespace-nowrap rounded-full border px-3 py-1 text-[11px] font-medium transition
-                ${
-                  activeCategoryId === 'all'
-                    ? 'border-rose-400 bg-rose-500/10 text-rose-200'
-                    : 'border-slate-700 bg-slate-900/70 text-slate-200 hover:border-rose-400 hover:text-rose-200'
-                }`}
-            >
-              {isArabic ? 'الكل' : 'All'}
-            </button>
+        <div className="mx-auto w-full max-w-none px-4 py-3 sm:px-6">
+          {/* مربع تلميح + أزرار سكرول */}
+          <div className="mb-2 flex items-center justify-between gap-2">
+            <span className="rounded-full border border-slate-800 bg-slate-900/60 px-3 py-1 text-[11px] text-slate-300">
+              {isArabic ? 'اسحب الأقسام ← →' : 'Swipe categories ← →'}
+            </span>
 
-            {menuCategories.map((cat) => (
+            <div className="flex items-center gap-2">
               <button
-                key={cat.id}
                 type="button"
-                onClick={() => handleSelectCategory(cat.id)}
+                onClick={() => scrollTabsBy(isArabic ? 260 : -260)}
+                className="rounded-full border border-slate-800 bg-slate-900/60 px-3 py-1 text-[11px] text-slate-200 hover:border-rose-400 hover:text-rose-200"
+                aria-label="Scroll categories left"
+              >
+                {isArabic ? '→' : '←'}
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollTabsBy(isArabic ? -260 : 260)}
+                className="rounded-full border border-slate-800 bg-slate-900/60 px-3 py-1 text-[11px] text-slate-200 hover:border-rose-400 hover:text-rose-200"
+                aria-label="Scroll categories right"
+              >
+                {isArabic ? '←' : '→'}
+              </button>
+            </div>
+          </div>
+
+          {/* Tabs مع تدرج يمين/يسار كـ hint */}
+          <div className="relative">
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-6 bg-gradient-to-r from-slate-950/90 to-transparent" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-6 bg-gradient-to-l from-slate-950/90 to-transparent" />
+
+            <div
+              ref={tabsRef}
+              className="flex gap-2 overflow-x-auto pb-1 pr-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            >
+              <button
+                type="button"
+                onClick={() => handleSelectCategory('all')}
                 className={`whitespace-nowrap rounded-full border px-3 py-1 text-[11px] font-medium transition
                   ${
-                    activeCategoryId === cat.id
+                    activeCategoryId === 'all'
                       ? 'border-rose-400 bg-rose-500/10 text-rose-200'
                       : 'border-slate-700 bg-slate-900/70 text-slate-200 hover:border-rose-400 hover:text-rose-200'
                   }`}
               >
-                <span className="mr-1">{cat.emoji}</span>
-                <span>{cat.name[lang]}</span>
+                {isArabic ? 'الكل' : 'All'}
               </button>
-            ))}
+
+              {menuCategories.map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => handleSelectCategory(cat.id)}
+                  className={`whitespace-nowrap rounded-full border px-3 py-1 text-[11px] font-medium transition
+                    ${
+                      activeCategoryId === cat.id
+                        ? 'border-rose-400 bg-rose-500/10 text-rose-200'
+                        : 'border-slate-700 bg-slate-900/70 text-slate-200 hover:border-rose-400 hover:text-rose-200'
+                    }`}
+                >
+                  <span className="mr-1">{cat.emoji}</span>
+                  <span>{cat.name[lang]}</span>
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* شريط توضيح صغير يقلل الضياع */}
@@ -194,7 +239,7 @@ export default function MenuPage() {
 
       {/* محتوى المنيو */}
       <section id="menu-root" className="bg-slate-950">
-        <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+        <div className="mx-auto w-full max-w-none px-4 py-6 sm:px-6 sm:py-8">
           {/* Empty state */}
           {totalResultsCount === 0 && (
             <div className="rounded-3xl border border-slate-900 bg-slate-950/80 p-6 text-center">
@@ -202,9 +247,7 @@ export default function MenuPage() {
                 {isArabic ? 'لا يوجد نتائج مطابقة' : 'No matching results'}
               </p>
               <p className="mt-2 text-xs text-slate-400">
-                {isArabic
-                  ? 'جرّب كلمة أخرى أو امسح البحث.'
-                  : 'Try a different keyword or clear the search.'}
+                {isArabic ? 'جرّب كلمة أخرى أو امسح البحث.' : 'Try a different keyword or clear the search.'}
               </p>
               <div className="mt-4">
                 <button
@@ -219,9 +262,7 @@ export default function MenuPage() {
           )}
 
           {visibleCategories.map((category) => {
-            const itemsForCategory = filteredItems.filter(
-              (item: any) => item.categoryId === category.id
-            );
+            const itemsForCategory = filteredItems.filter((item: any) => item.categoryId === category.id);
             if (!itemsForCategory.length) return null;
 
             // تجميع حسب subSection إن وجدت
@@ -240,12 +281,8 @@ export default function MenuPage() {
                 id={`menu-section-${category.id}`}
                 className="mb-8 rounded-3xl border border-slate-900/80 bg-slate-950/80 p-4 shadow-sm shadow-slate-900 sm:p-5"
               >
-                {/* عنوان القسم (مفيد للثقة والوضوح) */}
-                <header
-                  className={`mb-4 flex flex-col gap-1 ${
-                    isArabic ? 'text-right' : 'text-left'
-                  }`}
-                >
+                {/* عنوان القسم */}
+                <header className={`mb-4 flex flex-col gap-1 ${isArabic ? 'text-right' : 'text-left'}`}>
                   <h2 className="flex items-center gap-2 text-lg font-semibold text-slate-50">
                     <span className="text-xl">{category.emoji}</span>
                     <span>{category.name[lang]}</span>
@@ -287,14 +324,8 @@ export default function MenuPage() {
 
                               {/* نص الطبق + السعر + زر الطلب */}
                               <div className="flex flex-1 flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                                <div
-                                  className={
-                                    isArabic ? 'text-right md:ml-3' : 'text-left md:mr-3'
-                                  }
-                                >
-                                  <p className="font-semibold text-slate-50">
-                                    {item.name?.[lang] ?? ''}
-                                  </p>
+                                <div className={isArabic ? 'text-right md:ml-3' : 'text-left md:mr-3'}>
+                                  <p className="font-semibold text-slate-50">{item.name?.[lang] ?? ''}</p>
                                   {item.description?.[lang] && (
                                     <p className="mt-0.5 text-[11px] text-slate-400 md:text-xs">
                                       {item.description[lang]}
@@ -307,10 +338,7 @@ export default function MenuPage() {
                                     {item.price}
                                   </span>
                                   <a
-                                    href={buildItemWhatsAppLink(
-                                      item.name?.[lang] ?? '',
-                                      isArabic
-                                    )}
+                                    href={buildItemWhatsAppLink(item.name?.[lang] ?? '', isArabic)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="whitespace-nowrap rounded-full bg-emerald-500 px-3 py-1 text-[11px] font-semibold text-white hover:bg-emerald-400 md:text-xs"
