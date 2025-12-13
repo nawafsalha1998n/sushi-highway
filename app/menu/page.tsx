@@ -34,7 +34,8 @@ export default function MenuPage() {
   const [openSections, setOpenSections] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {};
     menuCategories.forEach((c) => {
-      initial[c.id] = true; // مفتوح افتراضياً — إذا بدك افتراضياً مغلق: خليها false
+      initial[c.id] = false;
+ // مفتوح افتراضياً — إذا بدك افتراضياً مغلق: خليها false
     });
     return initial;
   });
@@ -265,3 +266,4 @@ export default function MenuPage() {
     </main>
   );
 }
+
