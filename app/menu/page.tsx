@@ -30,21 +30,13 @@ const BEST_SELLER_MATCHERS = [
   'mini  boat',
   'ميني بوت',
   'مينى بوت',
-  'mini',
   // Big Boat
   'big boat',
   'big-boat',
   'big  boat',
   'بيج بوت',
-  'big',
   // Italian Pizza
-  'italian pizza',
-  'italian-pizza',
-  'pizza italian',
-  'بيتزا ايطالية',
-  'بيتزا إيطالية',
-  'بيتزا ايطاليه',
-  'بيتزا إيطاليه',
+  'pizza',
 ];
 
 function isBestSellerItem(item: any) {
@@ -491,3 +483,4 @@ export default function MenuPage() {
     </main>
   );
 }
+
