@@ -126,7 +126,7 @@ export default function ContactPage() {
                 {/* Placeholder Google Maps iframe for Beirut */}
                 <iframe
                   title="Sushi Highway location"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2627.2177!2d35.501!3d33.8938"
+                  src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d595.6720678972498!2d35.22517622068931!3d33.25307389215893!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sar!2slb!4v1766863184935!5m2!1sar!2slb"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
@@ -157,3 +157,4 @@ export default function ContactPage() {
     </div>
   );
 }
+
