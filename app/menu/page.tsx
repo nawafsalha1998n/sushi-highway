@@ -17,7 +17,7 @@ function buildItemWhatsAppLink(itemName: string, isArabic: boolean) {
 // خريطة تربط كل صنف برقم الصورة بحسب ترتيبه في القائمة
 const itemImageMap: Record<string, string> = {};
 (menuItems as any[]).forEach((item, index) => {
-  itemImageMap[item.id] = `/menu/${index + 1}.JPG`;
+  itemImageMap[item.id] = `/menu/${index + 1}.jpg`;
 });
 
 // ✅ Tab جديد للأكثر طلبًا
@@ -483,5 +483,6 @@ export default function MenuPage() {
     </main>
   );
 }
+
 
 
