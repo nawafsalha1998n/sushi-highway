@@ -76,7 +76,7 @@ export default function Hero() {
         >
           <div className="relative h-64 w-full overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/70 shadow-soft md:h-80">
             <Image
-              src="/big-sushi-boat-50pcs.jpg"
+              src="/big-sushi-boat-50pcs.PNG"
               alt={
                 lang === 'ar'
                   ? 'طبق بيغ بوت سوشي متنوع — ٥٠ قطعة'
@@ -104,3 +104,4 @@ export default function Hero() {
     </section>
   );
 }
+
