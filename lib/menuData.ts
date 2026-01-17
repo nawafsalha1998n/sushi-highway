@@ -461,7 +461,7 @@ export const menuItems: MenuItem[] = [
   makeItem({
     id: 'ura-crab-california-ebiko',
     categoryId: 'ura_crab',
-    nameEn: 'California Ebiko',
+    nameEn: 'Ebiko California',
     price: '5$'
   }),
   makeItem({
@@ -655,7 +655,7 @@ export const menuItems: MenuItem[] = [
     price: '4.75$'
   }),
 
-  // CREAMY / SMOKED / SALMON CRAB MAKI (Removed: Smoked Salmon Maki ONLY)
+  // CREAMY / SALMON CRAB MAKI (Removed: Smoked Salmon Maki ONLY)
   makeItem({
     id: 'creamy-creamy-shrimp',
     categoryId: 'creamy',
@@ -843,7 +843,7 @@ export const menuItems: MenuItem[] = [
   makeItem({
     id: 'hot-shrimp-tempura',
     categoryId: 'hot_plates',
-    nameEn: 'Shrimp Tempura (with fries & salad)',
+    nameEn: 'Shrimp Tempura',
     price: '12$'
   }),
   makeItem({
@@ -1121,3 +1121,4 @@ export const menuItems: MenuItem[] = [
 export const signatureItems: MenuItem[] = menuItems.filter(
   (item) => item.isSignature
 );
+
