@@ -216,9 +216,9 @@ export const menuCategories: MenuCategory[] = [
   makeCategory(
     'creamy',
     '💮',
-    'Creamy / Smoked / Salmon Crab Maki',
-    'كريمي / سموكد / سلمون كراب ماكي',
-    'Rich creamy and smoked special rolls.',
+    'Creamy / Salmon Crab Maki',
+    'كريمي / سلمون كراب ماكي',
+    'Rich creamy and special rolls.',
     'رولات خاصة بنكهات كريمية ومدخنة.'
   ),
   makeCategory(
@@ -1121,4 +1121,5 @@ export const menuItems: MenuItem[] = [
 export const signatureItems: MenuItem[] = menuItems.filter(
   (item) => item.isSignature
 );
+
 
