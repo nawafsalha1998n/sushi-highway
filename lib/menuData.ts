@@ -316,7 +316,7 @@ export const menuItems: MenuItem[] = [
     price: '3.5$'
   }),
 
-  // SALADS
+  // SALADS (Removed: Greek Salad, Lebanese Salad)
   makeItem({
     id: 'salads-crab',
     categoryId: 'salads',
@@ -352,20 +352,8 @@ export const menuItems: MenuItem[] = [
     price: '16$',
     descEn: 'Crab, salmon, tuna, shrimp mix'
   }),
-  makeItem({
-    id: 'salads-greek',
-    categoryId: 'salads',
-    nameEn: 'Greek Salad',
-    price: '6$'
-  }),
-  makeItem({
-    id: 'salads-lebanese',
-    categoryId: 'salads',
-    nameEn: 'Lebanese Salad',
-    price: '5.5$'
-  }),
 
-  // TEMAKI – 1 PC
+  // TEMAKI – 1 PC (Removed: Hawaiian ONLY - kept California)
   makeItem({
     id: 'temaki-tuna',
     categoryId: 'temaki',
@@ -388,12 +376,6 @@ export const menuItems: MenuItem[] = [
     id: 'temaki-shrimp',
     categoryId: 'temaki',
     nameEn: 'Shrimp',
-    price: '4$'
-  }),
-  makeItem({
-    id: 'temaki-hawaiian',
-    categoryId: 'temaki',
-    nameEn: 'Hawaiian',
     price: '4$'
   }),
   makeItem({
@@ -447,13 +429,7 @@ export const menuItems: MenuItem[] = [
     price: '3.5$'
   }),
 
-  // FUTO MAKI – 4 PCS
-  makeItem({
-    id: 'futo-hawaiian',
-    categoryId: 'futo',
-    nameEn: 'Hawaiian Futo Maki',
-    price: '6$'
-  }),
+  // FUTO MAKI – 4 PCS (Removed: Hawaiian Futo Maki ONLY - kept Mixed Futo Maki)
   makeItem({
     id: 'futo-mixed',
     categoryId: 'futo',
@@ -669,13 +645,7 @@ export const menuItems: MenuItem[] = [
     price: '6.5$'
   }),
 
-  // VEGETARIAN MAKI – 4 PCS
-  makeItem({
-    id: 'vegetarian-main',
-    categoryId: 'vegetarian',
-    nameEn: 'Mango, Avocado, Cucumber, Lettuce roll wrapped in Parsley',
-    price: '4$'
-  }),
+  // VEGETARIAN MAKI – 4 PCS (Removed ENTIRE category as requested)
 
   // REGINA SPECIAL MAKI – 4 PCS
   makeItem({
@@ -685,20 +655,13 @@ export const menuItems: MenuItem[] = [
     price: '4.75$'
   }),
 
-  // CREAMY / SMOKED / SALMON CRAB MAKI
+  // CREAMY / SMOKED / SALMON CRAB MAKI (Removed: Smoked Salmon Maki ONLY)
   makeItem({
     id: 'creamy-creamy-shrimp',
     categoryId: 'creamy',
     nameEn: 'Creamy Shrimp – 4 pcs',
     price: '5.5$',
     descEn: 'Shrimp mixed with Philadelphia and avocado wrapped in avocado.'
-  }),
-  makeItem({
-    id: 'creamy-smoked-salmon',
-    categoryId: 'creamy',
-    nameEn: 'Smoked Salmon Maki – 4 pcs',
-    price: '6.5$',
-    descEn: 'Smoked salmon and avocado roll wrapped in smoked salmon.'
   }),
   makeItem({
     id: 'creamy-salmon-crab',
@@ -708,7 +671,7 @@ export const menuItems: MenuItem[] = [
     descEn: 'Salmon and mango roll wrapped in crab.'
   }),
 
-  // PLATTERS
+  // PLATTERS (Removed: Special Sashimi Mix ONLY)
   makeItem({
     id: 'platters-crab-mix',
     categoryId: 'platters',
@@ -736,13 +699,6 @@ export const menuItems: MenuItem[] = [
     nameEn: 'Special Mix – 12 pcs',
     price: '17$',
     descEn: 'Avocado Wrap – 4 pcs, Volcano Salmon – 4 pcs, Fruity Shrimp – 4 pcs'
-  }),
-  makeItem({
-    id: 'platters-special-sashimi',
-    categoryId: 'platters',
-    nameEn: 'Special Sashimi Mix – 8 pcs',
-    price: '13$',
-    descEn: 'Salmon, Tuna, Shrimp, Crab'
   }),
 
   // SPECIAL ROLLS
@@ -839,18 +795,12 @@ export const menuItems: MenuItem[] = [
     price: '2$'
   }),
 
-  // PASTA
+  // PASTA (Removed: Pasta Bolognese ONLY)
   makeItem({
     id: 'pasta-chicken-fettuccine',
     categoryId: 'pasta',
     nameEn: 'Chicken Fettuccine',
     price: '12.5$'
-  }),
-  makeItem({
-    id: 'pasta-bolognese',
-    categoryId: 'pasta',
-    nameEn: 'Pasta Bolognese',
-    price: '11$'
   }),
   makeItem({
     id: 'pasta-arrabiata',
@@ -871,13 +821,7 @@ export const menuItems: MenuItem[] = [
     price: '8$'
   }),
 
-  // HOT PLATES
-  makeItem({
-    id: 'hot-chicken-scallop',
-    categoryId: 'hot_plates',
-    nameEn: 'Chicken Scallop (with fries & salad)',
-    price: '11$'
-  }),
+  // HOT PLATES (Removed: Chicken Scallop ONLY)
   makeItem({
     id: 'hot-crispy-chicken-strips',
     categoryId: 'hot_plates',
