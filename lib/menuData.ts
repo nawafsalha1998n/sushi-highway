@@ -584,7 +584,12 @@ export const menuItems: MenuItem[] = [
     nameEn: 'Shrimp Ebiko',
     price: '5$'
   }),
-
+makeItem({
+    id: 'ura-shrimp-rainbow-kani',
+    categoryId: 'ura_shrimp',
+    nameEn: 'Fruity Rainbow',
+    price: '5.50$'
+  }),
   // SASHIMI – 2 PCS
   makeItem({
     id: 'sashimi-salmon',
@@ -1121,5 +1126,6 @@ export const menuItems: MenuItem[] = [
 export const signatureItems: MenuItem[] = menuItems.filter(
   (item) => item.isSignature
 );
+
 
 
