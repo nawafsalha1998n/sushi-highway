@@ -25,6 +25,7 @@ const BEST_TAB_ID = 'best';
 
 // كلمات مفتاحية للأكثر طلبًا (EN + AR) — مرنة على اختلاف التسمية
 const BEST_SELLER_MATCHERS = [
+  // Mini Boat
   'mini boat',
   'mini-boat',
   'mini  boat',
@@ -34,12 +35,29 @@ const BEST_SELLER_MATCHERS = [
   'big boat',
   'big-boat',
   'big  boat',
+  'بيغ بوت',
   'بيج بوت',
+  // Sushi Cake (إضافة جديدة)
+  'sushi cake',
+  'كيك سوشي',
+  'كيك السوشي',
   // Italian Pizza
   'pizza',
+  'بيتزا',
+  // الأصناف المميزة (Signature Items)
+  'dynamite',
+  'دراغون',
+  'dragon',
+  'volcano',
+  'فولكانو',
+  'crazy',
+  'كريزي'
 ];
 
 function isBestSellerItem(item: any) {
+  // إذا كان الصنف مميزًا (isSignature) فهو من الأكثر طلبًا
+  if (item.isSignature) return true;
+  
   const en = (item?.name?.en ?? '').toString().toLowerCase();
   const ar = (item?.name?.ar ?? '').toString().toLowerCase();
   const hay = `${en} ${ar}`;
@@ -54,7 +72,7 @@ export default function MenuPage() {
 
   const [searchTerm, setSearchTerm] = useState('');
 
-  // ✅ افتراضيًا: نفتح “الأكثر طلبًا” أول شي (مريح للزبون على الجوال)
+  // ✅ افتراضيًا: نفتح "الأكثر طلبًا" أول شي (مريح للزبون على الجوال)
   const defaultCategoryId = BEST_TAB_ID;
   const [activeCategoryId, setActiveCategoryId] = useState<string>(defaultCategoryId);
 
@@ -280,7 +298,7 @@ export default function MenuPage() {
             <p className="mt-2 text-[11px] text-slate-500">
               {isArabic
                 ? 'نلاحظ: عند البحث نعرض نتائج من كل الأقسام حتى لا تفوتك أي صنف.'
-                : 'Note: while searching, we show results from all categories so you don’t miss anything.'}
+                : 'Note: while searching, we show results from all categories so you don\'t miss anything.'}
             </p>
           )}
         </div>
@@ -319,7 +337,9 @@ export default function MenuPage() {
                   <span>{isArabic ? 'الأكثر طلبًا' : 'Best Sellers'}</span>
                 </h2>
                 <p className="text-xs text-slate-400">
-                  {isArabic ? 'Mini Boat • Big Boat • Italian Pizza' : 'Mini Boat • Big Boat • Italian Pizza'}
+                  {isArabic 
+                    ? 'Mini Boat • Big Boat • Sushi Cake • Italian Pizza • Dynamite & Volcano Rolls' 
+                    : 'Mini Boat • Big Boat • Sushi Cake • Italian Pizza • Dynamite & Volcano Rolls'}
                 </p>
               </header>
 
@@ -350,6 +370,12 @@ export default function MenuPage() {
                             <p className="mt-0.5 text-[11px] text-slate-400 md:text-xs">
                               {item.description[lang]}
                             </p>
+                          )}
+                          {/* إشارة خاصة للأصناف المميزة */}
+                          {item.isSignature && (
+                            <span className="mt-1 inline-block rounded-full bg-amber-900/30 px-2 py-0.5 text-[10px] text-amber-200">
+                              {isArabic ? '⭐ صنف مميز' : '⭐ Signature Item'}
+                            </span>
                           )}
                         </div>
 
@@ -441,6 +467,12 @@ export default function MenuPage() {
                                       {item.description[lang]}
                                     </p>
                                   )}
+                                  {/* إشارة خاصة للأصناف المميزة */}
+                                  {item.isSignature && (
+                                    <span className="mt-1 inline-block rounded-full bg-amber-900/30 px-2 py-0.5 text-[10px] text-amber-200">
+                                      {isArabic ? '⭐ صنف مميز' : '⭐ Signature Item'}
+                                    </span>
+                                  )}
                                 </div>
 
                                 <div className="flex items-center justify-between gap-3 md:justify-end">
@@ -483,5 +515,3 @@ export default function MenuPage() {
     </main>
   );
 }
-
-
