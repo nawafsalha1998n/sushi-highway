@@ -14,22 +14,10 @@ function buildItemWhatsAppLink(itemName: string, isArabic: boolean) {
   return `${WHATSAPP_BASE}?text=${encodeURIComponent(message)}`;
 }
 
-// ✅ دالة جديدة لتحويل اسم الطبق إلى اسم ملف صورة
+// ✅ دالة جديدة تستخدم item.id لتوليد اسم ملف الصورة
 function getItemImageFileName(item: any): string {
-  // نأخذ الاسم الإنجليزي للطبق
-  const englishName = item.name.en;
-  
-  // نحول إلى أحرف صغيرة
-  let fileName = englishName.toLowerCase();
-  
-  // نزيل الأقواس والشرطات والفواصل
-  fileName = fileName.replace(/[()\/]/g, '');
-  
-  // نستبدل المسافات بشرطة (-)
-  fileName = fileName.replace(/\s+/g, '-');
-  
-  // نزيل النقاط والأحرف الخاصة
-  fileName = fileName.replace(/[.,]/g, '');
+  // نستخدم item.id مباشرة ثم نحول الشرطة السفلية (_) إلى شرطة (-)
+  let fileName = item.id.replace(/_/g, '-');
   
   // نضيف الامتداد .PNG بأحرف كبيرة
   fileName = fileName + '.PNG';
