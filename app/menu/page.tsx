@@ -14,11 +14,28 @@ function buildItemWhatsAppLink(itemName: string, isArabic: boolean) {
   return `${WHATSAPP_BASE}?text=${encodeURIComponent(message)}`;
 }
 
-// خريطة تربط كل صنف برقم الصورة بحسب ترتيبه في القائمة
-const itemImageMap: Record<string, string> = {};
-(menuItems as any[]).forEach((item, index) => {
-  itemImageMap[item.id] = `/menu/${index + 1}.PNG`;
-});
+// ✅ دالة جديدة لتحويل اسم الطبق إلى اسم ملف صورة
+function getItemImageFileName(item: any): string {
+  // نأخذ الاسم الإنجليزي للطبق
+  const englishName = item.name.en;
+  
+  // نحول إلى أحرف صغيرة
+  let fileName = englishName.toLowerCase();
+  
+  // نزيل الأقواس والشرطات والفواصل
+  fileName = fileName.replace(/[()\/]/g, '');
+  
+  // نستبدل المسافات بشرطة (-)
+  fileName = fileName.replace(/\s+/g, '-');
+  
+  // نزيل النقاط والأحرف الخاصة
+  fileName = fileName.replace(/[.,]/g, '');
+  
+  // نضيف الامتداد .PNG بأحرف كبيرة
+  fileName = fileName + '.PNG';
+  
+  return `/menu/${fileName}`;
+}
 
 // ✅ Tab جديد للأكثر طلبًا
 const BEST_TAB_ID = 'best';
@@ -345,7 +362,8 @@ export default function MenuPage() {
 
               <div className="space-y-2">
                 {bestSellerItems.map((item: any) => {
-                  const imgSrc = itemImageMap[item.id];
+                  // ✅ استخدم الدالة الجديدة لاسم الصورة
+                  const imgSrc = getItemImageFileName(item);
 
                   return (
                     <article
@@ -359,6 +377,11 @@ export default function MenuPage() {
                             alt={item.name?.[lang] ?? 'Menu item'}
                             fill
                             className="object-cover"
+                            onError={(e) => {
+                              // إذا لم توجد الصورة، نعرض صورة افتراضية
+                              const target = e.target as HTMLImageElement;
+                              target.src = '/menu/default.PNG';
+                            }}
                           />
                         )}
                       </div>
@@ -441,7 +464,8 @@ export default function MenuPage() {
 
                       <div className="space-y-2">
                         {groupItems.map((item: any) => {
-                          const imgSrc = itemImageMap[item.id];
+                          // ✅ استخدم الدالة الجديدة لاسم الصورة
+                          const imgSrc = getItemImageFileName(item);
 
                           return (
                             <article
@@ -455,6 +479,11 @@ export default function MenuPage() {
                                     alt={item.name?.[lang] ?? 'Menu item'}
                                     fill
                                     className="object-cover"
+                                    onError={(e) => {
+                                      // إذا لم توجد الصورة، نعرض صورة افتراضية
+                                      const target = e.target as HTMLImageElement;
+                                      target.src = '/menu/default.PNG';
+                                    }}
                                   />
                                 )}
                               </div>
