@@ -16,12 +16,8 @@ function buildItemWhatsAppLink(itemName: string, isArabic: boolean) {
 
 // ✅ دالة جديدة تستخدم item.id لتوليد اسم ملف الصورة
 function getItemImageFileName(item: any): string {
-  // نستخدم item.id مباشرة ثم نحول الشرطة السفلية (_) إلى شرطة (-)
   let fileName = item.id.replace(/_/g, '-');
-  
-  // نضيف الامتداد .PNG بأحرف كبيرة
   fileName = fileName + '.PNG';
-  
   return `/menu/${fileName}`;
 }
 
@@ -42,27 +38,14 @@ const BEST_SELLER_MATCHERS = [
   'big  boat',
   'بيغ بوت',
   'بيج بوت',
-  // Sushi Cake (إضافة جديدة)
-  'sushi cake',
-  'كيك سوشي',
-  'كيك السوشي',
-  // Italian Pizza
-  'pizza',
-  'بيتزا',
-  // الأصناف المميزة (Signature Items)
-  'dynamite',
-  'دراغون',
-  'dragon',
-  'volcano',
-  'فولكانو',
-  'crazy',
-  'كريزي'
+  // Sushi Cake (Big فقط)
+  'sushi cake big',
+  'sushi cake large',
+  'كيك سوشي كبير',
+  'كيك السوشي الكبير'
 ];
 
 function isBestSellerItem(item: any) {
-  // إذا كان الصنف مميزًا (isSignature) فهو من الأكثر طلبًا
-  if (item.isSignature) return true;
-  
   const en = (item?.name?.en ?? '').toString().toLowerCase();
   const ar = (item?.name?.ar ?? '').toString().toLowerCase();
   const hay = `${en} ${ar}`;
@@ -76,8 +59,9 @@ export default function MenuPage() {
   const dir = isArabic ? 'rtl' : 'ltr';
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [enlargedImage, setEnlargedImage] = useState<string | null>(null); // ✅ حالة الصورة المكبرة
 
-  // ✅ افتراضيًا: نفتح "الأكثر طلبًا" أول شي (مريح للزبون على الجوال)
+  // ✅ افتراضيًا: نفتح "الأكثر طلبًا" أول شي
   const defaultCategoryId = BEST_TAB_ID;
   const [activeCategoryId, setActiveCategoryId] = useState<string>(defaultCategoryId);
 
@@ -113,12 +97,35 @@ export default function MenuPage() {
     });
   }, [normalizedSearch]);
 
-  // ✅ إذا في بحث: اعرض نتائج من كل الأقسام (حتى ما يضيع الزبون)
+  // ✅ إذا في بحث: اعرض نتائج من كل الأقسام
   const showAllBecauseSearching = !!normalizedSearch;
 
   const bestSellerItems = useMemo(() => {
     return (menuItems as any[]).filter((item) => isBestSellerItem(item));
   }, []);
+
+  // ✅ دالة للحصول على صنفين من أعلى سعر
+  const getTwoMostExpensiveItems = useMemo(() => {
+    // استبعاد الأصناف الموجودة مسبقاً في Best Sellers
+    const excludedIds = new Set(bestSellerItems.map(item => item.id));
+    
+    // تصفية الأصناف المتبقية وترتيبها تنازلياً حسب السعر
+    const remainingItems = (menuItems as any[])
+      .filter(item => !excludedIds.has(item.id))
+      .sort((a, b) => {
+        const priceA = parseFloat(a.price.replace(/[^0-9.]/g, '')) || 0;
+        const priceB = parseFloat(b.price.replace(/[^0-9.]/g, '')) || 0;
+        return priceB - priceA;
+      })
+      .slice(0, 2); // أخذ اثنين فقط
+      
+    return remainingItems;
+  }, [bestSellerItems]);
+
+  // ✅ دمج الأصناف الأكثر طلباً مع الصنفين الأغلى
+  const combinedBestSellerItems = useMemo(() => {
+    return [...bestSellerItems, ...getTwoMostExpensiveItems];
+  }, [bestSellerItems, getTwoMostExpensiveItems]);
 
   const activeCategoryName = useMemo(() => {
     if (activeCategoryId === BEST_TAB_ID) return isArabic ? 'الأكثر طلبًا' : 'Best Sellers';
@@ -132,7 +139,7 @@ export default function MenuPage() {
   const handleSelectCategory = (categoryId: string | 'all') => {
     setActiveCategoryId(categoryId);
 
-    // سكرول لبداية المنيو بعد التبديل (مفيد جدًا للجوال)
+    // سكرول لبداية المنيو بعد التبديل
     requestAnimationFrame(() => {
       const root = document.getElementById('menu-root');
       if (root) root.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -147,7 +154,7 @@ export default function MenuPage() {
 
   // بناء أقسام مرئية حسب الحالة
   const visibleCategories = useMemo(() => {
-    // عند البحث: نعرض نتائج البحث من كل الأقسام (مثل قبل)
+    // عند البحث: نعرض نتائج البحث من كل الأقسام
     if (showAllBecauseSearching) return menuCategories;
 
     // إذا اختار "الأكثر طلبًا": ما منعرض أقسام أخرى
@@ -160,7 +167,7 @@ export default function MenuPage() {
     });
   }, [activeCategoryId, showAllBecauseSearching]);
 
-  // إذا في بحث: نخلي "All" فعال تلقائيًا (سلوك واضح)
+  // إذا في بحث: نخلي "All" فعال تلقائيًا
   useEffect(() => {
     if (showAllBecauseSearching && activeCategoryId !== 'all') {
       setActiveCategoryId('all');
@@ -195,7 +202,7 @@ export default function MenuPage() {
         </div>
       </section>
 
-      {/* ✅ Tabs ثابتة + سكرول واضح */}
+      {/* ✅ Tabs ثابتة - مربعات مع صور */}
       <section className="sticky top-0 z-20 border-b border-slate-900 bg-slate-950/90 backdrop-blur">
         <div className="mx-auto w-full max-w-none px-4 py-3 sm:px-6">
           <div className="mb-2 flex items-center justify-between gap-2">
@@ -229,55 +236,87 @@ export default function MenuPage() {
 
             <div
               ref={tabsRef}
-              className="flex gap-2 overflow-x-auto pb-1 pr-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              className="flex gap-3 overflow-x-auto pb-3 pr-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
               {/* ⭐ الأكثر طلبًا */}
               <button
                 type="button"
                 onClick={() => handleSelectCategory(BEST_TAB_ID)}
-                className={`whitespace-nowrap rounded-full border px-3 py-1 text-[11px] font-medium transition
-                  ${
-                    activeCategoryId === BEST_TAB_ID
-                      ? 'border-rose-400 bg-rose-500/10 text-rose-200'
-                      : 'border-slate-700 bg-slate-900/70 text-slate-200 hover:border-rose-400 hover:text-rose-200'
+                className={`flex-shrink-0 w-24 h-28 flex flex-col items-center justify-center rounded-2xl border transition-all
+                  ${activeCategoryId === BEST_TAB_ID
+                    ? 'border-rose-400 bg-rose-500/20 shadow-lg shadow-rose-500/20'
+                    : 'border-slate-800 bg-slate-900/90 hover:border-rose-400 hover:bg-slate-800'
                   }`}
               >
-                ⭐ {isArabic ? 'الأكثر طلبًا' : 'Best Sellers'}
+                <div className="relative w-12 h-12 mb-2 rounded-full overflow-hidden border border-slate-700">
+                  <Image
+                    src="/menu/category-best.png"
+                    alt={isArabic ? 'الأكثر طلبًا' : 'Best Sellers'}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <span className="text-[10px] font-medium text-slate-100 text-center px-1">
+                  ⭐ {isArabic ? 'الأكثر طلبًا' : 'Best'}
+                </span>
               </button>
 
+              {/* الكل */}
               <button
                 type="button"
                 onClick={() => handleSelectCategory('all')}
-                className={`whitespace-nowrap rounded-full border px-3 py-1 text-[11px] font-medium transition
-                  ${
-                    activeCategoryId === 'all'
-                      ? 'border-rose-400 bg-rose-500/10 text-rose-200'
-                      : 'border-slate-700 bg-slate-900/70 text-slate-200 hover:border-rose-400 hover:text-rose-200'
+                className={`flex-shrink-0 w-24 h-28 flex flex-col items-center justify-center rounded-2xl border transition-all
+                  ${activeCategoryId === 'all'
+                    ? 'border-rose-400 bg-rose-500/20 shadow-lg shadow-rose-500/20'
+                    : 'border-slate-800 bg-slate-900/90 hover:border-rose-400 hover:bg-slate-800'
                   }`}
               >
-                {isArabic ? 'الكل' : 'All'}
+                <div className="relative w-12 h-12 mb-2 rounded-full overflow-hidden border border-slate-700">
+                  <Image
+                    src="/menu/category-all.png"
+                    alt={isArabic ? 'الكل' : 'All'}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <span className="text-[10px] font-medium text-slate-100 text-center px-1">
+                  {isArabic ? 'الكل' : 'All'}
+                </span>
               </button>
 
+              {/* الأقسام */}
               {menuCategories.map((cat) => (
                 <button
                   key={cat.id}
                   type="button"
                   onClick={() => handleSelectCategory(cat.id)}
-                  className={`whitespace-nowrap rounded-full border px-3 py-1 text-[11px] font-medium transition
-                    ${
-                      activeCategoryId === cat.id
-                        ? 'border-rose-400 bg-rose-500/10 text-rose-200'
-                        : 'border-slate-700 bg-slate-900/70 text-slate-200 hover:border-rose-400 hover:text-rose-200'
+                  className={`flex-shrink-0 w-24 h-28 flex flex-col items-center justify-center rounded-2xl border transition-all
+                    ${activeCategoryId === cat.id
+                      ? 'border-rose-400 bg-rose-500/20 shadow-lg shadow-rose-500/20'
+                      : 'border-slate-800 bg-slate-900/90 hover:border-rose-400 hover:bg-slate-800'
                     }`}
                 >
-                  <span className="mr-1">{cat.emoji}</span>
-                  <span>{cat.name[lang]}</span>
+                  <div className="relative w-12 h-12 mb-2 rounded-full overflow-hidden border border-slate-700">
+                    <Image
+                      src={`/menu/category-${cat.id}.png`}
+                      alt={cat.name[lang]}
+                      fill
+                      className="object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/menu/default.PNG';
+                      }}
+                    />
+                  </div>
+                  <span className="text-[10px] font-medium text-slate-100 text-center px-1">
+                    {cat.name[lang]}
+                  </span>
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400">
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400">
             <span>
               {showAllBecauseSearching
                 ? isArabic
@@ -343,14 +382,14 @@ export default function MenuPage() {
                 </h2>
                 <p className="text-xs text-slate-400">
                   {isArabic 
-                    ? 'Mini Boat • Big Boat • Sushi Cake • Italian Pizza • Dynamite & Volcano Rolls' 
-                    : 'Mini Boat • Big Boat • Sushi Cake • Italian Pizza • Dynamite & Volcano Rolls'}
+                    ? 'Mini Boat • Big Boat • Sushi Cake Big • إضافة صنفين من الأعلى سعراً' 
+                    : 'Mini Boat • Big Boat • Sushi Cake Big • Plus 2 highest priced items'}
                 </p>
               </header>
 
               <div className="space-y-2">
-                {bestSellerItems.map((item: any) => {
-                  // ✅ استخدم الدالة الجديدة لاسم الصورة
+                {combinedBestSellerItems.map((item: any) => {
+                  // ✅ استخدم الدالة لاسم الصورة
                   const imgSrc = getItemImageFileName(item);
 
                   return (
@@ -358,7 +397,10 @@ export default function MenuPage() {
                       key={item.id}
                       className="flex gap-3 rounded-2xl border border-slate-800 bg-slate-900/70 p-3 text-xs text-slate-200 md:text-sm"
                     >
-                      <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl border border-slate-700 bg-slate-900/80">
+                      <div 
+                        className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl border border-slate-700 bg-slate-900/80 cursor-pointer"
+                        onClick={() => setEnlargedImage(imgSrc)}
+                      >
                         {imgSrc && (
                           <Image
                             src={imgSrc}
@@ -366,7 +408,6 @@ export default function MenuPage() {
                             fill
                             className="object-cover"
                             onError={(e) => {
-                              // إذا لم توجد الصورة، نعرض صورة افتراضية
                               const target = e.target as HTMLImageElement;
                               target.src = '/menu/default.PNG';
                             }}
@@ -386,6 +427,12 @@ export default function MenuPage() {
                           {item.isSignature && (
                             <span className="mt-1 inline-block rounded-full bg-amber-900/30 px-2 py-0.5 text-[10px] text-amber-200">
                               {isArabic ? '⭐ صنف مميز' : '⭐ Signature Item'}
+                            </span>
+                          )}
+                          {/* إشارة للصنفين الأغلى */}
+                          {getTwoMostExpensiveItems.some(expItem => expItem.id === item.id) && (
+                            <span className="mt-1 inline-block rounded-full bg-purple-900/30 px-2 py-0.5 text-[10px] text-purple-200">
+                              {isArabic ? '💎 من الأعلى سعراً' : '💎 Premium Pick'}
                             </span>
                           )}
                         </div>
@@ -452,7 +499,7 @@ export default function MenuPage() {
 
                       <div className="space-y-2">
                         {groupItems.map((item: any) => {
-                          // ✅ استخدم الدالة الجديدة لاسم الصورة
+                          // ✅ استخدم الدالة لاسم الصورة
                           const imgSrc = getItemImageFileName(item);
 
                           return (
@@ -460,7 +507,10 @@ export default function MenuPage() {
                               key={item.id}
                               className="flex gap-3 rounded-2xl border border-slate-800 bg-slate-900/70 p-3 text-xs text-slate-200 md:text-sm"
                             >
-                              <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl border border-slate-700 bg-slate-900/80">
+                              <div 
+                                className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl border border-slate-700 bg-slate-900/80 cursor-pointer"
+                                onClick={() => setEnlargedImage(imgSrc)}
+                              >
                                 {imgSrc && (
                                   <Image
                                     src={imgSrc}
@@ -468,7 +518,6 @@ export default function MenuPage() {
                                     fill
                                     className="object-cover"
                                     onError={(e) => {
-                                      // إذا لم توجد الصورة، نعرض صورة افتراضية
                                       const target = e.target as HTMLImageElement;
                                       target.src = '/menu/default.PNG';
                                     }}
@@ -518,6 +567,32 @@ export default function MenuPage() {
           })}
         </div>
       </section>
+
+      {/* ✅ Modal للصورة المكبرة */}
+      {enlargedImage && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+          onClick={() => setEnlargedImage(null)}
+        >
+          <div className="relative max-h-[90vh] max-w-[90vw]">
+            <button
+              type="button"
+              onClick={() => setEnlargedImage(null)}
+              className="absolute -top-10 right-0 rounded-full bg-slate-800/80 p-2 text-white hover:bg-slate-700"
+              aria-label={isArabic ? 'إغلاق' : 'Close'}
+            >
+              ✕
+            </button>
+            <Image
+              src={enlargedImage}
+              alt="Zoomed menu item"
+              width={600}
+              height={600}
+              className="h-auto w-full rounded-2xl object-contain"
+            />
+          </div>
+        </div>
+      )}
 
       {showToTop && (
         <button
