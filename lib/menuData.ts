@@ -615,6 +615,13 @@ export const menuItems: MenuItem[] = [
     price: '5$'
   }),
   makeItem({
+    id: 'ura-shrimp-avocado',
+    categoryId: 'ura_shrimp',
+    nameEn: 'Shrimp Avocado',
+    nameAr: 'روبيان أفوكادو',
+    price: '5$'
+  }),
+  makeItem({
     id: 'ura-shrimp-crispy',
     categoryId: 'ura_shrimp',
     nameEn: 'Shrimp Crispy',
@@ -1293,3 +1300,4 @@ export const menuItems: MenuItem[] = [
 export const signatureItems: MenuItem[] = menuItems.filter(
   (item) => item.isSignature
 );
+
