@@ -17,7 +17,7 @@ function buildItemWhatsAppLink(itemName: string, isArabic: boolean) {
 // ✅ دالة جديدة تستخدم item.id لتوليد اسم ملف الصورة
 function getItemImageFileName(item: any): string {
   let fileName = item.id.replace(/_/g, '-');
-  fileName = fileName + '.PNG';
+  fileName = fileName + '.PNG'; // ✅ .PNG بالكبير
   return `/menu/${fileName}`;
 }
 
@@ -59,7 +59,7 @@ export default function MenuPage() {
   const dir = isArabic ? 'rtl' : 'ltr';
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [enlargedImage, setEnlargedImage] = useState<string | null>(null); // ✅ حالة الصورة المكبرة
+  const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
 
   // ✅ افتراضيًا: نفتح "الأكثر طلبًا" أول شي
   const defaultCategoryId = BEST_TAB_ID;
@@ -106,10 +106,8 @@ export default function MenuPage() {
 
   // ✅ دالة للحصول على صنفين من أعلى سعر
   const getTwoMostExpensiveItems = useMemo(() => {
-    // استبعاد الأصناف الموجودة مسبقاً في Best Sellers
     const excludedIds = new Set(bestSellerItems.map(item => item.id));
     
-    // تصفية الأصناف المتبقية وترتيبها تنازلياً حسب السعر
     const remainingItems = (menuItems as any[])
       .filter(item => !excludedIds.has(item.id))
       .sort((a, b) => {
@@ -117,7 +115,7 @@ export default function MenuPage() {
         const priceB = parseFloat(b.price.replace(/[^0-9.]/g, '')) || 0;
         return priceB - priceA;
       })
-      .slice(0, 2); // أخذ اثنين فقط
+      .slice(0, 2);
       
     return remainingItems;
   }, [bestSellerItems]);
@@ -154,13 +152,8 @@ export default function MenuPage() {
 
   // بناء أقسام مرئية حسب الحالة
   const visibleCategories = useMemo(() => {
-    // عند البحث: نعرض نتائج البحث من كل الأقسام
     if (showAllBecauseSearching) return menuCategories;
-
-    // إذا اختار "الأكثر طلبًا": ما منعرض أقسام أخرى
     if (activeCategoryId === BEST_TAB_ID) return [];
-
-    // باقي المنطق
     return menuCategories.filter((category) => {
       if (activeCategoryId === 'all') return true;
       return category.id === activeCategoryId;
@@ -181,7 +174,7 @@ export default function MenuPage() {
       dir={dir}
       className="min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden"
     >
-      {/* Header بسيط وواضح */}
+      {/* Header */}
       <section className="border-b border-slate-900 bg-slate-950/80">
         <div className="mx-auto w-full max-w-none flex flex-col gap-3 px-4 py-6 sm:px-6 sm:py-8">
           <div className={isArabic ? 'text-right' : 'text-left'}>
@@ -250,7 +243,7 @@ export default function MenuPage() {
               >
                 <div className="relative w-12 h-12 mb-2 rounded-full overflow-hidden border border-slate-700">
                   <Image
-                    src="/menu/category-best.png"
+                    src="/menu/category-best.PNG" {/* ✅ .PNG بالكبير */}
                     alt={isArabic ? 'الأكثر طلبًا' : 'Best Sellers'}
                     fill
                     className="object-cover"
@@ -273,7 +266,7 @@ export default function MenuPage() {
               >
                 <div className="relative w-12 h-12 mb-2 rounded-full overflow-hidden border border-slate-700">
                   <Image
-                    src="/menu/category-all.png"
+                    src="/menu/category-all.PNG" {/* ✅ .PNG بالكبير */}
                     alt={isArabic ? 'الكل' : 'All'}
                     fill
                     className="object-cover"
@@ -298,7 +291,7 @@ export default function MenuPage() {
                 >
                   <div className="relative w-12 h-12 mb-2 rounded-full overflow-hidden border border-slate-700">
                     <Image
-                      src={`/menu/category-${cat.id}.png`}
+                      src={`/menu/category-${cat.id}.PNG`} {/* ✅ .PNG بالكبير */}
                       alt={cat.name[lang]}
                       fill
                       className="object-cover"
@@ -389,7 +382,6 @@ export default function MenuPage() {
 
               <div className="space-y-2">
                 {combinedBestSellerItems.map((item: any) => {
-                  // ✅ استخدم الدالة لاسم الصورة
                   const imgSrc = getItemImageFileName(item);
 
                   return (
@@ -423,13 +415,11 @@ export default function MenuPage() {
                               {item.description[lang]}
                             </p>
                           )}
-                          {/* إشارة خاصة للأصناف المميزة */}
                           {item.isSignature && (
                             <span className="mt-1 inline-block rounded-full bg-amber-900/30 px-2 py-0.5 text-[10px] text-amber-200">
                               {isArabic ? '⭐ صنف مميز' : '⭐ Signature Item'}
                             </span>
                           )}
-                          {/* إشارة للصنفين الأغلى */}
                           {getTwoMostExpensiveItems.some(expItem => expItem.id === item.id) && (
                             <span className="mt-1 inline-block rounded-full bg-purple-900/30 px-2 py-0.5 text-[10px] text-purple-200">
                               {isArabic ? '💎 من الأعلى سعراً' : '💎 Premium Pick'}
@@ -499,7 +489,6 @@ export default function MenuPage() {
 
                       <div className="space-y-2">
                         {groupItems.map((item: any) => {
-                          // ✅ استخدم الدالة لاسم الصورة
                           const imgSrc = getItemImageFileName(item);
 
                           return (
@@ -533,7 +522,6 @@ export default function MenuPage() {
                                       {item.description[lang]}
                                     </p>
                                   )}
-                                  {/* إشارة خاصة للأصناف المميزة */}
                                   {item.isSignature && (
                                     <span className="mt-1 inline-block rounded-full bg-amber-900/30 px-2 py-0.5 text-[10px] text-amber-200">
                                       {isArabic ? '⭐ صنف مميز' : '⭐ Signature Item'}
