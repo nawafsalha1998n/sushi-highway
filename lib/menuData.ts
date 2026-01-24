@@ -643,8 +643,8 @@ export const menuItems: MenuItem[] = [
   makeItem({
     id: 'ura-shrimp-rainbow-kani',
     categoryId: 'ura_shrimp',
-    nameEn: 'Fruity Rainbow',
-    nameAr: 'فروتي رينبو',
+    nameEn: 'Rainbow Shrimp',
+    nameAr: 'رينبو روبيان',
     price: '5.50$'
   }),
 
@@ -1291,6 +1291,7 @@ export const menuItems: MenuItem[] = [
 export const signatureItems: MenuItem[] = menuItems.filter(
   (item) => item.isSignature
 );
+
 
 
 
