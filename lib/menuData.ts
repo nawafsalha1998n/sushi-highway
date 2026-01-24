@@ -15,7 +15,6 @@ export type CategoryId =
   | 'sashimi'
   | 'sushi'
   | 'duo_maki'
-  | 'vegetarian'
   | 'regina'
   | 'creamy'
   | 'platters'
@@ -1300,4 +1299,5 @@ export const menuItems: MenuItem[] = [
 export const signatureItems: MenuItem[] = menuItems.filter(
   (item) => item.isSignature
 );
+
 
