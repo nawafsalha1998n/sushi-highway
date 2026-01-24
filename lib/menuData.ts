@@ -198,14 +198,6 @@ export const menuCategories: MenuCategory[] = [
     'رول مميز يجمع السلمون والتونا والأفوكادو.'
   ),
   makeCategory(
-    'vegetarian',
-    '🥒',
-    'Vegetarian Maki – 4 pcs',
-    'ماكي نباتي – 4 قطع',
-    'Colourful veggie rolls.',
-    'رولات خضار طازجة.'
-  ),
-  makeCategory(
     'regina',
     '👑',
     'Regina Special Maki – 4 pcs',
@@ -1299,5 +1291,6 @@ export const menuItems: MenuItem[] = [
 export const signatureItems: MenuItem[] = menuItems.filter(
   (item) => item.isSignature
 );
+
 
 
