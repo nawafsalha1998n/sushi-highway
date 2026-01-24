@@ -250,7 +250,7 @@ export default function MenuPage() {
               >
                 <div className="relative w-12 h-12 mb-2 rounded-full overflow-hidden border border-slate-700">
                   <Image
-                    src="/menu/category-best.png"
+                    src="/menu/category-best.PNG"
                     alt={isArabic ? 'الأكثر طلبًا' : 'Best Sellers'}
                     fill
                     className="object-cover"
@@ -624,4 +624,5 @@ export default function MenuPage() {
     </main>
   );
 }
+
 
