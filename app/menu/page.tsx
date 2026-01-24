@@ -376,23 +376,6 @@ export default function MenuPage() {
           {!showAllBecauseSearching && activeCategoryId === BEST_TAB_ID && (
             <section className="mb-8 rounded-3xl border border-slate-900/80 bg-slate-950/80 p-4 shadow-sm shadow-slate-900 sm:p-5">
               <header className={`mb-4 flex flex-col gap-1 ${isArabic ? 'text-right' : 'text-left'}`}>
-  {/* ⭐ إضافة صورة لقسم الأكثر طلبًا ⭐ */}
-  <div className="relative mb-4 h-40 w-full overflow-hidden rounded-2xl border border-slate-700 bg-slate-900/80">
-    <Image
-      src="/menu/best-sellers.PNG"
-      alt={isArabic ? 'الأكثر طلبًا' : 'Best Sellers'}
-      fill
-      className="object-cover"
-      priority={true}  // ⭐ أولوية تحميل هذه الصورة
-      onError={(e) => {
-        // إذا لم توجد الصورة، نعرض لون خلفية بديل
-        const target = e.target as HTMLImageElement;
-        target.style.display = 'none';
-        target.parentElement!.style.background = 'linear-gradient(135deg, #f59e0b, #dc2626)';
-      }}
-    />
-  </div>
-  
   <h2 className="flex items-center gap-2 text-lg font-semibold text-slate-50">
     <span className="text-xl">⭐</span>
     <span>{isArabic ? 'الأكثر طلبًا' : 'Best Sellers'}</span>
@@ -624,5 +607,6 @@ export default function MenuPage() {
     </main>
   );
 }
+
 
 
