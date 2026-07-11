@@ -379,14 +379,14 @@ export const menuItems: MenuItem[] = [
     categoryId: 'temaki',
     nameEn: 'Salmon',
     nameAr: 'سلمون',
-    price: '6$'
+    price: '7$'
   }),
   makeItem({
     id: 'temaki-crab',
     categoryId: 'temaki',
     nameEn: 'Crab',
     nameAr: 'كراب',
-    price: '6$'
+    price: '5$'
   }),
   makeItem({
     id: 'temaki-shrimp',
@@ -416,28 +416,28 @@ export const menuItems: MenuItem[] = [
     categoryId: 'hoso',
     nameEn: 'Crab',
     nameAr: 'كراب',
-    price: '5$'
+    price: '4$'
   }),
   makeItem({
     id: 'hoso-tuna',
     categoryId: 'hoso',
     nameEn: 'Tuna',
     nameAr: 'تونا',
-    price: '4$'
+    price: '6$'
   }),
   makeItem({
     id: 'hoso-avocado',
     categoryId: 'hoso',
     nameEn: 'Avocado',
     nameAr: 'أفوكادو',
-    price: '5$'
+    price: '4$'
   }),
   makeItem({
     id: 'hoso-mango',
     categoryId: 'hoso',
     nameEn: 'Mango',
     nameAr: 'مانجو',
-    price: '4$'
+    price: '5$'
   }),
   makeItem({
     id: 'hoso-cucumber',
@@ -460,7 +460,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'futo',
     nameEn: 'Mixed Futo Maki',
     nameAr: 'ميكس فوتو ماكي',
-    price: '7$'
+    price: '8$'
   }),
 
   // URAMAKI TUNA – 4 PCS
@@ -492,14 +492,14 @@ export const menuItems: MenuItem[] = [
     categoryId: 'ura_crab',
     nameEn: 'Ebiko California',
     nameAr: 'إيبيكو كاليفورنيا',
-    price: '4$'
+    price: '5$'
   }),
   makeItem({
     id: 'ura-crab-crispy-california',
     categoryId: 'ura_crab',
     nameEn: 'Crispy California',
     nameAr: 'كريسبي كاليفورنيا',
-    price: '5$'
+    price: '4$'
   }),
   makeItem({
     id: 'ura-crab-crispy-crazy',
@@ -528,14 +528,14 @@ export const menuItems: MenuItem[] = [
     categoryId: 'ura_crab',
     nameEn: 'Fruity Crab',
     nameAr: 'فروتي كراب',
-    price: '5$'
+    price: '6$'
   }),
   makeItem({
     id: 'ura-crab-rainbow-kani',
     categoryId: 'ura_crab',
     nameEn: 'Rainbow Kani',
     nameAr: 'رينبو كاني',
-    price: '6$'
+    price: '7$'
   }),
   makeItem({
     id: 'ura-crab-crab-avocado-wrap',
@@ -551,7 +551,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'ura_salmon',
     nameEn: 'Volcano Salmon',
     nameAr: 'فولكانو سلمون',
-    price: '8$',
+    price: '9$',
     isSignature: true
   }),
   makeItem({
