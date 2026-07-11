@@ -871,7 +871,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'pizza',
     nameEn: 'Shrimp Pizza',
     nameAr: 'بيتزا روبيان',
-    price: '11$'
+    price: '14$'
   }),
   makeItem({
     id: 'pizza-pepperoni',
@@ -1002,7 +1002,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Beverages',
     nameEn: 'Water (Big)',
     nameAr: 'مياه (كبير)',
-    price: '1.1$'
+    price: '2$'
   }),
   makeItem({
     id: 'drinks-water-small',
@@ -1010,7 +1010,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Beverages',
     nameEn: 'Water (Small)',
     nameAr: 'مياه (صغير)',
-    price: '0.5$'
+    price: '1$'
   }),
   makeItem({
     id: 'drinks-pepsi',
@@ -1018,7 +1018,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Beverages',
     nameEn: 'Pepsi',
     nameAr: 'بيبسي',
-    price: '1.75$'
+    price: '2$'
   }),
   makeItem({
     id: 'drinks-7up',
@@ -1026,7 +1026,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Beverages',
     nameEn: '7up',
     nameAr: 'سفن أب',
-    price: '1.75$'
+    price: '2$'
   }),
   makeItem({
     id: 'drinks-mirinda',
@@ -1034,7 +1034,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Beverages',
     nameEn: 'Mirinda',
     nameAr: 'ميريندا',
-    price: '1.75$'
+    price: '2$'
   }),
 
   // Fresh Juice
@@ -1044,7 +1044,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Fresh Juice',
     nameEn: 'Orange',
     nameAr: 'عصير برتقال',
-    price: '3.7$'
+    price: '4$'
   }),
   makeItem({
     id: 'drinks-juice-strawberry',
@@ -1052,7 +1052,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Fresh Juice',
     nameEn: 'Strawberry',
     nameAr: 'عصير فراولة',
-    price: '3.7$'
+    price: '4$'
   }),
   makeItem({
     id: 'drinks-juice-carrot',
@@ -1060,7 +1060,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Fresh Juice',
     nameEn: 'Carrot',
     nameAr: 'عصير جزر',
-    price: '3.75$'
+    price: '4$'
   }),
   makeItem({
     id: 'drinks-juice-lemonade',
@@ -1068,7 +1068,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Fresh Juice',
     nameEn: 'Lemonade',
     nameAr: 'ليمونادة',
-    price: '2.65$'
+    price: '3$'
   }),
   makeItem({
     id: 'drinks-juice-mango',
@@ -1076,7 +1076,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Fresh Juice',
     nameEn: 'Mango',
     nameAr: 'عصير مانجو',
-    price: '4.2$'
+    price: '4$'
   }),
   makeItem({
     id: 'drinks-juice-minted-lemonade',
@@ -1084,7 +1084,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Fresh Juice',
     nameEn: 'Minted Lemonade',
     nameAr: 'ليمونادة بالنعناع',
-    price: '2.85$'
+    price: '3$'
   }),
 
   // Milkshake
@@ -1136,7 +1136,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Smoothie',
     nameEn: 'Strawberry Smoothie',
     nameAr: 'سموذي فراولة',
-    price: '3.4$'
+    price: '3$'
   }),
   makeItem({
     id: 'drinks-smoothie-mango',
@@ -1144,7 +1144,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Smoothie',
     nameEn: 'Mango Smoothie',
     nameAr: 'سموذي مانجو',
-    price: '3.4$'
+    price: '3$'
   }),
   makeItem({
     id: 'drinks-smoothie-peach',
@@ -1152,7 +1152,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Smoothie',
     nameEn: 'Peach Smoothie',
     nameAr: 'سموذي خوخ',
-    price: '3.3$'
+    price: '3$'
   }),
   makeItem({
     id: 'drinks-smoothie-passion',
@@ -1160,7 +1160,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Smoothie',
     nameEn: 'Passion Smoothie',
     nameAr: 'سموذي باشن فروت',
-    price: '3.4$'
+    price: '3$'
   }),
   makeItem({
     id: 'drinks-smoothie-mixed-berries',
@@ -1168,7 +1168,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Smoothie',
     nameEn: 'Mixed Berries Smoothie',
     nameAr: 'سموذي توت مختلط',
-    price: '3.4$'
+    price: '3$'
   }),
 
   // Mojito
@@ -1178,7 +1178,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Mojito',
     nameEn: 'Peach Mojito',
     nameAr: 'موهيتو خوخ',
-    price: '3.1$'
+    price: '3$'
   }),
   makeItem({
     id: 'drinks-mojito-passion',
@@ -1186,7 +1186,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Mojito',
     nameEn: 'Passion Mojito',
     nameAr: 'موهيتو باشن فروت',
-    price: '3.1$'
+    price: '3$'
   }),
   makeItem({
     id: 'drinks-mojito-pomegranate',
@@ -1194,7 +1194,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Mojito',
     nameEn: 'Pomegranate Mojito',
     nameAr: 'موهيتو رمان',
-    price: '3.1$'
+    price: '3$'
   }),
   makeItem({
     id: 'drinks-mojito-mango',
@@ -1202,7 +1202,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Mojito',
     nameEn: 'Mango Mojito',
     nameAr: 'موهيتو مانجو',
-    price: '3.1$'
+    price: '3$'
   }),
   makeItem({
     id: 'drinks-mojito-blue-hawaii',
@@ -1210,7 +1210,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Mojito',
     nameEn: 'Blue Hawaii Mojito',
     nameAr: 'موهيتو بلو هاواي',
-    price: '3.1$'
+    price: '3$'
   }),
 
   // Hot Drinks
@@ -1228,7 +1228,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Hot Drinks',
     nameEn: 'Double Espresso',
     nameAr: 'دبل إسبريسو',
-    price: '1.5$'
+    price: '2$'
   }),
   makeItem({
     id: 'drinks-hot-nescafe',
@@ -1236,7 +1236,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Hot Drinks',
     nameEn: 'Nescafe',
     nameAr: 'نسكافيه',
-    price: '1.9$'
+    price: '2$'
   }),
   makeItem({
     id: 'drinks-hot-cappuccino',
@@ -1244,7 +1244,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Hot Drinks',
     nameEn: 'Cappuccino',
     nameAr: 'كابوتشينو',
-    price: '1.9$'
+    price: '2$'
   }),
   makeItem({
     id: 'drinks-hot-latte',
@@ -1252,7 +1252,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Hot Drinks',
     nameEn: 'Caffe Latte (caramel / chocolate / hazelnut)',
     nameAr: 'لاتيه (كراميل / شوكولاتة / بندق)',
-    price: '2.85$'
+    price: '3$'
   }),
   makeItem({
     id: 'drinks-hot-hot-chocolate',
@@ -1260,7 +1260,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Hot Drinks',
     nameEn: 'Hot Chocolate',
     nameAr: 'شوكولاتة ساخنة',
-    price: '3.3$'
+    price: '3$'
   }),
   makeItem({
     id: 'drinks-hot-americano',
@@ -1268,7 +1268,7 @@ export const menuItems: MenuItem[] = [
     subSection: 'Hot Drinks',
     nameEn: 'Americano',
     nameAr: 'أمريكانو',
-    price: '1.9$'
+    price: '2$'
   }),
   makeItem({
     id: 'drinks-hot-flat-white',
