@@ -302,21 +302,21 @@ export const menuItems: MenuItem[] = [
     categoryId: 'starters',
     nameEn: 'Edamame',
     nameAr: 'إيدامامي',
-    price: '5$'
+    price: '6$'
   }),
   makeItem({
     id: 'starters-cheese-rolls',
     categoryId: 'starters',
     nameEn: 'Cheese Rolls',
     nameAr: 'رولات الجبن',
-    price: '4.6$'
+    price: '5$'
   }),
   makeItem({
     id: 'starters-spring-rolls',
     categoryId: 'starters',
     nameEn: 'Spring Rolls',
     nameAr: 'سبرينغ رولز',
-    price: '3.5$'
+    price: '5$'
   }),
 
   // SALADS
@@ -325,7 +325,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'salads',
     nameEn: 'Crab Salad',
     nameAr: 'سلطة الكراب',
-    price: '12$',
+    price: '14$',
     descEn: 'Shrimp 180g, avocado, mango, crispy topping',
     descAr: 'روبيان 180غ، أفوكادو، مانجو، توبينغ مقرمش'
   }),
@@ -334,7 +334,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'salads',
     nameEn: 'Salmon Salad',
     nameAr: 'سلطة السلمون',
-    price: '16$',
+    price: '18$',
     descEn: 'Salmon 180g, avocado, mango, crispy topping',
     descAr: 'سلمون 180غ، أفوكادو، مانجو، توبينغ مقرمش'
   }),
@@ -343,7 +343,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'salads',
     nameEn: 'Shrimp Salad',
     nameAr: 'سلطة الروبيان',
-    price: '15$',
+    price: '16$',
     descEn: 'Shrimp 180g, avocado, mango, crispy topping',
     descAr: 'روبيان 180غ، أفوكادو، مانجو، توبينغ مقرمش'
   }),
@@ -352,7 +352,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'salads',
     nameEn: 'Tuna Salad',
     nameAr: 'سلطة التونا',
-    price: '16$',
+    price: '18$',
     descEn: 'Tuna 180g, avocado, mango, crispy topping',
     descAr: 'تونا 180غ، أفوكادو، مانجو، توبينغ مقرمش'
   }),
@@ -361,7 +361,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'salads',
     nameEn: 'Mixed Sea Food Salad',
     nameAr: 'سلطة مأكولات بحرية متنوعة',
-    price: '16$',
+    price: '18$',
     descEn: 'Crab, salmon, tuna, shrimp mix',
     descAr: 'مزيج من الكراب، السلمون، التونا، الروبيان'
   }),
@@ -372,7 +372,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'temaki',
     nameEn: 'Tuna',
     nameAr: 'تونا',
-    price: '6$'
+    price: '7$'
   }),
   makeItem({
     id: 'temaki-salmon',
@@ -386,14 +386,14 @@ export const menuItems: MenuItem[] = [
     categoryId: 'temaki',
     nameEn: 'Crab',
     nameAr: 'كراب',
-    price: '4$'
+    price: '6$'
   }),
   makeItem({
     id: 'temaki-shrimp',
     categoryId: 'temaki',
     nameEn: 'Shrimp',
     nameAr: 'روبيان',
-    price: '4$'
+    price: '6$'
   }),
   makeItem({
     id: 'temaki-california',
@@ -409,28 +409,28 @@ export const menuItems: MenuItem[] = [
     categoryId: 'hoso',
     nameEn: 'Salmon',
     nameAr: 'سلمون',
-    price: '5$'
+    price: '6$'
   }),
   makeItem({
     id: 'hoso-crab',
     categoryId: 'hoso',
     nameEn: 'Crab',
     nameAr: 'كراب',
-    price: '4$'
+    price: '5$'
   }),
   makeItem({
     id: 'hoso-tuna',
     categoryId: 'hoso',
     nameEn: 'Tuna',
     nameAr: 'تونا',
-    price: '4.5$'
+    price: '4$'
   }),
   makeItem({
     id: 'hoso-avocado',
     categoryId: 'hoso',
     nameEn: 'Avocado',
     nameAr: 'أفوكادو',
-    price: '4$'
+    price: '5$'
   }),
   makeItem({
     id: 'hoso-mango',
@@ -444,14 +444,14 @@ export const menuItems: MenuItem[] = [
     categoryId: 'hoso',
     nameEn: 'Cucumber',
     nameAr: 'خيار',
-    price: '3.5$'
+    price: '3$'
   }),
   makeItem({
     id: 'hoso-shrimp',
     categoryId: 'hoso',
     nameEn: 'Shrimp',
     nameAr: 'روبيان',
-    price: '3.5$'
+    price: '5$'
   }),
 
   // FUTO MAKI – 4 PCS
@@ -469,14 +469,14 @@ export const menuItems: MenuItem[] = [
     categoryId: 'ura_tuna',
     nameEn: 'Volcano Tuna',
     nameAr: 'فولكانو تونا',
-    price: '7$'
+    price: '8$'
   }),
   makeItem({
     id: 'ura-tuna-wrap',
     categoryId: 'ura_tuna',
     nameEn: 'Tuna Wrap',
     nameAr: 'تونا راب',
-    price: '7$'
+    price: '8$'
   }),
 
   // URAMAKI CRAB – 4 PCS
@@ -485,28 +485,28 @@ export const menuItems: MenuItem[] = [
     categoryId: 'ura_crab',
     nameEn: 'California',
     nameAr: 'كاليفورنيا',
-    price: '3$'
+    price: '4$'
   }),
   makeItem({
     id: 'ura-crab-california-ebiko',
     categoryId: 'ura_crab',
     nameEn: 'Ebiko California',
     nameAr: 'إيبيكو كاليفورنيا',
-    price: '5$'
+    price: '4$'
   }),
   makeItem({
     id: 'ura-crab-crispy-california',
     categoryId: 'ura_crab',
     nameEn: 'Crispy California',
     nameAr: 'كريسبي كاليفورنيا',
-    price: '3$'
+    price: '5$'
   }),
   makeItem({
     id: 'ura-crab-crispy-crazy',
     categoryId: 'ura_crab',
     nameEn: 'Crispy Crazy',
     nameAr: 'كريسبي كريزي',
-    price: '4$',
+    price: '5$',
     isSignature: true
   }),
   makeItem({
@@ -514,14 +514,14 @@ export const menuItems: MenuItem[] = [
     categoryId: 'ura_crab',
     nameEn: 'Crunchy Crab',
     nameAr: 'كرانشي كراب',
-    price: '3.5$'
+    price: '5'
   }),
   makeItem({
     id: 'ura-crab-spicy-crab',
     categoryId: 'ura_crab',
     nameEn: 'Spicy Crab',
     nameAr: 'سبايسي كراب',
-    price: '4$'
+    price: '5$'
   }),
   makeItem({
     id: 'ura-crab-fruity-crab',
@@ -535,14 +535,14 @@ export const menuItems: MenuItem[] = [
     categoryId: 'ura_crab',
     nameEn: 'Rainbow Kani',
     nameAr: 'رينبو كاني',
-    price: '5$'
+    price: '6$'
   }),
   makeItem({
     id: 'ura-crab-crab-avocado-wrap',
     categoryId: 'ura_crab',
     nameEn: 'Crab Avocado Wrap',
     nameAr: 'كراب أفوكادو راب',
-    price: '4$'
+    price: '5$'
   }),
 
   // URAMAKI SALMON – 4 PCS
@@ -559,14 +559,14 @@ export const menuItems: MenuItem[] = [
     categoryId: 'ura_salmon',
     nameEn: 'Salmon Ebiko',
     nameAr: 'سلمون إيبيكو',
-    price: '7$'
+    price: '8$'
   }),
   makeItem({
     id: 'ura-salmon-fruity',
     categoryId: 'ura_salmon',
     nameEn: 'Fruity Salmon',
     nameAr: 'فروتي سلمون',
-    price: '6$'
+    price: '7$'
   }),
   makeItem({
     id: 'ura-salmon-wrap',
@@ -580,7 +580,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'ura_salmon',
     nameEn: 'Salmon Avocado',
     nameAr: 'سلمون أفوكادو',
-    price: '4$'
+    price: '6$'
   }),
   makeItem({
     id: 'ura-salmon-mango',
@@ -594,7 +594,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'ura_salmon',
     nameEn: 'Salmon Philadelphia',
     nameAr: 'سلمون فيلادلفيا',
-    price: '6$'
+    price: '7$'
   }),
 
   // URAMAKI SHRIMP – 4 PCS
@@ -603,49 +603,49 @@ export const menuItems: MenuItem[] = [
     categoryId: 'ura_shrimp',
     nameEn: 'Volcano Shrimp',
     nameAr: 'فولكانو روبيان',
-    price: '5$'
+    price: '6$'
   }),
   makeItem({
     id: 'ura-shrimp-avocado',
     categoryId: 'ura_shrimp',
     nameEn: 'Shrimp Avocado',
     nameAr: 'روبيان أفوكادو',
-    price: '5$'
+    price: '6$'
   }),
   makeItem({
     id: 'ura-shrimp-crispy',
     categoryId: 'ura_shrimp',
     nameEn: 'Shrimp Crispy',
     nameAr: 'روبيان كريسبي',
-    price: '5$'
+    price: '6$'
   }),
   makeItem({
     id: 'ura-shrimp-mango',
     categoryId: 'ura_shrimp',
     nameEn: 'Shrimp Mango',
     nameAr: 'روبيان مانجو',
-    price: '5$'
+    price: '6$'
   }),
   makeItem({
     id: 'ura-shrimp-fruity',
     categoryId: 'ura_shrimp',
     nameEn: 'Fruity Shrimp',
     nameAr: 'فروتي روبيان',
-    price: '5$'
+    price: '6$'
   }),
   makeItem({
     id: 'ura-shrimp-ebiko',
     categoryId: 'ura_shrimp',
     nameEn: 'Shrimp Ebiko',
     nameAr: 'روبيان إيبيكو',
-    price: '5$'
+    price: '6$'
   }),
   makeItem({
     id: 'ura-shrimp-rainbow-kani',
     categoryId: 'ura_shrimp',
     nameEn: 'Rainbow Shrimp',
     nameAr: 'رينبو روبيان',
-    price: '5.50$'
+    price: '6$'
   }),
 
   // SASHIMI – 2 PCS
@@ -654,21 +654,21 @@ export const menuItems: MenuItem[] = [
     categoryId: 'sashimi',
     nameEn: 'Salmon',
     nameAr: 'سلمون',
-    price: '4$'
+    price: '5$'
   }),
   makeItem({
     id: 'sashimi-tuna',
     categoryId: 'sashimi',
     nameEn: 'Tuna',
     nameAr: 'تونا',
-    price: '4$'
+    price: '5$'
   }),
   makeItem({
     id: 'sashimi-crab',
     categoryId: 'sashimi',
     nameEn: 'Crab',
     nameAr: 'كراب',
-    price: '2.5$'
+    price: '3$'
   }),
   makeItem({
     id: 'sashimi-shrimp',
@@ -684,28 +684,28 @@ export const menuItems: MenuItem[] = [
     categoryId: 'sushi',
     nameEn: 'Salmon Sushi',
     nameAr: 'سوشي سلمون',
-    price: '4$'
+    price: '5$'
   }),
   makeItem({
     id: 'sushi-tuna',
     categoryId: 'sushi',
     nameEn: 'Tuna Sushi',
     nameAr: 'سوشي تونا',
-    price: '4$'
+    price: '5$'
   }),
   makeItem({
     id: 'sushi-shrimp',
     categoryId: 'sushi',
     nameEn: 'Shrimp Sushi',
     nameAr: 'سوشي روبيان',
-    price: '3$'
+    price: '4$'
   }),
   makeItem({
     id: 'sushi-crab',
     categoryId: 'sushi',
     nameEn: 'Crab Sushi',
     nameAr: 'سوشي كراب',
-    price: '2.5$'
+    price: '3$'
   }),
 
   // DUO MAKI – 4 PCS
@@ -714,7 +714,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'duo_maki',
     nameEn: 'Salmon, Tuna, Avocado roll wrapped in Salmon and Tuna',
     nameAr: 'رول سلمون، تونا، أفوكادو مغلف بالسلمون والتونا',
-    price: '6.5$'
+    price: '7$'
   }),
 
   // VEGETARIAN MAKI – 4 PCS (تمت إزالته كما طلبت)
@@ -725,7 +725,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'regina',
     nameEn: 'Grilled Salmon wrapped in Avocado',
     nameAr: 'سلمون مشوي ملفوف بالأفوكادو',
-    price: '4.75$'
+    price: '6$'
   }),
 
   // CREAMY / SALMON CRAB MAKI
@@ -734,7 +734,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'creamy',
     nameEn: 'Creamy Shrimp – 4 pcs',
     nameAr: 'كريمي روبيان – 4 قطع',
-    price: '5.5$',
+    price: '7$',
     descEn: 'Shrimp mixed with Philadelphia and avocado wrapped in avocado.',
     descAr: 'روبيان مخلوط مع فيلادلفيا وأفوكادو مغلف بالأفوكادو.'
   }),
@@ -743,7 +743,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'creamy',
     nameEn: 'Salmon Crab Maki – 4 pcs',
     nameAr: 'سلمون كراب ماكي – 4 قطع',
-    price: '6.5$',
+    price: '7$',
     descEn: 'Salmon and mango roll wrapped in crab.',
     descAr: 'رول سلمون ومانجو مغلف بالكراب.'
   }),
@@ -754,7 +754,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'platters',
     nameEn: 'Crab Mix – 12 pcs',
     nameAr: 'ميكس كراب – 12 قطعة',
-    price: '12$',
+    price: '15$',
     descEn: 'Crazy maki – 4 pcs, Avocado Wrap – 4 pcs, Fruity Crab – 4 pcs',
     descAr: 'كريزي ماكي – 4 قطع، أفوكادو راب – 4 قطع، فروتي كراب – 4 قطع'
   }),
@@ -763,7 +763,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'platters',
     nameEn: 'Salmon Mix – 12 pcs',
     nameAr: 'ميكس سلمون – 12 قطعة',
-    price: '18$',
+    price: '20$',
     descEn: 'Salmon Maki, Fruity Salmon, Volcano Salmon, Salmon Wrap',
     descAr: 'سلمون ماكي، فروتي سلمون، فولكانو سلمون، سلمون راب'
   }),
@@ -772,7 +772,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'platters',
     nameEn: 'Shrimp Mix – 12 pcs',
     nameAr: 'ميكس روبيان – 12 قطعة',
-    price: '14$',
+    price: '16$',
     descEn: 'Shrimp Volcano – 4 pcs, Shrimp Mango – 4 pcs, Shrimp Ebiko – 4 pcs',
     descAr: 'روبيان فولكانو – 4 قطع، روبيان مانجو – 4 قطع، روبيان إيبيكو – 4 قطع'
   }),
@@ -781,7 +781,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'platters',
     nameEn: 'Special Mix – 12 pcs',
     nameAr: 'ميكس خاص – 12 قطعة',
-    price: '17$',
+    price: '19$',
     descEn: 'Avocado Wrap – 4 pcs, Volcano Salmon – 4 pcs, Fruity Shrimp – 4 pcs',
     descAr: 'أفوكادو راب – 4 قطع، فولكانو سلمون – 4 قطع، فروتي روبيان – 4 قطع'
   }),
@@ -792,7 +792,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'special_rolls',
     nameEn: 'Dynamite Shrimp Roll – 8 pcs',
     nameAr: 'ديناميت روبيان رول – 8 قطع',
-    price: '12$',
+    price: '15$',
     isSignature: true
   }),
   makeItem({
@@ -800,7 +800,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'special_rolls',
     nameEn: 'Dragon Roll – 8 pcs',
     nameAr: 'دراغون رول – 8 قطع',
-    price: '10$'
+    price: '12$'
   }),
 
   // MINI BOAT – 25 PCS
@@ -809,7 +809,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'boat_mini',
     nameEn: 'Mini Boat – 25 pcs',
     nameAr: 'ميني بوت – 25 قطعة',
-    price: '32$',
+    price: '35$',
     descEn: '3 Crispy Crazy Crab, 3 Volcano Salmon, 3 Philadelphia Salmon, 3 Fruity Crab, 3 Volcano Shrimp, 3 California, 3 Ebiko Shrimp, 2 Sashimi, 2 Sashimi Sushi',
     descAr: '3 كريسبي كريزي كراب، 3 فولكانو سلمون، 3 فيلادلفيا سلمون، 3 فروتي كراب، 3 فولكانو روبيان، 3 كاليفورنيا، 3 إيبيكو روبيان، 2 ساشيمي، 2 ساشيمي سوشي'
   }),
@@ -820,7 +820,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'boat_big',
     nameEn: 'Big Boat – 50 pcs',
     nameAr: 'بيغ بوت – 50 قطعة',
-    price: '60$',
+    price: '65$',
     descEn: '2 Tuna Sashimi, 2 Shrimp Sashimi, 2 Crab Sashimi, 4 Salmon Sashimi, 4 Crazy Crab, 4 Fruity Crab, 4 Volcano Shrimp, 4 Salmon Wrap, 4 Avocado Crab, 4 Crunchy Crab, 4 Volcano Salmon, 4 California, 4 Salmon Sushi, 2 Tuna Sushi, 4 California Ebiko',
     descAr: '2 تونا ساشيمي، 2 روبيان ساشيمي، 2 كراب ساشيمي، 4 سلمون ساشيمي، 4 كريزي كراب، 4 فروتي كراب، 4 فولكانو روبيان، 4 سلمون راب، 4 أفوكادو كراب، 4 كرانشي كراب، 4 فولكانو سلمون، 4 كاليفورنيا، 4 سلمون سوشي، 2 تونا سوشي، 4 كاليفورنيا إيبيكو'
   }),
@@ -831,7 +831,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'sushi_cake',
     nameEn: 'Mini Sushi Cake',
     nameAr: 'ميني كيك سوشي',
-    price: '35$',
+    price: '40$',
     isSignature: true
   }),
   makeItem({
@@ -839,7 +839,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'sushi_cake',
     nameEn: 'Medium Sushi Cake',
     nameAr: 'ميديم كيك سوشي',
-    price: '50$',
+    price: '55$',
     isSignature: true
   }),
   makeItem({
@@ -847,7 +847,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'sushi_cake',
     nameEn: 'Big Sushi Cake',
     nameAr: 'بيغ كيك سوشي',
-    price: '75$',
+    price: '80$',
     isSignature: true
   }),
 
@@ -857,28 +857,28 @@ export const menuItems: MenuItem[] = [
     categoryId: 'pizza',
     nameEn: 'Vegetarian Pizza',
     nameAr: 'بيتزا نباتية',
-    price: '10$'
+    price: '12$'
   }),
   makeItem({
     id: 'pizza-margharita',
     categoryId: 'pizza',
     nameEn: 'Margharita Pizza',
     nameAr: 'بيتزا مارغاريتا',
-    price: '10$'
+    price: '12$'
   }),
   makeItem({
     id: 'pizza-shrimp',
     categoryId: 'pizza',
     nameEn: 'Shrimp Pizza',
     nameAr: 'بيتزا روبيان',
-    price: '12$'
+    price: '11$'
   }),
   makeItem({
     id: 'pizza-pepperoni',
     categoryId: 'pizza',
     nameEn: 'Pepperoni Pizza',
     nameAr: 'بيتزا بيبروني',
-    price: '12$'
+    price: '15$'
   }),
   makeItem({
     id: 'pizza-smoked-salmon',
@@ -903,7 +903,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'kumpir',
     nameEn: 'Add-ons: Mortadella',
     nameAr: 'إضافات: مرتديلا',
-    price: '1.5$'
+    price: '1$'
   }),
   makeItem({
     id: 'kumpir-add-chicken',
@@ -926,21 +926,21 @@ export const menuItems: MenuItem[] = [
     categoryId: 'pasta',
     nameEn: 'Chicken Fettuccine',
     nameAr: 'فيتوتشيني دجاج',
-    price: '12.5$'
+    price: '15$'
   }),
   makeItem({
     id: 'pasta-arrabiata',
     categoryId: 'pasta',
     nameEn: 'Pasta Arrabiata',
     nameAr: 'باستا أربياتا',
-    price: '6.5$'
+    price: '8$'
   }),
   makeItem({
     id: 'pasta-shrimp',
     categoryId: 'pasta',
     nameEn: 'Shrimp Pasta',
     nameAr: 'باستا روبيان',
-    price: '12.5$'
+    price: '14$'
   }),
   makeItem({
     id: 'pasta-pesto',
@@ -956,42 +956,42 @@ export const menuItems: MenuItem[] = [
     categoryId: 'hot_plates',
     nameEn: 'Crispy Chicken Strips (with fries & salad)',
     nameAr: 'شرائح دجاج مقرمشة (مع بطاطس وسلطة)',
-    price: '9$'
+    price: '8$'
   }),
   makeItem({
     id: 'hot-chicken-burger',
     categoryId: 'hot_plates',
     nameEn: 'Chicken Burger (with fries & salad)',
     nameAr: 'برجر دجاج (مع بطاطس وسلطة)',
-    price: '9$'
+    price: '10$'
   }),
   makeItem({
     id: 'hot-beef-burger',
     categoryId: 'hot_plates',
     nameEn: 'Beef Burger (with fries & salad)',
     nameAr: 'برجر لحم (مع بطاطس وسلطة)',
-    price: '11$'
+    price: '12$'
   }),
   makeItem({
     id: 'hot-shrimp-tempura',
     categoryId: 'hot_plates',
     nameEn: 'Shrimp Tempura',
     nameAr: 'تمبورا روبيان',
-    price: '12$'
+    price: '14$'
   }),
   makeItem({
     id: 'hot-grilled-salmon',
     categoryId: 'hot_plates',
     nameEn: 'Grilled Salmon (with vegetables)',
     nameAr: 'سلمون مشوي (مع خضار)',
-    price: '25$'
+    price: '28$'
   }),
   makeItem({
     id: 'hot-fries',
     categoryId: 'hot_plates',
     nameEn: 'Fries',
     nameAr: 'بطاطس مقلية',
-    price: '2$'
+    price: '3$'
   }),
 
   // DRINKS
