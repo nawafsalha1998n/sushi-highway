@@ -617,7 +617,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'ura_shrimp',
     nameEn: 'Shrimp Crispy',
     nameAr: 'روبيان كريسبي',
-    price: '6$'
+    price: '5$'
   }),
   makeItem({
     id: 'ura-shrimp-mango',
@@ -631,7 +631,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'ura_shrimp',
     nameEn: 'Fruity Shrimp',
     nameAr: 'فروتي روبيان',
-    price: '6$'
+    price: '7$'
   }),
   makeItem({
     id: 'ura-shrimp-ebiko',
