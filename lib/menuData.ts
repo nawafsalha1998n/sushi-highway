@@ -39,6 +39,7 @@ export type MenuCategory = {
     en: string;
     ar: string;
   };
+  hidden?: boolean;
 };
 
 export type MenuItem = {
@@ -55,6 +56,7 @@ export type MenuItem = {
   };
   subSection?: string; // for Drinks groups etc (e.g. "Beverages", "Fresh Juice")
   isSignature?: boolean;
+  hidden?: boolean;
 };
 
 const makeCategory = (
@@ -63,12 +65,14 @@ const makeCategory = (
   nameEn: string,
   nameAr: string,
   descEn: string,
-  descAr: string
+  descAr: string,
+  hidden = false
 ): MenuCategory => ({
   id,
   emoji,
   name: { en: nameEn, ar: nameAr },
-  description: { en: descEn, ar: descAr }
+  description: { en: descEn, ar: descAr },
+  hidden
 });
 
 const makeItem = (args: {
@@ -81,6 +85,7 @@ const makeItem = (args: {
   descAr?: string;
   subSection?: string;
   isSignature?: boolean;
+  hidden?: boolean;
 }): MenuItem => ({
   id: args.id,
   categoryId: args.categoryId,
@@ -97,7 +102,8 @@ const makeItem = (args: {
         }
       : undefined,
   subSection: args.subSection,
-  isSignature: args.isSignature
+  isSignature: args.isSignature,
+  hidden: args.hidden
 });
 
 export const menuCategories: MenuCategory[] = [
@@ -267,7 +273,8 @@ export const menuCategories: MenuCategory[] = [
     'Kumpir Potato',
     'كمبير بطاطا',
     'Loaded baked potatoes.',
-    'بطاطا مشوية محشوة بالكامل.'
+    'بطاطا مشوية محشوة بالكامل.',
+    true
   ),
   makeCategory(
     'pasta',
@@ -885,7 +892,8 @@ export const menuItems: MenuItem[] = [
     categoryId: 'pizza',
     nameEn: 'Smoked Salmon Pizza',
     nameAr: 'بيتزا سلمون مدخن',
-    price: '14$'
+    price: '14$',
+    hidden: true
   }),
 
   // KUMPIR POTATO
@@ -903,7 +911,8 @@ export const menuItems: MenuItem[] = [
     categoryId: 'kumpir',
     nameEn: 'Add-ons: Mortadella',
     nameAr: 'إضافات: مرتديلا',
-    price: '1$'
+    price: '1$',
+    hidden: true
   }),
   makeItem({
     id: 'kumpir-add-chicken',
@@ -1289,7 +1298,7 @@ export const menuItems: MenuItem[] = [
 ];
 
 export const signatureItems: MenuItem[] = menuItems.filter(
-  (item) => item.isSignature
+  (item) => item.isSignature && !item.hidden
 );
 
 

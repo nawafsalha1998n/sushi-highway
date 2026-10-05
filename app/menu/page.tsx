@@ -76,14 +76,15 @@ export default function MenuPage() {
 
   const normalizedSearch = searchTerm.trim().toLowerCase();
   const filteredItems = useMemo(() => (menuItems as any[]).filter((item) => {
+    if (item.hidden) return false;
     if (!normalizedSearch) return true;
     return item.name.en.toLowerCase().includes(normalizedSearch) || item.name.ar.toLowerCase().includes(normalizedSearch);
   }), [normalizedSearch]);
   const showAllBecauseSearching = Boolean(normalizedSearch);
-  const bestSellerItems = useMemo(() => (menuItems as any[]).filter(isBestSellerItem), []);
+  const bestSellerItems = useMemo(() => (menuItems as any[]).filter((item) => !item.hidden && isBestSellerItem(item)), []);
   const premiumItems = useMemo(() => {
     const excluded = new Set(bestSellerItems.map((item) => item.id));
-    return (menuItems as any[]).filter((item) => !excluded.has(item.id)).sort((a, b) => (parseFloat(b.price.replace(/[^0-9.]/g, '')) || 0) - (parseFloat(a.price.replace(/[^0-9.]/g, '')) || 0)).slice(0, 2);
+    return (menuItems as any[]).filter((item) => !item.hidden && !excluded.has(item.id)).sort((a, b) => (parseFloat(b.price.replace(/[^0-9.]/g, '')) || 0) - (parseFloat(a.price.replace(/[^0-9.]/g, '')) || 0)).slice(0, 2);
   }, [bestSellerItems]);
   const combinedBestSellerItems = useMemo(() => [...bestSellerItems, ...premiumItems], [bestSellerItems, premiumItems]);
   const totalResultsCount = filteredItems.length;
@@ -101,9 +102,9 @@ export default function MenuPage() {
   };
   const scrollTabsBy = (dx: number) => tabsRef.current?.scrollBy({ left: dx, behavior: 'smooth' });
   const visibleCategories = useMemo(() => {
-    if (showAllBecauseSearching) return menuCategories;
+    if (showAllBecauseSearching) return menuCategories.filter((category) => !category.hidden);
     if (activeCategoryId === BEST_TAB_ID) return [];
-    return menuCategories.filter((category) => activeCategoryId === 'all' || category.id === activeCategoryId);
+    return menuCategories.filter((category) => !category.hidden && (activeCategoryId === 'all' || category.id === activeCategoryId));
   }, [activeCategoryId, showAllBecauseSearching]);
 
   useEffect(() => {
@@ -152,7 +153,7 @@ export default function MenuPage() {
           <div className="flex items-center gap-2">
             <button type="button" onClick={() => scrollTabsBy(isArabic ? 260 : -260)} className="hidden h-10 w-10 shrink-0 rounded-full border border-[#d8d8d8] bg-white text-lg sm:block">{isArabic ? '→' : '←'}</button>
             <div ref={tabsRef} className="flex min-w-0 gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {[{ id: BEST_TAB_ID, label: isArabic ? 'الأكثر طلبًا' : 'Best', image: '/menu/category-best.PNG' }, { id: 'all', label: isArabic ? 'الكل' : 'All', image: '/menu/category-all.png' }, ...menuCategories.map((category) => ({ id: category.id, label: category.name[lang], image: `/menu/category-${category.id}.png` }))].map((tab) => (
+              {[{ id: BEST_TAB_ID, label: isArabic ? 'الأكثر طلبًا' : 'Best', image: '/menu/category-best.PNG' }, { id: 'all', label: isArabic ? 'الكل' : 'All', image: '/menu/category-all.png' }, ...menuCategories.filter((category) => !category.hidden).map((category) => ({ id: category.id, label: category.name[lang], image: `/menu/category-${category.id}.png` }))].map((tab) => (
                 <button key={tab.id} type="button" onClick={() => handleSelectCategory(tab.id)} className={`flex shrink-0 items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-bold transition ${activeCategoryId === tab.id ? 'border-[#151515] bg-[#151515] text-white' : 'border-[#d8d8d8] bg-white text-[#555] hover:border-[#c8102e] hover:text-[#c8102e]'}`}>
                   <span className="relative h-6 w-6 overflow-hidden rounded-full"><Image src={tab.image} alt="" fill className="object-cover" onError={(event) => { (event.target as HTMLImageElement).src = '/menu/default.PNG'; }} /></span>
                   {tab.label}
